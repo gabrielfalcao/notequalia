@@ -1,0 +1,11 @@
+# We explicitly ask for your server's external IP address, because the same value is used for configuring Coturn.
+# If you'd rather use a local IP here, make sure to set up `matrix_coturn_turn_external_ip_address`.
+#
+# To connect using a non-root user (and elevate to root with sudo later),
+# replace `ansible_ssh_user=root` with something like this: `ansible_ssh_user=username become=true become_user=root`
+#
+# For improved Ansible performance, SSH pipelining is enabled by default (`ansible_ssh_pipelining=yes`).
+# If this causes SSH connection troubles, feel free to disable it.
+
+[matrix-servers]
+matrix.cahoots.in ansible_host=174.138.105.200 ansible_ssh_user=root ansible_ssh_pipelining=yes
