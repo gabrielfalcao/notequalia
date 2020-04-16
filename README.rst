@@ -1,11 +1,14 @@
 ------
 
+
 Python Application deployed Kubernetes Stack
 ============================================
 
-1. Simple Flask app
-2. Automated deployment with Toolbelt + K8S + Helm
-3. Runs tunneled with ngrok both locally and on K8S making testing easy and seamless
+
+- https://developers.facebook.com/docs/instagram-api/
+- https://developers.facebook.com/docs/instagram-api/guides/content-publishing#publish-with-tagged-users
+- https://developers.facebook.com/docs/instagram-basic-display-api
+- https://docs.authlib.org/en/latest/client/flask.html
 
 
 

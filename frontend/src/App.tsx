@@ -9,8 +9,6 @@ import * as superagent from "superagent";
 
 import { useDropzone } from "react-dropzone";
 
-import "./App.css";
-
 function App() {
     const [files, setFiles] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -22,21 +20,19 @@ function App() {
         files.forEach(file => {
             http = http.attach("file", file);
         });
-        http
-            .on("progress", e => {
-                if (e.direction === "upload" && e.percent) {
-                    setIsUploading(true);
-                    setProgress(e.percent);
-                    console.log(e);
-                }
-            })
-            .end((err, res) => {
-                setIsUploading(false);
-                console.log(res);
-                if (err) {
-                    setError(err);
-                }
-            });
+        http.on("progress", e => {
+            if (e.direction === "upload" && e.percent) {
+                setIsUploading(true);
+                setProgress(e.percent);
+                console.log(e);
+            }
+        }).end((err, res) => {
+            setIsUploading(false);
+            console.log(res);
+            if (err) {
+                setError(err);
+            }
+        });
         event.preventDefault();
     }
     const onDrop = useCallback(acceptedFiles => {
@@ -47,7 +43,9 @@ function App() {
         // Similar to componentDidMount and componentDidUpdate:
         document.title = "Personal File Server";
     });
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop
+    });
 
     return (
         <Container>
@@ -73,11 +71,15 @@ function App() {
                                 <input {...getInputProps()} />
 
                                 {isDragActive ? (
-                                    <Card.Text> Drop the files here ...</Card.Text>
+                                    <Card.Text>
+                                        {" "}
+                                        Drop the files here ...
+									</Card.Text>
                                 ) : (
                                         <Card.Text>
-                                            Drag 'n' drop some files here, or click to select files.
-                  </Card.Text>
+                                            Drag 'n' drop some files here, or click
+                                            to select files.
+									</Card.Text>
                                     )}
                             </Card.Body>
                         ) : isUploading ? null : (
@@ -93,7 +95,7 @@ function App() {
                                 ) : (
                                         <Button onClick={doUpload}>
                                             Upload {files.length} file(s)
-                  </Button>
+									</Button>
                                     )}
                             </Card.Body>
                         ) : null}
