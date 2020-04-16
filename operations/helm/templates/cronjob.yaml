@@ -1,0 +1,22 @@
+{{- if .Values.zmq.enabled }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "cahoots-in.fullname" . }}-cron
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            name: {{ .Chart.Name }}
+            command: ['cahoots-in', 'enqueue', '{{ .Chart.Name }}']
+            envFrom:
+              - configMapRef:
+                  name: {{ include "cahoots-in.fullname" . }}-env
+          restartPolicy: OnFailure
+{{- end }}

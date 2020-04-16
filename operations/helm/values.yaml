@@ -1,0 +1,126 @@
+# Default values for cahoots-in.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: gabrielfalcao/k8s-cahoots-in
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+
+service:
+  type: NodePort
+  port: 5000
+
+kibana:
+  enabled: false
+  service:
+    type: NodePort
+    port: 5601
+
+ngrok:
+  enabled: true
+  bindtls: both
+  image:
+    repository: wernight/ngrok
+    tag: latest
+    pullPolicy: Always
+
+  token: "34DAA242kqHzC3z1PxsnG_4hehzoCdvw7qbi5768QQg"
+  subdomain: pron-f1l3-serv3r  # from "https:///pron-f1l3-serv3r.ngrok.io/"
+
+zmq:
+  enabled: false
+  type: NodePort
+  router_port: 4242
+  dealer_port: 6969
+  publisher_port: 5353
+  subscriber_port: 5858
+
+elasticsearch:
+  enabled: false
+  fullnameOverride: infrastructure-elasticsearch
+
+ingress:
+  enabled: false
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+postgresql:
+  enabled: true
+  image:
+    repository: postgres
+    tag: 10.6
+
+  postgresqlDataDir: /data/pgdata
+  persistence:
+    mountPath: /data/
+
+  postgresqlPassword: b5fi41dz1BE4C22F44u
+  postgresqlDatabase: cahoots_in
+  postgresqlUsername: web
+  # master:
+  #   extraInitContainers:
+  #   - image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+  #     imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+  #     name: create postgres users
+  #     command: ['bash', '-c', '"echo \"grant all privileges on database cahoots_in to postgres\""']
+
+
+redis:
+  enabled: false
+  image:
+    pullPolicy: IfNotPresent
+  cluster:
+    enabled: false
+    slaveCount: 1
+  master:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    persistence:
+      enabled: true
+      storageClass: efs
+  slave:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    persistence:
+      enabled: true
+      storageClass: efs
+  sentinel:
+    enabled: false
+  rbac:
+    create: true
+  usePassword: false
+  metrics:
+    enabled: false
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 50Mi

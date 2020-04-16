@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cahoots-in.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cahoots-in.name" . }}-web
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "cahoots-in.name" . }}-web
+    app.kubernetes.io/instance: {{ .Release.Name }}

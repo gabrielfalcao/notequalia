@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cahoots-in.fullname" . }}-web
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cahoots-in.name" . }}-web
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "cahoots-in.name" . }}-web
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      initContainers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Chart.Name }}-check-installation
+        command: ['/venv/bin/cahoots-in', 'check']
+        envFrom:
+          - configMapRef:
+              name: {{ include "cahoots-in.fullname" . }}-env
+
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Chart.Name }}-check-db-connection
+        command: ['/venv/bin/cahoots-in', 'check-db']
+        envFrom:
+          - configMapRef:
+              name: {{ include "cahoots-in.fullname" . }}-env
+
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Chart.Name }}-db-migrate
+        command: ['/venv/bin/cahoots-in', 'migrate-db', '--drop']
+        envFrom:
+          - configMapRef:
+              name: {{ include "cahoots-in.fullname" . }}-env
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "cahoots-in.fullname" . }}-secrets
+              key: postgresql-password
+
+        env:
+        - name: DOCKER_IMAGE
+          value: {{ .Values.image.tag }}
+
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Chart.Name }}
+        command: ['/venv/bin/cahoots-in', 'web', '--debug']
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: api
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: api
+          initialDelaySeconds: 1
+
+        # env:
+        #   - name: OAUTH2_CLIENT_SECRET
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: {{ template "cahoots-in.fullname" . }}-secrets
+        #         key: oauth2-client-secret
+
+        envFrom:
+          - configMapRef:
+              name: {{ include "cahoots-in.fullname" . }}-env
+
+        ports:
+        - containerPort: 5000
+          name: api
