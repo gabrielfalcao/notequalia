@@ -4,14 +4,14 @@
 import os
 from pathlib import Path
 from flask import request, redirect, url_for, send_from_directory
-from flask import render_template
+from flask import render_template, jsonify
 from typing import Optional
 from werkzeug.utils import secure_filename
 
 from cahoots.logs import set_log_level_by_name
 from cahoots.web.core import application
 from cahoots import config
-
+from cahoots.web import backend
 logger = set_log_level_by_name("DEBUG", __name__)
 
 upload_path = Path(config.UPLOAD_FOLDER)
@@ -53,7 +53,7 @@ def upload_file():
     if not files:
         logger.error(f"{len(files)} of {len(candidates)} were uploaded")
 
-    return redirect(url_for("list_files"))
+    return jsonify(backend.list_files().to_dict())
 
 
 def handle_file_upload(file) -> Optional[Path]:
@@ -79,5 +79,5 @@ def uploaded_file(filename):
 
 @application.route("/files")
 def list_files():
-    files = upload_path.glob("*.*")
-    return render_template("list_files.html", files=files)
+    files = backend.list_files()
+    return jsonify(files.to_dict())
