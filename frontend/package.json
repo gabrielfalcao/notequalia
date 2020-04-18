@@ -29,13 +29,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "watch": "tsc --watch",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
+    "format": "prettier --write **/*.tsx",
+    "format-check": "prettier --check **/*.tsx",
     "test": "react-scripts test",
     "test-watch": "jest --runInBand --detectOpenHandles --bail --watch",
     "release": "ncc build src/index.tsx",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .tsx"
   },
   "eslintConfig": {
     "extends": "react-app"

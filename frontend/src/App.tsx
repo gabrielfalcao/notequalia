@@ -10,110 +10,110 @@ import * as superagent from "superagent";
 import { useDropzone } from "react-dropzone";
 
 function App() {
-    const [files, setFiles] = useState([]);
-    const [progress, setProgress] = useState(0);
-    const [isUploading, setIsUploading] = useState(false);
-    const [error, setError] = useState(null);
+	const [files, setFiles] = useState([]);
+	const [progress, setProgress] = useState(0);
+	const [isUploading, setIsUploading] = useState(false);
+	const [error, setError] = useState(null);
 
-    function doUpload(event: MouseEvent<HTMLButtonElement>) {
-        let http = superagent.post("http://localhost:5000/upload");
-        files.forEach(file => {
-            http = http.attach("file", file);
-        });
-        http.on("progress", e => {
-            if (e.direction === "upload" && e.percent) {
-                setIsUploading(true);
-                setProgress(e.percent);
-                console.log(e);
-            }
-        }).end((err, res) => {
-            setIsUploading(false);
-            console.log(res);
-            if (err) {
-                setError(err);
-            }
-        });
-        event.preventDefault();
-    }
-    const onDrop = useCallback(acceptedFiles => {
-        setFiles(files => files.concat(acceptedFiles));
-    }, []);
+	function doUpload(event: MouseEvent<HTMLButtonElement>) {
+		let http = superagent.post("http://localhost:5000/upload");
+		files.forEach(file => {
+			http = http.attach("file", file);
+		});
+		http.on("progress", e => {
+			if (e.direction === "upload" && e.percent) {
+				setIsUploading(true);
+				setProgress(e.percent);
+				console.log(e);
+			}
+		}).end((err, res) => {
+			setIsUploading(false);
+			console.log(res);
+			if (err) {
+				setError(err);
+			}
+		});
+		event.preventDefault();
+	}
+	const onDrop = useCallback(acceptedFiles => {
+		setFiles(files => files.concat(acceptedFiles));
+	}, []);
 
-    useEffect(() => {
-        // Similar to componentDidMount and componentDidUpdate:
-        document.title = "Personal File Server";
-    });
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop
-    });
+	useEffect(() => {
+		// Similar to componentDidMount and componentDidUpdate:
+		document.title = "Personal File Server";
+	});
+	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+		onDrop
+	});
 
-    return (
-        <Container>
-            <Row>
-                <Col>
-                    {error !== null ? (
-                        <Card>
-                            <Card.Body {...getRootProps()}>
-                                <Card.Title>Error</Card.Title>
-                                <Card.Text>{error}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    ) : null}
-                </Col>
-            </Row>
-            <Row>
-                <Col sm></Col>
-                <Col sm>
-                    <Card>
-                        {files.length === 0 ? (
-                            <Card.Body {...getRootProps()}>
-                                <Card.Title>Upload Files</Card.Title>
-                                <input {...getInputProps()} />
+	return (
+		<Container>
+			<Row>
+				<Col>
+					{error !== null ? (
+						<Card>
+							<Card.Body {...getRootProps()}>
+								<Card.Title>Error</Card.Title>
+								<Card.Text>{error}</Card.Text>
+							</Card.Body>
+						</Card>
+					) : null}
+				</Col>
+			</Row>
+			<Row>
+				<Col sm></Col>
+				<Col sm>
+					<Card>
+						{files.length === 0 ? (
+							<Card.Body {...getRootProps()}>
+								<Card.Title>Upload Files</Card.Title>
+								<input {...getInputProps()} />
 
-                                {isDragActive ? (
-                                    <Card.Text>
-                                        {" "}
-                                        Drop the files here ...
+								{isDragActive ? (
+									<Card.Text>
+										{" "}
+										Drop the files here ...
 									</Card.Text>
-                                ) : (
-                                        <Card.Text>
-                                            Drag 'n' drop some files here, or click
-                                            to select files.
+								) : (
+									<Card.Text>
+										Drag 'n' drop some files here, or click
+										to select files.
 									</Card.Text>
-                                    )}
-                            </Card.Body>
-                        ) : isUploading ? null : (
-                            <Card.Body>
-                                <h1>Ready to upload!</h1>
-                            </Card.Body>
-                        )}
+								)}
+							</Card.Body>
+						) : isUploading ? null : (
+							<Card.Body>
+								<h1>Ready to upload!</h1>
+							</Card.Body>
+						)}
 
-                        {files.length > 0 ? (
-                            <Card.Body>
-                                {isUploading ? (
-                                    <Card.Text>Uploading ...</Card.Text>
-                                ) : (
-                                        <Button onClick={doUpload}>
-                                            Upload {files.length} file(s)
+						{files.length > 0 ? (
+							<Card.Body>
+								{isUploading ? (
+									<Card.Text>Uploading ...</Card.Text>
+								) : (
+									<Button onClick={doUpload}>
+										Upload {files.length} file(s)
 									</Button>
-                                    )}
-                            </Card.Body>
-                        ) : null}
-                    </Card>
-                </Col>
-                <Col sm></Col>
-            </Row>
-            {progress > 0 ? (
-                <Row>
-                    <Col sm></Col>
-                    <Col sm>
-                        <ProgressBar now={progress} label={`${progress}%`} />
-                    </Col>
-                    <Col sm></Col>
-                </Row>
-            ) : null}
-        </Container>
-    );
+								)}
+							</Card.Body>
+						) : null}
+					</Card>
+				</Col>
+				<Col sm></Col>
+			</Row>
+			{progress > 0 ? (
+				<Row>
+					<Col sm></Col>
+					<Col sm>
+						<ProgressBar now={progress} label={`${progress}%`} />
+					</Col>
+					<Col sm></Col>
+				</Row>
+			) : null}
+		</Container>
+	);
 }
 
 export default App;
