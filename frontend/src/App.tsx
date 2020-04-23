@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback, MouseEvent } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ListGroup from "react-bootstrap/ListGroup";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import Spinner from "react-bootstrap/Spinner";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import * as superagent from "superagent";
@@ -15,12 +17,29 @@ interface File {
     readonly size: number;
 }
 
+function load_cache(): Array<File> {
+    const raw = window.localStorage.getItem("uploads");
+    if (typeof raw === "string") {
+        const items: Array<File> = JSON.parse(raw);
+        return items;
+    }
+    return [];
+}
+function write_cache(items: Array<File>) {
+    const value: string = JSON.stringify(items);
+    window.localStorage.setItem("uploads", value);
+    console.log("write_cache", value);
+}
+
+function clear_cache() {
+    window.localStorage.removeItem("uploads");
+}
 function App() {
     const [progress, setProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
     const [error, setError] = useState(null);
     const [files, setFiles] = useState([]);
-    const [uploads, setUploads] = useState([] as Array<File>);
+    const [uploads, setUploads] = useState(load_cache());
 
     function doUpload(event: MouseEvent<HTMLButtonElement>) {
         let http = superagent.post("http://localhost:5000/upload");
@@ -41,6 +60,7 @@ function App() {
                 setError(err);
             } else {
                 setUploads(response.body);
+                write_cache(response.body);
             }
         });
         event.preventDefault();
@@ -53,6 +73,10 @@ function App() {
     useEffect(() => {
         // Similar to componentDidMount and componentDidUpdate:
         document.title = "Personal File Server";
+        const cached = load_cache();
+        if (cached.length === 0) {
+            listFiles();
+        }
     });
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop
@@ -64,14 +88,15 @@ function App() {
                 setError(err);
             } else if (response.body) {
                 setUploads(response.body as Array<File>);
+                write_cache(response.body);
             }
         });
     }
     return (
-        <Container>
+        <Container fluid="md">
             {error !== null ? (
                 <Row>
-                    <Col>
+                    <Col md={12}>
                         <Card bg={"danger"} text="white">
                             <Card.Body {...getRootProps()}>
                                 <Card.Title>Error</Card.Title>
@@ -82,12 +107,12 @@ function App() {
                 </Row>
             ) : null}
             <Row>
-                <Col sm>
+                <Col md={12}>
                     <ListGroup>
                         {uploads.map(file => {
                             if ("name" in file) {
                                 return (
-                                    <ListGroup.Item>
+                                    <ListGroup.Item key={file.name}>
                                         <a
                                             target="_blank"
                                             rel="noopener noreferrer"
@@ -101,10 +126,35 @@ function App() {
                                 return null;
                             }
                         })}
-                        <ListGroup.Item>{uploads.length} files</ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col md={12}>{uploads.length} files</Col>
+                            </Row>
+                            <Row>
+                                <Col md={9}></Col>
+                                <Col md={3}>
+                                    <ButtonGroup>
+                                        <Button onClick={listFiles}>
+                                            List Files
+										</Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => {
+                                                clear_cache();
+                                                setUploads([]);
+                                            }}
+                                        >
+                                            Clear Cache
+										</Button>
+                                    </ButtonGroup>
+                                </Col>
+                            </Row>
+                        </ListGroup.Item>
                     </ListGroup>
                 </Col>
-                <Col sm>
+            </Row>
+            <Row>
+                <Col md={12}>
                     <Card>
                         {files.length === 0 ? (
                             <Card.Body {...getRootProps()}>
@@ -131,7 +181,13 @@ function App() {
                         {files.length > 0 ? (
                             <Card.Body>
                                 {isUploading ? (
-                                    <Card.Text>Uploading ...</Card.Text>
+                                    <Card.Text>
+                                        <Spinner
+                                            animation="grow"
+                                            variant="dark"
+                                        />
+										Uploading ...
+                                    </Card.Text>
                                 ) : (
                                         <Button onClick={doUpload}>
                                             Upload {files.length} file(s)
@@ -145,14 +201,11 @@ function App() {
             </Row>
             {progress > 0 ? (
                 <Row>
-                    <Col sm></Col>
-                    <Col sm>
+                    <Col>
                         <ProgressBar now={progress} label={`${progress}%`} />
                     </Col>
-                    <Col sm></Col>
                 </Row>
             ) : null}
-            <Button onClick={listFiles}>List Files</Button>
         </Container>
     );
 }
