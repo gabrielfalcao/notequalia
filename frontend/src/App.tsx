@@ -60,6 +60,7 @@ function App() {
                 setError(err);
             } else {
                 setUploads(response.body);
+                setError(null);
                 write_cache(response.body);
             }
         });
@@ -88,6 +89,7 @@ function App() {
                 setError(err);
             } else if (response.body) {
                 setUploads(response.body as Array<File>);
+                setError(null);
                 write_cache(response.body);
             }
         });
