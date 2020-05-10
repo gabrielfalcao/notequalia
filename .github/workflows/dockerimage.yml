@@ -18,7 +18,7 @@ jobs:
       with:
         username: gabrielfalcao
         password: "${{ secrets.DOCKER_PASSWORD }}"
-        image_name: gabrielfalcao/file-server-base
+        image_name: gabrielfalcao/cahoots-in-base
         image_tag: "${{ github.sha }}"
         dockefile: Dockerfile.base
 
@@ -27,6 +27,6 @@ jobs:
       with:
         username: gabrielfalcao
         password: "${{ secrets.DOCKER_PASSWORD }}"
-        image_name: gabrielfalcao/k8s-file-server
+        image_name: gabrielfalcao/k8s-cahoots-in
         image_tag: "${{ github.sha }}"
         dockefile: Dockerfile
