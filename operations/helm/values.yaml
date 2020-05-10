@@ -13,9 +13,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-
 service:
-  type: NodePort
+  type: ClusterIP
   port: 5000
 
 kibana:
@@ -25,7 +24,7 @@ kibana:
     port: 5601
 
 ngrok:
-  enabled: true
+  enabled: false
   bindtls: both
   image:
     repository: wernight/ngrok
@@ -48,7 +47,7 @@ elasticsearch:
   fullnameOverride: infrastructure-elasticsearch
 
 ingress:
-  enabled: false
+  enabled: true
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

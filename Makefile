@@ -1,4 +1,4 @@
-.PHONY: tests all unit functional run docker-image docker-push docker migrate db deploy deploy-with-helm port-forward wheels docker-base-image redeploy check docker-pull purge
+.PHONY: tests all unit functional run docker-image docker-push docker migrate db deploy deploy-with-helm port-forward wheels docker-base-image redeploy check docker-pull clean
 
 export FLASK_DEBUG	:= 1
 export VENV		?= .venv
@@ -9,12 +9,13 @@ DEPLOY_TIMEOUT		:= 300
 # }} variable in the github actions. Using %h (short sha) will cause
 # deploys to fails with ImagePullBackOff
 BASE_TAG		:= $(shell git log --pretty="format:%H" -n1 Dockerfile.base *.txt setup.py)
-PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 .)
+PROD_TAG		:= 662b4dd72fc5bda6b81259e72be909b420b5b56a # $(shell git log --pretty="format:%H" -n3 . | tail -1)
 DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= cahoots-in-base
 PROD_IMAGE		:= k8s-cahoots-in
 HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE)
-NAMESPACE		:= $$(newstore k8s space current)
+NAMESPACE		:= in-cahoots
+HELM_RELEASE		:= $(NAMESPACE)-v0
 FIGLET			:= (2>/dev/null which figlet && figlet) || echo
 
 
@@ -53,7 +54,7 @@ functional: $(VENV)/bin/nosetests  # runs functional tests
 
 # runs the server, exposing the routes to http://localhost:5000
 run: $(VENV)/bin/python
-	$(VENV)/bin/cahoots-in web --port=5000 --host=0.0.0.0
+	$(VENV)/bin/cahoots-in web --port=5000
 
 
 docker-base-image:
@@ -87,34 +88,46 @@ docker-pull:
 	docker pull $(DOCKER_AUTHOR)/$(PROD_IMAGE)
 
 port-forward:
-	newstore k8s run kubepfm --target "$(NAMESPACE):.*kibana.*:5601:5601" --target "$(NAMESPACE):.*web:5000:5000" --target "$(NAMESPACE):.*elastic.*:9200:9200" --target "$(NAMESPACE):.*elastic.*:9300:9300" --target "$(NAMESPACE):.*queue:4242:4242" --target "$(NAMESPACE):.*queue:6969:6969" --target "$(NAMESPACE):.*forwarder:5353:5353" --target "$(NAMESPACE):.*forwarder:5858:5858"
+	kubepfm --target "$(NAMESPACE):.*web:5000:5000" --target "ingress-nginx:*nginx-ingress-controller*:80:80"
+	# kubepfm --target "$(NAMESPACE):.*kibana.*:5601:5601" --target "$(NAMESPACE):.*web:5000:5000" --target "$(NAMESPACE):.*elastic.*:9200:9200" --target "$(NAMESPACE):.*elastic.*:9300:9300" --target "$(NAMESPACE):.*queue:4242:4242" --target "$(NAMESPACE):.*queue:6969:6969" --target "$(NAMESPACE):.*forwarder:5353:5353" --target "$(NAMESPACE):.*forwarder:5858:5858"
 
 forward-queue-port:
-	newstore k8s run kubepfm --target "$(NAMESPACE):.*queue:4242:4242"
+	kubepfm --target "$(NAMESPACE):.*queue:4242:4242"
 
 db: $(VENV)/bin/cahoots-in
-	-@2>/dev/null dropdb cahoots_in || echo ''
-	-@2>/dev/null dropuser cahoots_in || echo 'no db user'
-	-@2>/dev/null createuser cahoots_in --createrole --createdb
-	-@2>/dev/null createdb cahoots_in
-	-@psql postgres << "CREATE ROLE cahoots_in WITH LOGIN PASSWORD 'Wh15K3y'"
-	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE cahoots_in TO cahoots_in;"
+	-@2>/dev/null dropdb flask_hello || echo ''
+	-@2>/dev/null dropuser flask_hello || echo 'no db user'
+	-@2>/dev/null createuser flask_hello --createrole --createdb
+	-@2>/dev/null createdb flask_hello
+	-@psql postgres << "CREATE ROLE flask_hello WITH LOGIN PASSWORD 'Wh15K3y'"
+	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE flask_hello TO flask_hello;"
 	$(VENV)/bin/cahoots-in migrate-db
+
+template:
+	helm dependency update --skip-refresh operations/helm/
+	helm template $(HELM_SET_VARS) operations/helm
 
 deploy:
 	helm template $(HELM_SET_VARS) operations/helm > /dev/null
-	-(2>/dev/null newstore k8s space current && newstore k8s stack delete all) || newstore k8s space create
+	make k8s-namespace
+	git push
 	make helm-install
+	helm dependency update --skip-refresh operations/helm/
 
 helm-install:
-	git push
-	helm dependency update --skip-refresh operations/helm/
-	newstore k8s helm install $(HELM_SET_VARS) --timeout $(DEPLOY_TIMEOUT) --no-update --debug operations/helm
+	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
 
+helm-upgrade:
+	helm upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
+
+k8s-namespace:
+	kubectl get namespaces | grep $(NAMESPACE) | awk '{print $$1}' || kubectl create namespace $(NAMESPACE)
 
 rollback:
-	helm template $(HELM_SET_VARS) operations/helm > /dev/null
-	-newstore k8s space delete all --confirm
+	helm delete --purge $(HELM_RELEASE)
+
+k9s:
+	k9s -n $(NAMESPACE)
 
 redeploy: rollback deploy
 
@@ -129,10 +142,10 @@ worker:
 
 setup-helm:
 	helm repo add elastic https://helm.elastic.co
-	2>/dev/null newstore k8s space current || newstore k8s space create
+
 
 tunnel:
 	ngrok http --subdomain=pron-f1l3-serv3r 5000
 
-purge:
+clean:
 	rm -rf .venv

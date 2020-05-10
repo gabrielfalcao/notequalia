@@ -67,12 +67,12 @@ spec:
             port: api
           initialDelaySeconds: 1
 
-        # env:
-        #   - name: OAUTH2_CLIENT_SECRET
-        #     valueFrom:
-        #       secretKeyRef:
-        #         name: {{ template "cahoots-in.fullname" . }}-secrets
-        #         key: oauth2-client-secret
+        env:
+          - name: OAUTH2_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "cahoots-in.fullname" . }}-secrets
+                key: oauth2-client-secret
 
         envFrom:
           - configMapRef:
