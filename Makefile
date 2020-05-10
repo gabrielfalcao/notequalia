@@ -149,3 +149,11 @@ tunnel:
 
 clean:
 	rm -rf .venv
+
+frontend/build/index.html:
+	cd frontend && npm run build
+
+react-app: frontend/build/index.html
+	cp frontend/build/index.html cahoots/web/templates/index.html
+	rm -rf cahoots/web/static/{js,css}
+	rsync -putaoz frontend/build/static/ cahoots/web/static/

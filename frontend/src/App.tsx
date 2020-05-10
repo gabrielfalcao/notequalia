@@ -79,10 +79,14 @@ function App() {
     useEffect(() => {
         // Similar to componentDidMount and componentDidUpdate:
         document.title = "Personal File Server";
-        const cached = load_cache();
-        if (cached.length === 0) {
-            listFiles();
-        }
+
+        const timer = setTimeout(() => {
+            const cached = load_cache();
+            if (cached.length === 0) {
+                listFiles();
+            }
+        }, 1000);
+        return () => clearTimeout(timer);
     });
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop

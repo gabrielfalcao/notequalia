@@ -2,13 +2,13 @@ from flask import Flask
 from flask_cors import CORS
 from flask_session import Session
 
-from cahoots.filesystem import templates_path
+from cahoots.filesystem import templates_path, static_path
 
 
 params = {
     "template_folder": templates_path,
-    "static_url_path": "",
-    "static_folder": "web/static",
+    "static_url_path": "/static/",
+    "static_folder": static_path,
 }
 
 application = Flask(__name__, **params)
