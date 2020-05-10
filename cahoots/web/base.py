@@ -12,6 +12,7 @@ from cahoots.logs import set_log_level_by_name
 from cahoots.web.core import application
 from cahoots import config
 from cahoots.web import backend
+
 logger = set_log_level_by_name("DEBUG", __name__)
 
 upload_path = Path(config.UPLOAD_FOLDER)

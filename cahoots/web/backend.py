@@ -3,6 +3,7 @@
 
 from pathlib import Path
 from uiclasses import Model
+
 # from uiclasses.typing import Property
 
 from cahoots.logs import set_log_level_by_name
@@ -21,11 +22,8 @@ class File(Model):
     @classmethod
     def from_path(cls, path: Path):
         stat = path.stat()
-        return cls(
-            name=path.name,
-            size=stat.st_size,
-        )
+        return cls(name=path.name, size=stat.st_size)
 
 
 def list_files():
-    return File.List(map(File.from_path, upload_path.glob('*')))
+    return File.List(map(File.from_path, upload_path.glob("*")))
