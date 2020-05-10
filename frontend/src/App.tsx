@@ -47,7 +47,7 @@ function App() {
     const [uploads, setUploads] = useState(load_cache());
 
     function doUpload(event: MouseEvent<HTMLButtonElement>) {
-        let http = superagent.post("{FILE_SERVER_BASE_URL}/upload");
+        let http = superagent.post(`${FILE_SERVER_BASE_URL}/upload`);
         files.forEach(file => {
             http = http.attach("file", file);
         });
@@ -89,7 +89,7 @@ function App() {
     });
 
     function listFiles() {
-        superagent.get("http://localhost:5000/files").end((err, response) => {
+        superagent.get(`${FILE_SERVER_BASE_URL}/files`).end((err, response) => {
             if (err) {
                 setError(err);
             } else if (response.body) {
@@ -123,7 +123,7 @@ function App() {
                                         <a
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            href={`http://localhost:5000/uploads/${file.name}`}
+                                            href={`${FILE_SERVER_BASE_URL}/uploads/${file.name}`}
                                         >
                                             {file.name}
                                         </a>
