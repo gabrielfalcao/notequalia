@@ -17,7 +17,7 @@ jobs:
         username: gabrielfalcao
         password: "${{ secrets.DOCKER_PASSWORD }}"
         image_name: gabrielfalcao/cahoots-in-base
-        image_tag: "${{ github.sha }}"
+        image_tag: latest
         dockefile: Dockerfile.base
 
     - name: Build and push Docker image for Kubernetes using cache
