@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "tsc && react-scripts build",
     "watch": "tsc --watch",
     "format": "prettier --write **/*.tsx",
     "format-check": "prettier --check **/*.tsx",

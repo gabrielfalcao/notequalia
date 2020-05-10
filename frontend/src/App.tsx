@@ -17,6 +17,11 @@ interface File {
     readonly size: number;
 }
 
+const FILE_SERVER_BASE_URL =
+    document.location.protocol === "http:"
+        ? "https://localhost:5000"
+        : "https://wavemanda.la";
+
 function load_cache(): Array<File> {
     const raw = window.localStorage.getItem("uploads");
     if (typeof raw === "string") {
@@ -42,7 +47,7 @@ function App() {
     const [uploads, setUploads] = useState(load_cache());
 
     function doUpload(event: MouseEvent<HTMLButtonElement>) {
-        let http = superagent.post("http://localhost:5000/upload");
+        let http = superagent.post("{FILE_SERVER_BASE_URL}/upload");
         files.forEach(file => {
             http = http.attach("file", file);
         });
@@ -166,12 +171,12 @@ function App() {
                                 {isDragActive ? (
                                     <Card.Text>
                                         Drop the files here ...
-                                    </Card.Text>
+									</Card.Text>
                                 ) : (
                                         <Card.Text>
                                             Drag 'n' drop some files here, or click
                                             to select files.
-                                        </Card.Text>
+									</Card.Text>
                                     )}
                             </Card.Body>
                         ) : isUploading ? null : (
@@ -188,12 +193,12 @@ function App() {
                                             animation="grow"
                                             variant="dark"
                                         />
-										Uploading ...
-                                    </Card.Text>
+                                        Uploading ...
+									</Card.Text>
                                 ) : (
                                         <Button onClick={doUpload}>
                                             Upload {files.length} file(s)
-                                        </Button>
+									</Button>
                                     )}
                             </Card.Body>
                         ) : null}
