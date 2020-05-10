@@ -8,7 +8,7 @@ DEPLOY_TIMEOUT		:= 300
 # NOTE: the sha must be the long version to match the ${{ github.sha
 # }} variable in the github actions. Using %h (short sha) will cause
 # deploys to fails with ImagePullBackOff
-BASE_TAG		:= $(shell git log --pretty="format:%H" -n1 Dockerfile.base *.txt setup.py)
+BASE_TAG		:= latest  #$(shell git log --pretty="format:%H" -n1 Dockerfile.base *.txt setup.py)
 PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
 DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= cahoots-in-base

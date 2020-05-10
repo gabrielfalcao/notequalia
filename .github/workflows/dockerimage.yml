@@ -10,6 +10,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - run: make docker-base-image
+    - run: make docker-image
 
     - name: Build and push base Docker image using cache
       uses: whoan/docker-build-with-cache-action@v3
