@@ -35,7 +35,7 @@ ngrok:
   subdomain: pron-f1l3-serv3r  # from "https:///pron-f1l3-serv3r.ngrok.io/"
 
 zmq:
-  enabled: false
+  enabled: true
   type: NodePort
   router_port: 4242
   dealer_port: 6969
