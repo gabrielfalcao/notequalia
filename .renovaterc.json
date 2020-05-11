@@ -1,0 +1,5 @@
+{
+    "rangeStrategy": "pin",
+    "rebaseWhen": "conflicted",
+    "ignorePaths": ["frontend/**", "operations/**"]
+}
