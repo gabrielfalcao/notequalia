@@ -1,15 +1,4 @@
 ---
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: digital-ocean
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
-provisioner: dobs.csi.digitalocean.com
-reclaimPolicy: Retain
-volumeBindingMode: Immediate
-
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -20,4 +9,4 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: digital-ocean
+  storageClassName: do-retained-block-storage

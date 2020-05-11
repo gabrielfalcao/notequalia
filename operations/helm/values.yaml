@@ -79,7 +79,9 @@ postgresql:
 
   postgresqlDataDir: /data/pgdata
   persistence:
+    enabled: true
     mountPath: /data/
+    storageClass: do-retained-block-storage
 
   postgresqlPassword: b5fi41dz1BE4C22F44u
   postgresqlDatabase: cahoots_in
@@ -107,7 +109,7 @@ redis:
         memory: 256Mi
     persistence:
       enabled: true
-      storageClass: efs
+      storageClass: do-retained-block-storage
   slave:
     resources:
       requests:
@@ -115,7 +117,7 @@ redis:
         memory: 256Mi
     persistence:
       enabled: true
-      storageClass: efs
+      storageClass: do-retained-block-storage
   sentinel:
     enabled: false
   rbac:

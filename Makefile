@@ -126,6 +126,7 @@ k8s-namespace:
 
 rollback:
 	helm delete --purge $(HELM_RELEASE)
+	kubectl delete ns $(NAMESPACE)
 
 k9s:
 	k9s -n $(NAMESPACE)
