@@ -67,6 +67,7 @@ tolerations: []
 
 affinity: {}
 postgresql:
+  fullnameOverride: cahoots-db
   enabled: true
   image:
     repository: postgres
