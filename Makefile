@@ -36,7 +36,7 @@ $(VENV):  # creates $(VENV) folder if does not exist
 	$(VENV)/bin/pip install -U pip setuptools
 
 $(VENV)/bin/cahoots-in $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
-	test -e $(VENV)/bin/pip || make $(VENV)
+	test -e $(VENV)/bin/pip || $(MAKE) $(VENV)
 	$(VENV)/bin/pip install -r development.txt
 	$(VENV)/bin/pip install -e .
 
@@ -120,10 +120,10 @@ template:
 
 deploy:
 	helm template $(HELM_SET_VARS) operations/helm > /dev/null
-	make k8s-namespace
+	$(MAKE) k8s-namespace
 	git push
 	helm dependency update --skip-refresh operations/helm/
-	make helm-install || make helm-upgrade
+	$(MAKE) helm-install || $(MAKE) helm-upgrade
 
 helm-install:
 	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
