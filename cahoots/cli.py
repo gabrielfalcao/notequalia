@@ -108,8 +108,8 @@ def check():
 
     set_debug_mode()
     logger.info("Python installation works!")
-    logger.info(f"DATABASE HOSTNAME: {dbconfig.sqlalchemy_url()!r}")
     env = json.dumps(dict(os.environ), indent=4)
+    logger.info(f"DATABASE HOSTNAME: {dbconfig.sqlalchemy_url()!r}")
     print(f"\033[1;33m{env}\033[0m")
 
 
