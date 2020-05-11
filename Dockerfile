@@ -10,6 +10,7 @@ ENV PYTHONPATH /app/
 
 COPY . /app/
 
+RUN /venv/bin/pip install -U pip setuptools wheel
 RUN /venv/bin/pip install /app
 RUN /venv/bin/pip install uwsgi
 
