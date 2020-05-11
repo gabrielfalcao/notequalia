@@ -11,13 +11,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Build and push base Docker image using cache
-      uses: whoan/docker-build-with-cache-action@v3
+    - name: K8S Docker Image (Kubernetes Deployment)
+      uses: docker/build-push-action@v1
       with:
-        username: gabrielfalcao
-        password: "${{ secrets.DOCKER_PASSWORD }}"
-        image_name: cahoots-in-base
-        image_tag: latest
-        pull_image_and_stages: false
-        push_git_tag: true
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: gabrielfalcao/cahoots-in-base
+        tag_with_ref: true
+        tag_with_sha: true
         dockerfile: Dockerfile.base
