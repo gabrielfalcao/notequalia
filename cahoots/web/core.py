@@ -1,12 +1,12 @@
 from flask import Flask
-# from flask import jsonify
+from flask import jsonify
 from flask_cors import CORS
 from flask_session import Session
 
 from authlib.integrations.flask_client import OAuth
 
-# from loginpass import create_flask_blueprint
-# from loginpass import Google
+from loginpass import create_flask_blueprint
+from loginpass import Google
 
 from cahoots.filesystem import templates_path, static_path
 
@@ -26,13 +26,13 @@ session_manager = Session(application)
 oauth = OAuth(application)
 
 
-# def handle_authorize(remote, token, user_info):
-#     print(user_info)
-#     return jsonify(user_info)
+def handle_authorize(remote, token, user_info):
+    print(user_info)
+    return jsonify(user_info)
 
 
-# google = create_flask_blueprint(Google, oauth, handle_authorize)
-# application.register_blueprint(google, url_prefix="/google")
+google = create_flask_blueprint(Google, oauth, handle_authorize)
+application.register_blueprint(google, url_prefix="/google")
 
 # oauth.register(
 #     name='github',
