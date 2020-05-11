@@ -13,7 +13,6 @@ spec:
   - hosts:
     - cahoots.in
     secretName: cahoots-roots
-
   rules:
   - host: cahoots.in
     http:

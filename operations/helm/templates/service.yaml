@@ -13,7 +13,7 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
       protocol: TCP
-      name: wsgi
+      name: http
   selector:
     app.kubernetes.io/name: {{ include "cahoots-in.name" . }}-web
     app.kubernetes.io/instance: {{ .Release.Name }}
