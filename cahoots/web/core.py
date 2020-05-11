@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_session import Session
 
 from authlib.flask.client import OAuth
+
 # from loginpass import create_flask_blueprint
 # from loginpass import Google
 
@@ -24,9 +25,9 @@ session_manager = Session(application)
 oauth = OAuth(application)
 
 
-def handle_authorize(remote, token, user_info):
-    print(user_info)
-    return jsonify(user_info)
+# def handle_authorize(remote, token, user_info):
+#     print(user_info)
+#     return jsonify(user_info)
 
 
 # google = create_flask_blueprint(Google, oauth, handle_authorize)
