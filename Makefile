@@ -8,7 +8,7 @@ DEPLOY_TIMEOUT		:= 300
 # NOTE: the sha must be the long version to match the ${{ github.sha
 # }} variable in the github actions. Using %h (short sha) will cause
 # deploys to fails with ImagePullBackOff
-BASE_TAG		:= latest  #$(shell git log --pretty="format:%H" -n1 Dockerfile.base *.txt setup.py)
+BASE_TAG		:= latest
 PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
 DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= cahoots-in-base
@@ -16,7 +16,7 @@ PROD_IMAGE		:= k8s-cahoots-in
 HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE)
 NAMESPACE		:= in-cahoots
 HELM_RELEASE		:= $(NAMESPACE)-v0
-FIGLET			:= (2>/dev/null which figlet && figlet) || echo
+FIGLET			:= $(shell which figlet)
 
 
 all: dependencies tests
@@ -95,12 +95,12 @@ forward-queue-port:
 	kubepfm --target "$(NAMESPACE):.*queue:4242:4242"
 
 db: $(VENV)/bin/cahoots-in
-	-@2>/dev/null dropdb flask_hello || echo ''
-	-@2>/dev/null dropuser flask_hello || echo 'no db user'
-	-@2>/dev/null createuser flask_hello --createrole --createdb
-	-@2>/dev/null createdb flask_hello
-	-@psql postgres << "CREATE ROLE flask_hello WITH LOGIN PASSWORD 'Wh15K3y'"
-	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE flask_hello TO flask_hello;"
+	-@2>/dev/null dropdb cahoots_in || echo ''
+	-@2>/dev/null dropuser cahoots_in || echo 'no db user'
+	-@2>/dev/null createuser cahoots_in --createrole --createdb
+	-@2>/dev/null createdb cahoots_in
+	-@psql postgres << "CREATE ROLE cahoots_in WITH LOGIN PASSWORD 'Wh15K3y'"
+	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE cahoots_in TO cahoots_in;"
 	$(VENV)/bin/cahoots-in migrate-db
 
 template:

@@ -10,18 +10,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - wavemanda.la
     - cahoots.in
-    secretName: wavemandala-roots
+    secretName: cahoots-roots
 
   rules:
-  - host: wavemanda.la
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{ include "cahoots-in.fullname" . }}
-          servicePort: 5000
   - host: cahoots.in
     http:
       paths:
