@@ -11,10 +11,11 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: K8S Docker Image (Kubernetes Deployment)
-      uses: whoan/docker-build-with-cache-action@v5.3.0
+      uses: docker/build-push-action@v1.1.0
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        image_name: gabrielfalcao/k8s-cahoots-in
-        image_tag: "${{ github.sha }}"
+        repository: gabrielfalcao/cahoots-in-base
+        tag_with_ref: false  # prevent pushing "latest" tag
+        tag_with_sha: true
         dockerfile: Dockerfile
