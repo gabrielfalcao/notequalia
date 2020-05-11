@@ -10,9 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    # - name: Bootstrap image
-    #   run: bash -c 'docker images | grep gabrielfalcao/cahoots-in-base || docker build . --file Dockerfile.base --tag gabrielfalcao/cahoots-in-base'
-
     - name: K8S Docker Image (Kubernetes Deployment)
       uses: docker/build-push-action@v1
       with:

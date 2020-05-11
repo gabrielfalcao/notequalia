@@ -1,7 +1,9 @@
 .PHONY: tests all unit functional run docker-image docker-push docker migrate db deploy deploy-with-helm port-forward wheels docker-base-image redeploy check docker-pull clean
 
+GIT_ROOT		:= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+VENV_ROOT		:= $(GIT_ROOT)/.venv
+export VENV		?= $(VENV_ROOT)
 export FLASK_DEBUG	:= 1
-export VENV		?= .venv
 export HTTPS_API	?= $(shell ps aux | grep ngrok | grep -v grep)
 
 DEPLOY_TIMEOUT		:= 300
@@ -41,7 +43,7 @@ $(VENV)/bin/cahoots-in $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip:
 	$(VENV)/bin/pip install -e .
 
 # Runs the unit and functional tests
-tests: $(VENV)/bin/nosetests  # runs all tests
+tests: | $(VENV)/bin/nosetests  # runs all tests
 	$(VENV)/bin/nosetests tests
 
 # Install dependencies
@@ -57,14 +59,14 @@ migrate:
 
 # runs unit tests
 
-unit: $(VENV)/bin/nosetests  # runs only unit tests
+unit: | $(VENV)/bin/nosetests  # runs only unit tests
 	$(VENV)/bin/nosetests --cover-erase tests/unit
 
-functional: $(VENV)/bin/nosetests  # runs functional tests
+functional:| $(VENV)/bin/nosetests  # runs functional tests
 	$(VENV)/bin/nosetests tests/functional
 
 # runs the server, exposing the routes to http://localhost:5000
-run: $(VENV)/bin/python
+run: | $(VENV)/bin/python
 	$(VENV)/bin/cahoots-in web --port=5000
 
 
@@ -105,7 +107,7 @@ port-forward:
 forward-queue-port:
 	kubepfm --target "$(NAMESPACE):.*queue:4242:4242"
 
-db: $(VENV)/bin/cahoots-in
+db: | $(VENV)/bin/cahoots-in
 	-@2>/dev/null dropdb cahoots_in || echo ''
 	-@2>/dev/null dropuser cahoots_in || echo 'no db user'
 	-@2>/dev/null createuser cahoots_in --createrole --createdb
