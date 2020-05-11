@@ -1,5 +1,20 @@
 {
-    "rangeStrategy": "pin",
-    "rebaseWhen": "conflicted",
-    "ignorePaths": ["frontend/**", "operations/**"]
+  "ignorePaths": [
+    "frontend/**",
+    "operations/**"
+  ],
+  "packageRules": [
+    {
+      "automerge": true,
+      "rebaseWhen": "behind-base-branch",
+      "updateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ]
+    }
+  ],
+  "rangeStrategy": "pin",
+  "rebaseWhen": "behind-base-branch"
 }
