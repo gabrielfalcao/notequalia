@@ -60,7 +60,7 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: {{ .Chart.Name }}
-        command: ['/venv/bin/cahoots-in', 'web', '--debug']
+        command: ['/venv/bin/cahoots-in', 'web']
         livenessProbe:
           httpGet:
             path: /health

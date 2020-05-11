@@ -5,26 +5,35 @@ metadata:
   labels:
 {{ include "cahoots-in.labels" . | indent 4 }}
 data:
+{{- if .Values.postgresql.enabled }}
   POSTGRES_HOST: {{ template "postgresql.hostname" . }}
   POSTGRES_PORT: {{ .Values.postgresql.service.port | quote }}
   POSTGRES_DATABASE: {{ .Values.postgresql.postgresqlDatabase | quote }}
   POSTGRES_USERNAME: {{ .Values.postgresql.postgresqlUsername | quote }}
   POSTGRES_PASSWORD: {{ .Values.postgresql.postgresqlPassword | quote }}
+{{- end }}
 
+  HTTPS_API: "true"
+
+{{- if .Values.redis.enabled }}
   REDIS_HOST: {{ template "redis.hostname" . }}
+{{- end }}
+
+{{- if .Values.elasticsearch.enabled }}
   ELASTICSEARCH_HOST: {{ template "elasticsearch.hostname" . }}
+{{- end }}
 
   FLASK_HOST: "0.0.0.0"
   FLASK_PORT: {{ .Values.service.port | quote }}
   # FLASK_DEBUG: "true"  # disable for production usage
 
+{{- if .Values.zmq.enabled }}
   ZMQ_ROUTER_PORT: {{ .Values.zmq.router_port | quote }}
   ZMQ_DEALER_PORT: {{ .Values.zmq.dealer_port | quote }}
   ZMQ_PUBLISHER_PORT: {{ .Values.zmq.publisher_port | quote }}
   ZMQ_SUBSCRIBER_PORT: {{ .Values.zmq.subscriber_port | quote }}
-
-  HTTPS_API: "true"
   ZMQ_ROUTER_HOST: {{ include "cahoots-in.zmq-queue.hostname" . | quote }}
   ZMQ_DEALER_HOST: {{ include "cahoots-in.zmq-queue.hostname" . | quote }}
   ZMQ_PUBLISHER_HOST: {{ include "cahoots-in.zmq-queue.hostname" . | quote }}
   ZMQ_SUBSCRIBER_HOST: {{ include "cahoots-in.zmq-queue.hostname" . | quote }}
+{{- end }}
