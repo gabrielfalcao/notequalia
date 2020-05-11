@@ -74,7 +74,7 @@ spec:
 
         env:
           - name: UPLOAD_FOLDER
-            value: /cahoots-data/uploads
+            value: /cahoots.in/file-uploads
           # - name: OAUTH2_CLIENT_SECRET
           #   valueFrom:
           #     secretKeyRef:
@@ -91,4 +91,4 @@ spec:
 
         volumeMounts:
           - name: cahoots-uploads-volume
-            mountPath: /cahoots-data/uploads
+            mountPath: /cahoots.in/file-uploads
