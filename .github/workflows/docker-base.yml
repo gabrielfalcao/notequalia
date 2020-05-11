@@ -1,4 +1,4 @@
-name: Base Docker Image
+name: ⚙️ Base Docker Image
 
 on:
   - push

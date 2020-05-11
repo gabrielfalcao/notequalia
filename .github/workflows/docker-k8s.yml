@@ -1,4 +1,4 @@
-name: K8S Docker Image 🚢
+name: 🚢 K8S Docker Image
 
 on:
   - push
