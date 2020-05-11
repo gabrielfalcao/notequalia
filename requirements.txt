@@ -1,3 +1,4 @@
+PyJWT>=1.7.1
 agentzero==0.4.4
 authlib==0.14.2
 bcrypt==3.1.7
@@ -12,6 +13,7 @@ flask==1.1.2
 gevent==1.4.0
 loginpass==0.4
 psycopg2-binary==2.8.5
+python-jose==3.1.0
 pyzmq==18.0.1
 redis==3.5.1
 requests==2.23.0

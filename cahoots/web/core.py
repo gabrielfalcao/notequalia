@@ -6,7 +6,7 @@ from flask_session import Session
 from authlib.integrations.flask_client import OAuth
 
 from loginpass import create_flask_blueprint
-from loginpass import Google
+# from loginpass import Google
 
 from cahoots.filesystem import templates_path, static_path
 
@@ -31,8 +31,18 @@ def handle_authorize(remote, token, user_info):
     return jsonify(user_info)
 
 
-google = create_flask_blueprint(Google, oauth, handle_authorize)
-application.register_blueprint(google, url_prefix="/google")
+# google = create_flask_blueprint(Google, oauth, handle_authorize)
+# application.register_blueprint(google, url_prefix="/google")
+
+oauth2 = oauth.register(
+    "identity_provider",
+    client_id=application.config["OAUTH2_CLIENT_ID"],
+    client_secret=application.config["OAUTH2_CLIENT_SECRET"],
+    api_base_url=application.config["OAUTH2_BASE_URL"],
+    access_token_url=application.config["OAUTH2_ACCESS_TOKEN_URL"],
+    authorize_url=application.config["OAUTH2_AUTHORIZE_URL"],
+    client_kwargs={"scope": application.config["OAUTH2_CLIENT_SCOPE"]},
+)
 
 # oauth.register(
 #     name='github',
