@@ -11,6 +11,7 @@ Python Application deployed Kubernetes Stack
 - https://docs.authlib.org/en/latest/client/flask.html
 
 
+- https://philcalcado.com/2017/08/03/pattern_service_mesh.html
 
 
 Running locally
