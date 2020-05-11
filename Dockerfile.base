@@ -3,15 +3,40 @@ FROM python:3.7-alpine
 RUN apk --update --no-cache add \
     bash \
     build-base \
+    bzip2-dev \
     ca-certificates \
+    coreutils \
+    dpkg \
+    dpkg-dev \
+    expat-dev \
     figlet \
+    findutils \
     gcc \
+    gdbm-dev \
+    libc-dev \
     libffi-dev \
+    libnsl-dev \
+    libssl-dev \
+    libtirpc-dev \
+    linux-headers \
     make \
     musl-dev \
+    ncurses-dev \
+    openssl \
+    openssl-dev \
+    pax-utils \
     postgresql-dev \
     postgresql-libs \
-    python3-dev
+    python3-dev \
+    readline-dev \
+    sqlite-dev \
+    tcl-dev \
+    tk \
+    tk-dev \
+    util-linux-dev \
+    xz-dev \
+    zlib-dev
+
 
 RUN mkdir -p /app /pip/cache
 RUN python3 -mvenv /venv
@@ -20,5 +45,5 @@ WORKDIR /app
 
 COPY *.txt /app/
 
-RUN /venv/bin/pip install --cache-dir /pip/cache -U pip setuptools
+RUN /venv/bin/pip install --cache-dir /pip/cache -U pip setuptools wheel
 RUN /venv/bin/pip install --cache-dir /pip/cache -r development.txt
