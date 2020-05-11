@@ -1,8 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask
+# from flask import jsonify
 from flask_cors import CORS
 from flask_session import Session
 
-from authlib.flask.client import OAuth
+from authlib.integrations.flask_client import OAuth
 
 # from loginpass import create_flask_blueprint
 # from loginpass import Google
