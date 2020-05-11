@@ -4,7 +4,7 @@ import logging
 from flask_restplus import Api
 from flask_restplus import Resource
 from flask_restplus import fields
-from flask import url_for
+from flask import url_for, jsonify
 from .base import application
 
 from cahoots import config
@@ -100,10 +100,9 @@ class UserEndpoint(Resource):
         return user.to_dict(), 200
 
 
-@api.route("/health")
-class HealthCheck(Resource):
-    def get(self):
-        return {"system": "ok"}
+@application.route("/health")
+def get(*args, **kw):
+    return jsonify({"system": "ok"})
 
 
 @api.route("/rpc")

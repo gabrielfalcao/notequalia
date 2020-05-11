@@ -47,7 +47,7 @@ def set_log_level_by_name(loglevel: str, loggername=None):
     else:
         logger = logging.getLogger()
 
-    logger.setLevel(getattr(logging, loglevel.upper(), logging.INFO))
+    logger.setLevel(getattr(logging, loglevel.upper(), logging.DEBUG))
     return logger
 
 

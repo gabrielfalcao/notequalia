@@ -37,6 +37,7 @@ tests: $(VENV)/bin/nosetests  # runs all tests
 # Install dependencies
 dependencies: | $(VENV)/bin/nosetests
 	$(VENV)/bin/pip install -r development.txt
+	$(VENV)/bin/pip install -e .
 
 check:
 	$(VENV)/bin/cahoots-in check
