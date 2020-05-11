@@ -25,6 +25,9 @@ HTTPS_API = os.getenv("HTTPS_API")
 SECRET_KEY = b"//>;,;42zy_{lz@eat-m00r3-AsS)f:P128<\\"
 UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER") or str(DEFAULT_UPLOAD_PATH)
 
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+
 
 class dbconfig:
     host = os.getenv("POSTGRES_HOST") or "localhost"
