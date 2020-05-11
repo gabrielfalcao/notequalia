@@ -111,8 +111,8 @@ deploy:
 	helm template $(HELM_SET_VARS) operations/helm > /dev/null
 	make k8s-namespace
 	git push
-	make helm-install
 	helm dependency update --skip-refresh operations/helm/
+	make helm-install || make helm-upgrade
 
 helm-install:
 	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
