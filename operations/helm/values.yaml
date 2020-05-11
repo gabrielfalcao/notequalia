@@ -89,7 +89,8 @@ postgresql:
 
 
 redis:
-  enabled: false
+  fullnameOverride: cahoots-redis
+  enabled: true
   image:
     pullPolicy: IfNotPresent
   cluster:

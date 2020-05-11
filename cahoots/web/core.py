@@ -14,6 +14,6 @@ params = {
 application = Flask(__name__, **params)
 application.config.from_object("cahoots.config")
 
-cors = CORS(application, resources="/*")
+cors = CORS(application, resources="*")
 
 session_manager = Session(application)
