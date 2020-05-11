@@ -26,4 +26,4 @@ class File(Model):
 
 
 def list_files():
-    return File.List(map(File.from_path, upload_path.glob("*")))
+    return File.List(map(File.from_path, filter(lambda path: path.is_file(), upload_path.glob("*"))))
