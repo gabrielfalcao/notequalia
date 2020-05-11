@@ -16,7 +16,7 @@ jobs:
       with:
         username: gabrielfalcao
         password: "${{ secrets.DOCKER_PASSWORD }}"
-        image_name: gabrielfalcao/cahoots-in-base
+        image_name: cahoots-in-base
         image_tag: latest
         pull_image_and_stages: false
         push_git_tag: true
