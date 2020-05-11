@@ -29,6 +29,55 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 
+OAUTH2_DOMAIN = os.getenv("OAUTH2_DOMAIN") or "id.t.newstore.net"
+OAUTH2_CALLBACK_URL = (
+    os.getenv("OAUTH2_CALLBACK_URL")
+    or "https://cahoots.in/callback/oauth2"
+)
+
+# https://id.t.newstore.net/admin/master/console/#/realms/gabriel-NA-43928/clients/c75308f7-99e9-4b18-aeca-6e742a0b361d/credentials
+OAUTH2_CLIENT_ID = os.getenv("OAUTH2_CLIENT_ID")
+OAUTH2_CLIENT_SECRET = os.getenv("OAUTH2_CLIENT_SECRET")
+OAUTH2_BASE_URL = (
+    os.getenv("OAUTH2_BASE_URL")
+    or "https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/"
+)
+OAUTH2_ACCESS_TOKEN_URL = (
+    os.getenv("OAUTH2_ACCESS_TOKEN_URL") or f"{OAUTH2_BASE_URL}/token"
+)
+OAUTH2_AUTHORIZE_URL = os.getenv("OAUTH2_AUTHORIZE_URL") or "{OAUTH2_BASE_URL}/auth"
+OAUTH2_CLIENT_SCOPE = (
+    os.getenv("OAUTH2_CLIENT_SCOPE")
+    or "openid profile email roles role_list profile picture email_verified http://newstore/flask-test http://newstore/newstore_id"
+)
+OAUTH2_CLIENT_AUDIENCE = (
+    os.getenv("OAUTH2_CLIENT_AUDIENCE") or "https://cahoots.in/"
+)
+DOCKER_IMAGE = (
+    os.getenv("DOCKER_IMAGE") or "latest"
+)
+
+OIDC_CLIENT_SECRETS = os.getenv("OIDC_CLIENT_SECRETS_JSON_PATH") or str(
+    module_path.joinpath("client_secrets.json")
+)
+OIDC_ID_TOKEN_COOKIE_SECURE = bool(os.getenv("OIDC_ID_TOKEN_COOKIE_SECURE"))
+OIDC_REQUIRE_VERIFIED_EMAIL = bool(os.getenv("OIDC_REQUIRE_VERIFIED_EMAIL"))
+# OIDC_VALID_ISSUERS = None
+OIDC_OPENID_REALM = os.getenv("OIDC_OPENID_REALM")
+# OIDC_CALLBACK_ROUTE = '/callback_oidc'
+OIDC_SCOPES = [
+    "openid",
+    "email",
+    "profile",
+    "roles",
+    "address",
+    "microprofile-jwt",
+    "phone",
+    "offline_access",
+]
+# OIDC_USER_INFO_ENABLED = True
+
+
 class dbconfig:
     host = os.getenv("POSTGRES_HOST") or "localhost"
     port = int(os.getenv("POSTGRES_PORT") or 5432)

@@ -18,6 +18,16 @@ NAMESPACE		:= in-cahoots
 HELM_RELEASE		:= $(NAMESPACE)-v0
 FIGLET			:= $(shell which figlet)
 
+export OAUTH2_ACCESS_TOKEN_URL	:= https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/token
+export OAUTH2_AUTHORIZE_URL	:= https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/auth
+export OAUTH2_BASE_URL		:= https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/
+export OAUTH2_CALLBACK_URL	:= https://cahoots.in/callback/oauth2
+export OAUTH2_CLIENT_ID		:= cahoots-in
+export OAUTH2_CLIENT_SCOPE	:= openid profile email roles auth0
+export OAUTH2_CLIENT_SECRET	:= 22aa51e7-3123-4ec5-8406-a66aa43b7c1a
+export OAUTH2_DOMAIN		:= id.t.newstore.net
+export OAUTH2_CLIENT_AUDIENCE	:= https://cahoots.in/
+
 
 all: dependencies tests
 

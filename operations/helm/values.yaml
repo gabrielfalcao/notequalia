@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+cahoots_url: "https://cahoots.in/"
+
 image:
   repository: gabrielfalcao/k8s-cahoots-in
   tag: latest
@@ -52,6 +54,20 @@ elasticsearch:
 
 ingress:
   enabled: true
+
+oauth2:
+  enabled: true
+  domain: "id.t.newstore.net"
+  callback_url: "https://cahoots.in/callback/oauth2"
+
+  # https://manage.auth0.com/dashboard/us/dev-newstore/applications/N6l4Wi2JmIh5gXiGj2sibsZiJRJu0jj1/settings
+  client_id: "---injected by Makefile---"
+  client_secret: "---injected by Makefile---"
+  base_url: "https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/"
+  access_token_url: "https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/token"
+  authorize_url: "https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/auth"
+  client_scope: "openid profile email roles role_list profile picture email_verified http://newstore/flask-test http://newstore/newstore_id"
+  audience: "https://cahoots.in"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
