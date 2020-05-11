@@ -1,0 +1,23 @@
+name: Base Docker Image
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build and push base Docker image using cache
+      uses: whoan/docker-build-with-cache-action@v3
+      with:
+        username: gabrielfalcao
+        password: "${{ secrets.DOCKER_PASSWORD }}"
+        image_name: gabrielfalcao/cahoots-in-base
+        image_tag: latest
+        pull_image_and_stages: false
+        push_git_tag: true
+        dockefile: Dockerfile.base
