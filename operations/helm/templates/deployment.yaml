@@ -19,7 +19,7 @@ spec:
       initContainers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        name: {{ .Chart.Name }}-check-installation
+        name: check-installation
         command: ['/venv/bin/cahoots-in', 'check']
         envFrom:
           - configMapRef:
@@ -27,7 +27,7 @@ spec:
 
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        name: {{ .Chart.Name }}-check-db-connection
+        name: check-db-connection
         command: ['/venv/bin/cahoots-in', 'check-db']
         envFrom:
           - configMapRef:
@@ -35,7 +35,7 @@ spec:
 
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        name: {{ .Chart.Name }}-db-migrate
+        name: run-database-migrations
         command: ['/venv/bin/cahoots-in', 'migrate-db', '--drop']
         envFrom:
           - configMapRef:
@@ -50,6 +50,10 @@ spec:
         env:
         - name: DOCKER_IMAGE
           value: {{ .Values.image.tag }}
+      volumes:
+        - name: cahoots-uploads-volume
+          persistentVolumeClaim:
+            claimName: cahoots-uploads-pvc
 
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
