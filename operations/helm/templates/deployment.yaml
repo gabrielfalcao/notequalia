@@ -88,6 +88,6 @@ spec:
         - containerPort: 5000
           name: api
 
-      volumeMounts:
-        - name: cahoots-uploads-pvc
-          mountPath: /cahoots-data/uploads
+        volumeMounts:
+          - name: cahoots-uploads-pvc
+            mountPath: /cahoots-data/uploads
