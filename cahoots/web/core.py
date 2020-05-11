@@ -9,9 +9,9 @@ from loginpass import Google
 from cahoots.filesystem import templates_path, static_path
 
 params = {
-    "template_folder": templates_path,
+    "template_folder": str(templates_path),
     "static_url_path": "/static/",
-    "static_folder": static_path,
+    "static_folder": str(static_path),
 }
 
 application = Flask(__name__, **params)
