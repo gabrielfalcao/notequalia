@@ -50,6 +50,7 @@ spec:
         env:
         - name: DOCKER_IMAGE
           value: {{ .Values.image.tag }}
+
       volumes:
         - name: cahoots-uploads-volume
           persistentVolumeClaim:
@@ -89,5 +90,5 @@ spec:
           name: api
 
         volumeMounts:
-          - name: cahoots-uploads-pvc
+          - name: cahoots-uploads-volume
             mountPath: /cahoots-data/uploads
