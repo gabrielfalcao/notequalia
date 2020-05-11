@@ -19,6 +19,5 @@ jobs:
         username: gabrielfalcao
         password: "${{ secrets.DOCKER_PASSWORD }}"
         image_name: gabrielfalcao/k8s-cahoots-in
-        image_tag: latest
-        push_git_tag: true
-        dockefile: Dockerfile
+        image_tag: "${{ github.sha }}"
+        dockerfile: Dockerfile

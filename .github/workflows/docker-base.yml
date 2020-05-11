@@ -20,4 +20,4 @@ jobs:
         image_tag: latest
         pull_image_and_stages: false
         push_git_tag: true
-        dockefile: Dockerfile.base
+        dockerfile: Dockerfile.base
