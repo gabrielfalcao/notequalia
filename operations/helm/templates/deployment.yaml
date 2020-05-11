@@ -91,4 +91,4 @@ spec:
 
         volumeMounts:
           - name: cahoots-uploads-volume
-            mountPath: /cahoots.in/file-uploads
+            mountPath: /cahoots.in

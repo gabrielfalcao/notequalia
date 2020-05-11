@@ -4,9 +4,12 @@ RUN apk --update --no-cache add \
     git
 
 
+VOLUME /cahoots.in
+
 ENV VENV /venv/
 ENV PATH "/venv/bin:${PATH}"
 ENV PYTHONPATH /app/
+ENV UPLOAD_FOLDER /cahoots.in/file-uploads
 
 COPY . /app/
 
@@ -24,8 +27,6 @@ EXPOSE 5000
 EXPOSE 4242
 EXPOSE 6969
 
-ENV UPLOAD_FOLDER /cahoots.in/file-uploads
-VOLUME /cahoots.in/file-uploads
 
 CMD cahoots-in web "--port=$CAHOOTS_IN_PORT"
 CMD /venv/bin/uwsgi --http ":$CAHOOTS_IN_PORT" --mount /=application.web:application
