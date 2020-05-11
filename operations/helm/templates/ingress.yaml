@@ -5,7 +5,7 @@ metadata:
   name: {{ include "cahoots-in.fullname" . }}-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 spec:
   tls:
