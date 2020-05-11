@@ -1,4 +1,4 @@
-FROM gabrielfalcao/cahoots-in-base
+FROM gabrielfalcao/flask-hello-base
 
 RUN apk --update --no-cache add \
     git
