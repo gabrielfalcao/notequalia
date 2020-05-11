@@ -72,6 +72,8 @@ spec:
           initialDelaySeconds: 1
 
         env:
+          - name: UPLOAD_FOLDER
+            value: /cahoots-data/uploads
           # - name: OAUTH2_CLIENT_SECRET
           #   valueFrom:
           #     secretKeyRef:
@@ -85,3 +87,7 @@ spec:
         ports:
         - containerPort: 5000
           name: api
+
+      volumeMounts:
+        - name: cahoots-uploads-pvc
+          mountPath: /cahoots-data/uploads
