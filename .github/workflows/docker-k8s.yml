@@ -21,3 +21,4 @@ jobs:
         repository: gabrielfalcao/k8s-cahoots-in
         tag_with_ref: false  # prevent pushing latest
         tag_with_sha: true
+        tags: "${{ github.sha }}"
