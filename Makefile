@@ -150,6 +150,7 @@ undeploy: rollback
 	kubectl delete ns $(NAMESPACE)
 
 k9s:
+	iterm2 color k
 	k9s -n $(NAMESPACE)
 
 redeploy:
