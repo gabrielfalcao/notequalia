@@ -2,19 +2,20 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "cahoots-in.fullname" . }}-ingress
+  name: {{ include "cahoots-in.fullname" . }}-ingress-fulltestco
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
     nginx.ingress.kubernetes.io/proxy-body-size: 8m
+    kubernetes.io/tls-acme: 'true'
     # https://docs.giantswarm.io/guides/advanced-ingress-configuration/#custom-max-body-size
 spec:
   tls:
   - hosts:
-    - cahoots.in
-    secretName: cahoots-roots
+    - keycloak.fulltest.co
+    secretName: keycloak-fulltest-co
   rules:
-  - host: cahoots.in
+  - host: keycloak.fulltest.co
     http:
       paths:
       - path: /
@@ -22,3 +23,53 @@ spec:
           serviceName: {{ include "cahoots-in.fullname" . }}
           servicePort: 5000
 {{- end }}
+
+# ---
+# apiVersion: networking.k8s.io/v1beta1
+# kind: Ingress
+# metadata:
+#   name: {{ include "cahoots-in.fullname" . }}-ingress-wavemandala
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     cert-manager.io/cluster-issuer: "letsencrypt-staging"
+#     nginx.ingress.kubernetes.io/proxy-body-size: 8m
+#     kubernetes.io/tls-acme: 'true'
+#     # https://docs.giantswarm.io/guides/advanced-ingress-configuration/#custom-max-body-size
+# spec:
+#   tls:
+#   - hosts:
+#     - wavemanda.la
+#     secretName: wavemandala-roots
+#   rules:
+#   - host: wavemanda.la
+#     http:
+#       paths:
+#       - path: /
+#         backend:
+#           serviceName: {{ include "cahoots-in.fullname" . }}
+#           servicePort: 5000
+# ---
+# apiVersion: networking.k8s.io/v1beta1
+# kind: Ingress
+# metadata:
+#   name: {{ include "cahoots-in.fullname" . }}-ingress-cahoots
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     cert-manager.io/cluster-issuer: "letsencrypt-staging"
+#     nginx.ingress.kubernetes.io/proxy-body-size: 8m
+#     kubernetes.io/tls-acme: 'true'
+#     # https://docs.giantswarm.io/guides/advanced-ingress-configuration/#custom-max-body-size
+# spec:
+#   tls:
+#   - hosts:
+#     - cahoots.in
+#     secretName: cahoots-roots
+#   rules:
+#   - host: cahoots.in
+#     http:
+#       paths:
+#       - path: /
+#         backend:
+#           serviceName: {{ include "cahoots-in.fullname" . }}
+#           servicePort: 5000
+# ---
