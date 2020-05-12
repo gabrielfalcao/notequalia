@@ -5,7 +5,7 @@ metadata:
   name: {{ include "cahoots-in.fullname" . }}-ingress-fulltestco
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/proxy-body-size: 8m
     # kubernetes.io/tls-acme: 'true'
     # https://docs.giantswarm.io/guides/advanced-ingress-configuration/#custom-max-body-size

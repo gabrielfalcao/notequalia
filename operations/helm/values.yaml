@@ -5,6 +5,7 @@
 replicaCount: 1
 
 cahoots_url: "https://keycloak.fulltest.co/"
+# namespace: in-cahoots
 
 image:
   repository: gabrielfalcao/k8s-cahoots-in
@@ -93,11 +94,11 @@ postgresql:
     repository: postgres
     tag: 10.6
 
-  postgresqlDataDir: /cahoots.in/data/pgdata
+  postgresqlDataDir: /cahoots.in/data/postgresql-10.6/pgdata
   persistence:
     enabled: true
-    mountPath: /cahoots.in/data/
-    storageClass: do-retained-block-storage
+    mountPath: /cahoots.in/data/postgresql-10.6
+    existingClaim: volume-cahoots-in
 
   postgresqlPassword: b5fi41dz1BE4C22F44u
   postgresqlDatabase: cahoots_in
