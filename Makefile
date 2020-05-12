@@ -183,5 +183,6 @@ react-app: frontend/build/index.html
 	rsync -putaoz frontend/build/static/ cahoots/web/static/
 	rm -f frontend/build/index.html
 
+# https://cert-manager.io/docs/tutorials/backup/
 cert-manager-backup.yaml:
 	kubectl get -o yaml --all-namespaces issuer,clusterissuer,certificates,certificaterequests > cert-manager-backup.yaml
