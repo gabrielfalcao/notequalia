@@ -54,7 +54,7 @@ spec:
       volumes:
         - name: cahoots-uploads-volume
           persistentVolumeClaim:
-            claimName: volume-cahoots-in
+            claimName: pvc-cahoots-in
 
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

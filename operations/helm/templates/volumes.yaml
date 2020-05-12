@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: volume-cahoots-in
+  name: pvc-cahoots-in
 spec:
   accessModes:
   - ReadWriteOnce
@@ -14,7 +14,7 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: pvc-cahoots-in
+  name: volume-cahoots-in
   annotations:
     # fake it by indicating this is provisioned dynamically, so the system
     # works properly
@@ -24,6 +24,7 @@ spec:
   # by default, the volume will be not deleted if you delete the PVC, change to
   # "Delete" if you wish the volume to be deleted automatically with the PVC
   persistentVolumeReclaimPolicy: Retain
+
   capacity:
     storage: 10Gi
   accessModes:

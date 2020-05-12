@@ -98,7 +98,8 @@ postgresql:
   persistence:
     enabled: true
     mountPath: /cahoots.in/data/postgresql-10.6
-    existingClaim: volume-cahoots-in
+    existingClaim: pvc-cahoots-in
+    size: 10Gi
 
   postgresqlPassword: b5fi41dz1BE4C22F44u
   postgresqlDatabase: cahoots_in

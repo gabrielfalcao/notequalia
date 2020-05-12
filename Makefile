@@ -6,20 +6,6 @@ export VENV		?= $(VENV_ROOT)
 export FLASK_DEBUG	:= 1
 export HTTPS_API	?= $(shell ps aux | grep ngrok | grep -v grep)
 
-DEPLOY_TIMEOUT		:= 300
-# NOTE: the sha must be the long version to match the ${{ github.sha
-# }} variable in the github actions. Using %h (short sha) will cause
-# deploys to fails with ImagePullBackOff
-BASE_TAG		:= latest
-PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
-DOCKER_AUTHOR		:= gabrielfalcao
-BASE_IMAGE		:= cahoots-in-base
-PROD_IMAGE		:= k8s-cahoots-in
-HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE)
-NAMESPACE		:= in-cahoots
-HELM_RELEASE		:= $(NAMESPACE)-v0
-FIGLET			:= $(shell which figlet)
-
 export OAUTH2_ACCESS_TOKEN_URL	:= https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/token
 export OAUTH2_AUTHORIZE_URL	:= https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/auth
 export OAUTH2_BASE_URL		:= https://id.t.newstore.net/realms/gabriel-NA-43928/protocol/openid-connect/
@@ -30,6 +16,20 @@ export OAUTH2_CLIENT_SECRET	:= 22aa51e7-3123-4ec5-8406-a66aa43b7c1a
 export OAUTH2_DOMAIN		:= id.t.newstore.net
 export OAUTH2_CLIENT_AUDIENCE	:= https://keycloak.fulltest.co/
 
+
+DEPLOY_TIMEOUT		:= 300
+# NOTE: the sha must be the long version to match the ${{ github.sha
+# }} variable in the github actions. Using %h (short sha) will cause
+# deploys to fails with ImagePullBackOff
+BASE_TAG		:= latest
+PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
+DOCKER_AUTHOR		:= gabrielfalcao
+BASE_IMAGE		:= cahoots-in-base
+PROD_IMAGE		:= k8s-cahoots-in
+HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE) --set oauth2.client_id=$(OAUTH2_CLIENT_ID) --set oauth2.client_secret=$(OAUTH2_CLIENT_SECRET)
+NAMESPACE		:= in-cahoots
+HELM_RELEASE		:= $(NAMESPACE)-v0
+FIGLET			:= $(shell which figlet)
 
 all: dependencies tests
 
@@ -121,10 +121,13 @@ template:
 	helm template $(HELM_SET_VARS) operations/helm
 
 deploy: k8s-namespace
+	iterm2 color orange
 	helm template $(HELM_SET_VARS) operations/helm > /dev/null
 	git push
 	helm dependency update --skip-refresh operations/helm/
+	iterm2 color red
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
+	iterm2 color green
 
 helm-install:
 	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
@@ -133,10 +136,15 @@ helm-upgrade:
 	helm upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
 
 k8s-namespace:
+	iterm2 color blue
 	kubectl get namespaces | grep $(NAMESPACE) | awk '{print $$1}' || kubectl create namespace $(NAMESPACE)
+	iterm2 color yellow
 
 rollback:
-	helm delete --purge $(HELM_RELEASE)
+	iterm2 color cyan
+	-helm delete --purge $(HELM_RELEASE)
+	-kubectl get pv,pvc -n $(NAMESPACE) -o yaml  | kubectl delete -f -
+	iterm2 color purple
 
 undeploy: rollback
 	kubectl delete ns $(NAMESPACE)
