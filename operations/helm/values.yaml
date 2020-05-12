@@ -60,7 +60,8 @@ oauth2:
   enabled: true
   domain: "id.t.newstore.net"
   callback_url: "https://keycloak.fulltest.co/callback/oauth2"
-
+  initial_token_id: "e761757f-5149-4f6c-971a-db4140806d6a"
+  initial_token_registration: "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1NGFkYmJiZi0wMTY1LTQyODAtYWJkZi1lMzU4N2UyMjMzYTYifQ.eyJqdGkiOiJlNzYxNzU3Zi01MTQ5LTRmNmMtOTcxYS1kYjQxNDA4MDZkNmEiLCJleHAiOjAsIm5iZiI6MCwiaWF0IjoxNTg5MjUwNDg5LCJpc3MiOiJodHRwczovL2lkLnQubmV3c3RvcmUubmV0L2F1dGgvcmVhbG1zL2dhYnJpZWwtTkEtNDM5MjgiLCJhdWQiOiJodHRwczovL2lkLnQubmV3c3RvcmUubmV0L2F1dGgvcmVhbG1zL2dhYnJpZWwtTkEtNDM5MjgiLCJ0eXAiOiJJbml0aWFsQWNjZXNzVG9rZW4ifQ.jCdnGgI9vqSOU6awx16vVsnGj5w8bdlltUSwClTrzB8"
   # https://manage.auth0.com/dashboard/us/dev-newstore/applications/N6l4Wi2JmIh5gXiGj2sibsZiJRJu0jj1/settings
   client_id: "---injected by Makefile---"
   client_secret: "---injected by Makefile---"
