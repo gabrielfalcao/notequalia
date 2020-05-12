@@ -120,9 +120,8 @@ template:
 	helm dependency update --skip-refresh operations/helm/
 	helm template $(HELM_SET_VARS) operations/helm
 
-deploy:
+deploy: k8s-namespace
 	helm template $(HELM_SET_VARS) operations/helm > /dev/null
-	$(MAKE) k8s-namespace
 	git push
 	helm dependency update --skip-refresh operations/helm/
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
@@ -145,7 +144,8 @@ undeploy: rollback
 k9s:
 	k9s -n $(NAMESPACE)
 
-redeploy: rollback deploy
+redeploy:
+	$(MAKE) undeploy deploy
 
 enqueue:
 	$(VENV)/bin/cahoots-in enqueue -x $(X) -n 10 --address='tcp://127.0.0.1:4242' "$${USER}@$$(hostname):[SENT=$$(date +'%s')]"
