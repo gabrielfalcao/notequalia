@@ -2,6 +2,7 @@ name: 🚢 K8S Docker Image
 
 on:
   - push
+  - branch
 
 jobs:
   build:

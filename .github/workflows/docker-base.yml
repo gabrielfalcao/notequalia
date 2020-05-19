@@ -3,6 +3,7 @@ name: ⚙️ Base Docker Image
 on:
   - push
   - pull_request
+  - branch
 
 jobs:
   build:
