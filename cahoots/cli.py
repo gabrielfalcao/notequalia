@@ -23,6 +23,7 @@ from cahoots.worker.server import EchoServer
 from cahoots.es import es
 from cahoots.logs import set_log_level_by_name, set_debug_mode
 from cahoots import version
+from cahoots import email
 
 
 DEFAULT_ROUTER_PORT = os.getenv("ZMQ_ROUTER_PORT") or 4242
@@ -126,6 +127,33 @@ def check():
     print(f"\033[1;33m{env}\033[0m")
 
 
+@main.command("smtp")
+@click.option(
+    "--port",
+    "-p",
+    help="HTTP PORT",
+    type=int,
+    default=int(os.getenv("INBOX_PORT", 8825)),
+)
+@click.option("--host", "-H", help="HTTP HOST", default=os.getenv("INBOX_HOST") or '0.0.0.0')
+@click.option(
+    "--debug",
+    "-d",
+    is_flag=True,
+    help="enable debug mode (should not use in production)",
+    default=True,
+)
+@click.pass_context
+def run_smtp(ctx, host, port, debug):
+    "runs the web server"
+    debug = debug or bool(os.getenv("INBOX_DEBUG"))
+    if debug:
+        set_debug_mode()
+
+    email.inbox.serve(address=host, port=port)
+
+
+
 @main.command("web")
 @click.option(
     "--port",
@@ -134,7 +162,7 @@ def check():
     type=int,
     default=int(os.getenv("FLASK_PORT", 5000)),
 )
-@click.option("--host", "-H", help="HTTP HOST", default=os.getenv("FLASK_HOST"))
+@click.option("--host", "-H", help="HTTP HOST", default=os.getenv("FLASK_HOST") or '0.0.0.0')
 @click.option(
     "--debug",
     "-d",
@@ -172,7 +200,7 @@ def check_db(ctx):
 @click.option("--drop/--no-drop", default=False)
 @click.pass_context
 def migrate_db(ctx, drop):
-    "runs the web server"
+    "runs the migrations"
 
     set_debug_mode()
     error = check_database_dns()
