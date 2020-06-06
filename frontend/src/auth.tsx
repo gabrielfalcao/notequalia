@@ -4,7 +4,7 @@ export class Constants {
     public static stsAuthority =
         "https://id.t.newstore.net/auth/realms/gabriel-NA-43928/";
     public static clientId = "fake-nom";
-    public static clientRoot = "https://keycloak.fulltest.co";
+    public static clientRoot = "https://reactkeycloak.ngrok.io";
     public static clientScope =
         "openid profile email template:read template:write";
 
@@ -21,7 +21,7 @@ export class AuthService {
             redirect_uri: `${Constants.clientRoot}/oauth2/callback`,
             silent_redirect_uri: `${Constants.clientRoot}/oauth2/refresh`,
             // tslint:disable-next-line:object-literal-sort-keys
-            post_logout_redirect_uri: `${Constants.clientRoot}`,
+            post_logout_redirect_uri: `${Constants.clientRoot}/`,
             response_type: "code",
             scope: Constants.clientScope
         };

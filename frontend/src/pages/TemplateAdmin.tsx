@@ -56,6 +56,16 @@ class TemplateAdmin extends Component<TemplateAdminProps> {
         const scope = new Scope(auth);
         return (
             <Container fluid="md">
+                <Col md={12}>
+                    <hr />
+                    <h3>Scopes Allowed:</h3>
+
+                    <strong>
+                        <pre className="text-info">{auth.scope}</pre>
+                    </strong>
+                    <hr />
+                </Col>
+
                 <Row>
                     <Col md={12}>
                         <h1>Template Admin</h1>
