@@ -5,7 +5,7 @@ metadata:
   labels:
 {{ include "notequalia-io.labels" . | indent 4 }}
 data:
-  HTTPS_API: "true"
+  HTTPS_API: "false"
   FLASK_HOST: "0.0.0.0"
   FLASK_PORT: {{ .Values.service.port | quote }}
   # FLASK_DEBUG: "true"  # disable for production usage
