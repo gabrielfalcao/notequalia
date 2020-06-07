@@ -27,7 +27,7 @@ DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= notequalia-io-base
 PROD_IMAGE		:= k8s-notequalia-io
 HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE) --set oauth2.client_id=$(OAUTH2_CLIENT_ID) --set oauth2.client_secret=$(OAUTH2_CLIENT_SECRET) --set flask.secret_key=$(SECRET_KEY)-$(PROD_TAG)
-NAMESPACE		:= in-cahoots
+NAMESPACE		:= notequalia-k8sns
 HELM_RELEASE		:= $(NAMESPACE)-v0
 FIGLET			:= $(shell which figlet)
 

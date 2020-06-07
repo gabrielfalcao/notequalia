@@ -5,7 +5,7 @@
 replicaCount: 1
 
 cahoots_url: "https://keycloak.fulltest.co/"
-# namespace: in-cahoots
+# namespace: notequalia-k8sns
 
 image:
   repository: gabrielfalcao/k8s-notequalia-io
