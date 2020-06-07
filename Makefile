@@ -22,7 +22,8 @@ DEPLOY_TIMEOUT		:= 300
 # }} variable in the github actions. Using %h (short sha) will cause
 # deploys to fails with ImagePullBackOff
 BASE_TAG		:= latest
-PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
+#PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
+PROD_TAG		:= ca2865f076745b9856f5cc2e101d9e7482a318fe
 DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= notequalia-io-base
 PROD_IMAGE		:= k8s-notequalia-io
@@ -149,12 +150,12 @@ k8s-namespace:
 rollback:
 	iterm2 color cyan
 	-helm delete --purge $(HELM_RELEASE)
-	#-kubectl get pv,pvc -n $(NAMESPACE) -o yaml  | kubectl delete -f -
+	-kubectl get pv -n $(NAMESPACE) -o yaml  | kubectl delete -f -
 	#iterm2 color purple
 	iterm2 color green
 
 undeploy: rollback
-	kubectl delete ns $(NAMESPACE)
+	#kubectl delete ns $(NAMESPACE)
 
 k9s:
 	iterm2 color k
