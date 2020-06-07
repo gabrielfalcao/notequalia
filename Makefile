@@ -22,8 +22,8 @@ DEPLOY_TIMEOUT		:= 300
 # }} variable in the github actions. Using %h (short sha) will cause
 # deploys to fails with ImagePullBackOff
 BASE_TAG		:= latest
-#PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
-PROD_TAG		:= ca2865f076745b9856f5cc2e101d9e7482a318fe
+PROD_TAG		:= $(shell git log --pretty="format:%H" -n1 . | tail -1)
+#PROD_TAG		:= ca2865f076745b9856f5cc2e101d9e7482a318fe  # stable
 DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= notequalia-io-base
 PROD_IMAGE		:= k8s-notequalia-io
