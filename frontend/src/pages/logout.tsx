@@ -1,52 +1,50 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
+import PropTypes, { InferProps } from "prop-types";
+
 import Container from "react-bootstrap/Container";
 
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
-import { AuthService } from "../auth";
+import { needs_login, AuthProps } from "../auth";
 // import { ComponentWithStore } from "../ui";
 
-type LogoutProps = {
-    logout: () => {};
+const LogoutPropTypes = {
+    logout: PropTypes.func,
+    auth: PropTypes.shape({
+        scope: PropTypes.string,
+        access_token: PropTypes.string,
+        id_token: PropTypes.string,
+        refresh_token: PropTypes.string,
+        profile: PropTypes.shape({
+            preferred_username: PropTypes.string
+        })
+    })
 };
 
+type LogoutProps = AuthProps | InferProps<typeof LogoutPropTypes> | any;
+
 class Logout extends Component<LogoutProps> {
-    public authService: AuthService;
-    static propTypes = {
-        logout: PropTypes.func,
-        auth: PropTypes.shape({
-            scope: PropTypes.string,
-            access_token: PropTypes.string,
-            id_token: PropTypes.string,
-            refresh_token: PropTypes.string,
-            profile: PropTypes.shape({
-                preferred_username: PropTypes.string
-            })
-        })
-    };
+    static propTypes = LogoutPropTypes;
 
     constructor(props: LogoutProps) {
         super(props);
-        this.authService = new AuthService();
+        this.state = {};
     }
 
-    public logout = () => {
-        this.authService
-            .logout()
-            .then(() => {
-                this.props.logout();
-            })
-            .catch(error => {
-                console.log(error);
-                this.props.logout();
-            });
+    public performLogout = () => {
+        this.props.logout();
     };
 
     render() {
+        const { auth } = this.props;
+        if (needs_login(auth)) {
+            return <Redirect to="/" />;
+        }
+
         return (
             <Container fluid="md">
                 <Row>
@@ -59,7 +57,10 @@ class Logout extends Component<LogoutProps> {
                             </Modal.Header>
 
                             <Modal.Footer>
-                                <Button onClick={this.logout} variant="danger">
+                                <Button
+                                    onClick={this.performLogout}
+                                    variant="danger"
+                                >
                                     Logout
 								</Button>
                             </Modal.Footer>

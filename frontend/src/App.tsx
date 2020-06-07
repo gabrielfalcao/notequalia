@@ -15,11 +15,11 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 
 import ProfilePage from "./pages/home";
-import TemplateAdmin from "./pages/TemplateAdmin";
-import OAuth2Callback from "./pages/callback";
+import NoteManager from "./pages/NoteManager";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
 import { ComponentWithStore } from "./ui";
+import { needs_login } from "./auth";
 
 type AppState = {
     user: any;
@@ -28,16 +28,6 @@ type AppState = {
 type AppProps = {
     auth: any;
 };
-
-function needs_login(auth: any) {
-    if (!auth) {
-        return true;
-    }
-    if (!auth.scope) {
-        return true;
-    }
-    return typeof auth.scope !== "string";
-}
 
 class App extends Component<AppProps, AppState> {
     static propTypes = {
@@ -73,15 +63,15 @@ class App extends Component<AppProps, AppState> {
 
         return (
             <Router>
-                <Navbar bg="light" expand="lg" sticky="top">
+                <Navbar bg="light" expand="lg" sticky="top" className="mb-3">
                     <LinkContainer to="/">
-                        <Navbar.Brand>Fake NOM</Navbar.Brand>
+                        <Navbar.Brand>NoteQualia</Navbar.Brand>
                     </LinkContainer>
-                    <Navbar.Toggle aria-controls="fakenom-navbar-nav" />
+                    <Navbar.Toggle aria-controls="notequalia-navbar-nav" />
 
                     <Navbar.Collapse
                         className="justify-content-end"
-                        id="fakenom-navbar-nav"
+                        id="notequalia-navbar-nav"
                     >
                         <Nav>
                             {needs_login(auth) ? (
@@ -90,20 +80,17 @@ class App extends Component<AppProps, AppState> {
                                 </LinkContainer>
                             ) : (
                                     <React.Fragment>
-                                        <LinkContainer to="/profile">
-                                            <Nav.Link>Home</Nav.Link>
+                                        <LinkContainer to="/notes">
+                                            <Nav.Link>Notes</Nav.Link>
                                         </LinkContainer>
 
-                                        <LinkContainer to="/admin">
-                                            <Nav.Link>Template API Admin</Nav.Link>
-                                        </LinkContainer>
-
-                                        <Nav.Link href="/api">
-                                            Fake NewStore API v1
-									</Nav.Link>
+                                        <Nav.Link href="/api">Browse API</Nav.Link>
 
                                         <LinkContainer to="/logout">
                                             <Nav.Link>Logout</Nav.Link>
+                                        </LinkContainer>
+                                        <LinkContainer to="/profile">
+                                            <Nav.Link>Profile</Nav.Link>
                                         </LinkContainer>
                                     </React.Fragment>
                                 )}
@@ -111,9 +98,6 @@ class App extends Component<AppProps, AppState> {
                     </Navbar.Collapse>
                 </Navbar>
                 <Switch>
-                    <Route path="/oauth2/callback">
-                        <OAuth2Callback />
-                    </Route>
                     <Route path="/login">
                         <Login />
                     </Route>
@@ -121,13 +105,13 @@ class App extends Component<AppProps, AppState> {
                         <Logout />
                     </Route>
                     <Route exact path="/">
-                        <Redirect to="/admin" />
+                        <Redirect to="/notes" />
                     </Route>
                     <AuthenticatedRoute path="/profile">
                         <ProfilePage />
                     </AuthenticatedRoute>
-                    <AuthenticatedRoute path="/admin">
-                        <TemplateAdmin />
+                    <AuthenticatedRoute path="/notes">
+                        <NoteManager />
                     </AuthenticatedRoute>
                 </Switch>
             </Router>

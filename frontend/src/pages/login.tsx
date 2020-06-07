@@ -1,49 +1,40 @@
 import React, { Component } from "react";
-import PropTypes, { InferProps } from "prop-types";
+// import PropTypes, { InferProps } from "prop-types";
+import { connect } from "react-redux";
 
 import Container from "react-bootstrap/Container";
 // import * as toastr from "toastr";
 import { Redirect } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
+// import { LinkContainer } from "react-router-bootstrap";
 
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
-import { AuthService } from "../auth";
-import { ComponentWithStore } from "../ui";
+import { needs_login } from "../auth";
+type LoginProps = {
+    setUser: any;
+};
+type LoginState = {
+    user: any;
+};
 
-class Login extends Component<{}, any> {
-    public authService: AuthService;
-    static propTypes = {
-        auth: PropTypes.shape({
-            scope: PropTypes.string,
-            profile: PropTypes.shape({
-                preferred_name: PropTypes.string
-            })
-        })
-    };
-    static defaultProps: InferProps<typeof Login.propTypes> = {
-        auth: {
-            scope: null,
-            profile: null
-        }
-    };
-
-    constructor(props: any) {
-        super(props);
-
-        this.authService = new AuthService();
-    }
-
+class Login extends Component<LoginProps, LoginState> {
     public login = () => {
-        this.authService.login();
-        //
+        // dummy login
+        this.props.setUser({
+            scope: "notes:write notes:read",
+            user: { email: "johndoe@mail.cognod.es" },
+            access_token: "FAKETOKEN",
+            profile: {
+                preferred_name: "John Doe"
+            }
+        });
     };
 
     render() {
         const { auth }: any = this.props;
-        if (auth.access_token) {
+        if (!needs_login(auth)) {
             return <Redirect to="/" />;
         }
         return (
@@ -52,26 +43,17 @@ class Login extends Component<{}, any> {
                     <Col md={12}>
                         <Modal.Dialog>
                             <Modal.Header>
-                                <Modal.Title>Login with KeyCloak</Modal.Title>
+                                <Modal.Title>Login</Modal.Title>
                             </Modal.Header>
 
                             <Modal.Body>
                                 <p>
-                                    Your user needs at least the scopes{" "}
-                                    <code>template:read</code> or{" "}
-                                    <code>template:write</code> to use the
-									<a href="https://api.cognod.es">
-                                        Fake NewStore API v1
-									</a>
-									.
+                                    This is a dummy login for now, just click
+                                    login.
 								</p>
                             </Modal.Body>
 
                             <Modal.Footer>
-                                <LinkContainer to="/logout">
-                                    <Button variant="primary">Logout</Button>
-                                </LinkContainer>
-
                                 <Button onClick={this.login} variant="success">
                                     Proceed
 								</Button>
@@ -84,4 +66,16 @@ class Login extends Component<{}, any> {
     }
 }
 
-export default ComponentWithStore(Login);
+export default connect(
+    state => {
+        return { ...state };
+    },
+    {
+        setUser: function(user: any) {
+            return {
+                type: "NEW_AUTHENTICATION",
+                user
+            };
+        }
+    }
+)(Login);

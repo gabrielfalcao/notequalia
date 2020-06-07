@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { compose } from "redux";
 import { auth } from "./auth";
+import { note } from "./note";
 import { templates } from "./templates";
 import { connectRouter } from "connected-react-router";
 import { history } from "../history";
@@ -16,5 +17,5 @@ export const mainReducer = (state: any = DEFAULT_STATE, action: any = {}) => {
 
 export default compose(
     mainReducer,
-    combineReducers({ auth, templates, router: connectRouter(history) })
+    combineReducers({ auth, note, templates, router: connectRouter(history) })
 );
