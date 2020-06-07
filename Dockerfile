@@ -19,13 +19,13 @@ RUN /venv/bin/pip install /app
 RUN make tests
 
 RUN notequalia-io check
-ENV CAHOOTS_IN_PORT 5000
-ENV CAHOOTS_IN_VERSION 4
+ENV NOTEQUALIA_IO_PORT 5000
+ENV NOTEQUALIA_IO_VERSION 4
 
 EXPOSE 5000
 EXPOSE 4242
 EXPOSE 6969
 
 
-CMD notequalia-io web "--port=$CAHOOTS_IN_PORT"
-CMD /venv/bin/uwsgi --http ":$CAHOOTS_IN_PORT" --mount /=application.web:application
+CMD notequalia-io web "--port=$NOTEQUALIA_IO_PORT"
+CMD /venv/bin/uwsgi --http ":$NOTEQUALIA_IO_PORT" --mount /=application.web:application
