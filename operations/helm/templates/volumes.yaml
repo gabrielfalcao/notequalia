@@ -32,7 +32,7 @@ spec:
   csi:
     driver: dobs.csi.digitalocean.com
     fsType: ext4
-    volumeHandle: 101187de-45d7-11e8-9b2b-0242ac116704
+    volumeHandle: e6413dbc-a90a-11ea-9aea-0a58ac14d0a1  # run command "doctl compute volume list" to get hande
     volumeAttributes:
       com.digitalocean.csi/noformat: "true"
 
