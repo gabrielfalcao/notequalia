@@ -24,7 +24,35 @@ spec:
     - mail.cognod.es
     secretName: cognod-es-letsencrypt-secret
   rules:
+  - host: cognod.es
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "notequalia-io.fullname" . }}
+          servicePort: 5000
   - host: api.cognod.es
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "notequalia-io.fullname" . }}
+          servicePort: 5000
+  - host: data.cognod.es
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "notequalia-io.fullname" . }}
+          servicePort: 5000
+  - host: app.cognod.es
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ include "notequalia-io.fullname" . }}
+          servicePort: 5000
+  - host: mail.cognod.es
     http:
       paths:
       - path: /
