@@ -106,14 +106,14 @@ postgresql:
     size: 10Gi
 
   postgresqlPassword: b5fi41dz1BE4C22F44u
-  postgresqlDatabase: cahoots_in
+  postgresqlDatabase: notequalia_io
   postgresqlUsername: web
   # master:
   #   extraInitContainers:
   #   - image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
   #     imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
   #     name: create postgres users
-  #     command: ['bash', '-c', '"echo \"grant all privileges on database cahoots_in to postgres\""']
+  #     command: ['bash', '-c', '"echo \"grant all privileges on database notequalia_io to postgres\""']
 
 
 redis:

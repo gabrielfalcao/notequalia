@@ -108,12 +108,12 @@ forward-queue-port:
 	kubepfm --target "$(NAMESPACE):.*queue:4242:4242"
 
 db: purge-sessions | $(VENV)/bin/notequalia-io
-	-@2>/dev/null dropdb cahoots_in || echo ''
-	-@2>/dev/null dropuser cahoots_in || echo 'no db user'
-	-@2>/dev/null createuser cahoots_in --createrole --createdb
-	-@2>/dev/null createdb cahoots_in
-	-@psql postgres << "CREATE ROLE cahoots_in WITH LOGIN PASSWORD 'Wh15K3y'"
-	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE cahoots_in TO cahoots_in;"
+	-@2>/dev/null dropdb notequalia_io || echo ''
+	-@2>/dev/null dropuser notequalia_io || echo 'no db user'
+	-@2>/dev/null createuser notequalia_io --createrole --createdb
+	-@2>/dev/null createdb notequalia_io
+	-@psql postgres << "CREATE ROLE notequalia_io WITH LOGIN PASSWORD 'Wh15K3y'"
+	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE notequalia_io TO notequalia_io;"
 	$(VENV)/bin/notequalia-io migrate-db
 
 purge-sessions:

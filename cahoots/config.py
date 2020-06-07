@@ -84,9 +84,9 @@ OIDC_RESOURCE_SERVER_ONLY = False
 class dbconfig:
     host = os.getenv("POSTGRES_HOST") or "localhost"
     port = int(os.getenv("POSTGRES_PORT") or 5432)
-    username = os.getenv("POSTGRES_USERNAME") or "cahoots_in"
+    username = os.getenv("POSTGRES_USERNAME") or "notequalia_io"
     password = os.getenv("POSTGRES_PASSWORD") or "Wh15k3y"
-    database = os.getenv("POSTGRES_DATABASE") or "cahoots_in"
+    database = os.getenv("POSTGRES_DATABASE") or "notequalia_io"
     auth = os.getenv("POSTGRES_AUTH") or (
         password and f"{username}:{password}" or username
     )
