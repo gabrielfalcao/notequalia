@@ -87,14 +87,14 @@ def check_database_dns():
         sock.close()
 
 
-logger = logging.getLogger("cahoots-in")
+logger = logging.getLogger("notequalia-io")
 
 
 @click.group()
 @click.option("--loglevel", default="INFO", type=level_choices)
 @click.pass_context
 def main(ctx, loglevel):
-    "cahoots-in command-line manager"
+    "notequalia-io command-line manager"
     set_log_level_by_name(loglevel)
     ctx.obj = dict(engine=set_default_uri(dbconfig.sqlalchemy_url()))
 
@@ -102,7 +102,7 @@ def main(ctx, loglevel):
 @main.command(name="version")
 def print_version():
     "prints the version to the STDOUT"
-    print(f"cahoots-in {version} / {sys.platform}")
+    print(f"notequalia-io {version} / {sys.platform}")
 
 
 @main.command(name="purge-sessions")

@@ -4,7 +4,7 @@
 /.coverage
 /.mypy_cache/
 /.venv/
-/cahoots-in-uploads/
+/notequalia-io-uploads/
 /cahoots/__pycache__/
 /cahoots/web/__pycache__/
 /cahoots/worker/__pycache__/

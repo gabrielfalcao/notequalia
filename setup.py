@@ -32,7 +32,7 @@ def read_version():
 
 
 setup(
-    name="cahoots-in",
+    name="notequalia-io",
     version=read_version(),
     description="\n".join(
         [
@@ -42,14 +42,14 @@ setup(
         ]
     ),
     long_description=local_file("README.rst"),
-    entry_points={"console_scripts": ["cahoots-in = cahoots.cli:main"]},
+    entry_points={"console_scripts": ["notequalia-io = cahoots.cli:main"]},
     url="https://github.com/gabrielfalcao/kube-python-app-example",
     packages=find_packages(exclude=["*tests*"]),
     include_package_data=True,
     package_data={
         "cahoots": ["README.rst", "*.png", "*.json", "*.rst", "docs/*", "docs/*/*"]
     },
-    package_dir={"cahoots-in": "cahoots"},
+    package_dir={"notequalia-io": "cahoots"},
     zip_safe=False,
     author="Gabriel Falcão",
     author_email="gabriel@nacaolivre.org",

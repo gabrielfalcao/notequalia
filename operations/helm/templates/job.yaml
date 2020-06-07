@@ -2,7 +2,7 @@
 # apiVersion: batch/v1
 # kind: Job
 # metadata:
-#   name: {{ include "cahoots-in.fullname" . }}-worker
+#   name: {{ include "notequalia-io.fullname" . }}-worker
 # spec:
 #   template:
 #     spec:
@@ -10,10 +10,10 @@
 #       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 #         imagePullPolicy: {{ .Values.image.pullPolicy }}
 #         name: {{ .Chart.Name }}-worker
-#         command: ['/venv/bin/cahoots-in', 'worker']
+#         command: ['/venv/bin/notequalia-io', 'worker']
 #         envFrom:
 #           - configMapRef:
-#               name: {{ include "cahoots-in.fullname" . }}-env
+#               name: {{ include "notequalia-io.fullname" . }}-env
 
 #       restartPolicy: Never
 #   backoffLimit: 6 # number of retries before throwing error

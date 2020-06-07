@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "cahoots-in.fullname" . }}-ingress-fulltestco
+  name: {{ include "notequalia-io.fullname" . }}-ingress-fulltestco
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
@@ -25,7 +25,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "cahoots-in.fullname" . }}
+          serviceName: {{ include "notequalia-io.fullname" . }}
           servicePort: 5000
 {{- end }}
 
@@ -33,7 +33,7 @@ spec:
 # apiVersion: networking.k8s.io/v1beta1
 # kind: Ingress
 # metadata:
-#   name: {{ include "cahoots-in.fullname" . }}-ingress-wavemandala
+#   name: {{ include "notequalia-io.fullname" . }}-ingress-wavemandala
 #   annotations:
 #     kubernetes.io/ingress.class: nginx
 #     cert-manager.io/cluster-issuer: "letsencrypt-staging"
@@ -51,13 +51,13 @@ spec:
 #       paths:
 #       - path: /
 #         backend:
-#           serviceName: {{ include "cahoots-in.fullname" . }}
+#           serviceName: {{ include "notequalia-io.fullname" . }}
 #           servicePort: 5000
 # ---
 # apiVersion: networking.k8s.io/v1beta1
 # kind: Ingress
 # metadata:
-#   name: {{ include "cahoots-in.fullname" . }}-ingress-cahoots
+#   name: {{ include "notequalia-io.fullname" . }}-ingress-cahoots
 #   annotations:
 #     kubernetes.io/ingress.class: nginx
 #     cert-manager.io/cluster-issuer: "letsencrypt-staging"
@@ -67,14 +67,14 @@ spec:
 # spec:
 #   tls:
 #   - hosts:
-#     - notequalia.app
+#     - notequalia.io
 #     secretName: cahoots-roots
 #   rules:
-#   - host: notequalia.app
+#   - host: notequalia.io
 #     http:
 #       paths:
 #       - path: /
 #         backend:
-#           serviceName: {{ include "cahoots-in.fullname" . }}
+#           serviceName: {{ include "notequalia-io.fullname" . }}
 #           servicePort: 5000
 # ---

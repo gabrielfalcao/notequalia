@@ -6,7 +6,7 @@ module_path = Path(__file__).parent
 
 current_working_path = Path(os.getcwd()).expanduser().absolute()
 
-DEFAULT_UPLOAD_PATH = current_working_path.joinpath("cahoots-in-uploads")
+DEFAULT_UPLOAD_PATH = current_working_path.joinpath("notequalia-io-uploads")
 APP_URL_EXTERNAL = os.getenv("APP_URL_EXTERNAL") or "https://pron-f1l3-serv3r.ngrok.io/"
 
 REDIS_HOST = os.getenv("REDIS_HOST")

@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "cahoots-in.name" -}}
+{{- define "notequalia-io.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "cahoots-in.fullname" -}}
+{{- define "notequalia-io.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,7 +27,7 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "cahoots-in.chart" -}}
+{{- define "notequalia-io.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -35,9 +35,9 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 
-{{- define "cahoots-in.labels" -}}
-app.kubernetes.io/name: {{ include "cahoots-in.name" . }}
-helm.sh/chart: {{ include "cahoots-in.chart" . }}
+{{- define "notequalia-io.labels" -}}
+app.kubernetes.io/name: {{ include "notequalia-io.name" . }}
+helm.sh/chart: {{ include "notequalia-io.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -52,18 +52,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "namespace.svc.hostname" -}}
 {{- printf "%s.svc.cluster.local" .Release.Namespace -}}
 {{- end -}}
-{{- define "cahoots-in.web.hostname" -}}
-{{ include "cahoots-in.fullname" . }}.{{ include "namespace.svc.hostname" . }}
+{{- define "notequalia-io.web.hostname" -}}
+{{ include "notequalia-io.fullname" . }}.{{ include "namespace.svc.hostname" . }}
 {{- end -}}
-{{- define "cahoots-in.web.fqdn" -}}
-{{ include "cahoots-in.web.hostname" . }}:{{ .Values.service.port }}
+{{- define "notequalia-io.web.fqdn" -}}
+{{ include "notequalia-io.web.hostname" . }}:{{ .Values.service.port }}
 {{- end -}}
-{{- define "cahoots-in.zmq-queue.hostname" -}}
-{{ include "cahoots-in.fullname" . }}-queue.{{ include "namespace.svc.hostname" . }}
+{{- define "notequalia-io.zmq-queue.hostname" -}}
+{{ include "notequalia-io.fullname" . }}-queue.{{ include "namespace.svc.hostname" . }}
 {{- end -}}
 
-{{- define "cahoots-in.ngrok.hostname" -}}
-{{ include "cahoots-in.fullname" . }}-ngrok-tunnel.{{ include "namespace.svc.hostname" . }}
+{{- define "notequalia-io.ngrok.hostname" -}}
+{{ include "notequalia-io.fullname" . }}-ngrok-tunnel.{{ include "namespace.svc.hostname" . }}
 {{- end -}}
 
 {{/*

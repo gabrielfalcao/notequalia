@@ -1,4 +1,4 @@
-# Default values for cahoots-in.
+# Default values for notequalia-io.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -8,7 +8,7 @@ cahoots_url: "https://keycloak.fulltest.co/"
 # namespace: in-cahoots
 
 image:
-  repository: gabrielfalcao/k8s-cahoots-in
+  repository: gabrielfalcao/k8s-notequalia-io
   tag: latest
   pullPolicy: Always
 
@@ -98,11 +98,11 @@ postgresql:
     repository: postgres
     tag: 10.6
 
-  postgresqlDataDir: /notequalia.app/data/postgresql-10.6/pgdata-2020-05-19
+  postgresqlDataDir: /notequalia.io/data/postgresql-10.6/pgdata-2020-05-19
   persistence:
     enabled: true
-    mountPath: /notequalia.app/data/postgresql-10.6
-    existingClaim: pvc-cahoots-in
+    mountPath: /notequalia.io/data/postgresql-10.6
+    existingClaim: pvc-notequalia-io
     size: 10Gi
 
   postgresqlPassword: b5fi41dz1BE4C22F44u

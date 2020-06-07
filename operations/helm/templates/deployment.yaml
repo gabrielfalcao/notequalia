@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cahoots-in.fullname" . }}-web
+  name: {{ include "notequalia-io.fullname" . }}-web
 spec:
   minReadySeconds: 5
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "cahoots-in.name" . }}-web
+      app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "cahoots-in.name" . }}-web
+        app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       affinity:
@@ -40,31 +40,31 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: check-installation
-        command: ['/venv/bin/cahoots-in', 'check']
+        command: ['/venv/bin/notequalia-io', 'check']
         envFrom:
           - configMapRef:
-              name: {{ include "cahoots-in.fullname" . }}-env
+              name: {{ include "notequalia-io.fullname" . }}-env
 
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: check-db-connection
-        command: ['/venv/bin/cahoots-in', 'check-db']
+        command: ['/venv/bin/notequalia-io', 'check-db']
         envFrom:
           - configMapRef:
-              name: {{ include "cahoots-in.fullname" . }}-env
+              name: {{ include "notequalia-io.fullname" . }}-env
 
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: run-database-migrations
-        command: ['/venv/bin/cahoots-in', 'migrate-db', '--drop']
+        command: ['/venv/bin/notequalia-io', 'migrate-db', '--drop']
         envFrom:
           - configMapRef:
-              name: {{ include "cahoots-in.fullname" . }}-env
+              name: {{ include "notequalia-io.fullname" . }}-env
         env:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "cahoots-in.fullname" . }}-secrets
+              name: {{ template "notequalia-io.fullname" . }}-secrets
               key: postgresql-password
 
         env:
@@ -74,21 +74,21 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: purge-sessions
-        command: ['/venv/bin/cahoots-in', 'purge-sessions']
+        command: ['/venv/bin/notequalia-io', 'purge-sessions']
         envFrom:
           - configMapRef:
-              name: {{ include "cahoots-in.fullname" . }}-env
+              name: {{ include "notequalia-io.fullname" . }}-env
 
       volumes:
         - name: cahoots-uploads-volume
           persistentVolumeClaim:
-            claimName: pvc-cahoots-in
+            claimName: pvc-notequalia-io
 
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: {{ .Chart.Name }}-web-application-server
-        command: ['/venv/bin/cahoots-in', 'web']
+        command: ['/venv/bin/notequalia-io', 'web']
         livenessProbe:
           httpGet:
             path: /health
@@ -102,16 +102,16 @@ spec:
 
         env:
           - name: UPLOAD_FOLDER
-            value: /notequalia.app/file-uploads
+            value: /notequalia.io/file-uploads
           # - name: OAUTH2_CLIENT_SECRET
           #   valueFrom:
           #     secretKeyRef:
-          #       name: {{ template "cahoots-in.fullname" . }}-secrets
+          #       name: {{ template "notequalia-io.fullname" . }}-secrets
           #       key: oauth2-client-secret
 
         envFrom:
           - configMapRef:
-              name: {{ include "cahoots-in.fullname" . }}-env
+              name: {{ include "notequalia-io.fullname" . }}-env
 
         ports:
         - containerPort: 5000
@@ -119,4 +119,4 @@ spec:
 
         volumeMounts:
           - name: cahoots-uploads-volume
-            mountPath: /notequalia.app
+            mountPath: /notequalia.io

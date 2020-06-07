@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-cahoots-in
+  name: pvc-notequalia-io
 spec:
   accessModes:
   - ReadWriteOnce
@@ -14,7 +14,7 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: volume-cahoots-in
+  name: volume-notequalia-io
   annotations:
     # fake it by indicating this is provisioned dynamically, so the system
     # works properly

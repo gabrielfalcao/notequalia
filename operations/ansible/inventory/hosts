@@ -8,4 +8,4 @@
 # If this causes SSH connection troubles, feel free to disable it.
 
 [matrix-servers]
-matrix.notequalia.app ansible_host=174.138.105.200 ansible_ssh_user=root ansible_ssh_pipelining=yes
+matrix.notequalia.io ansible_host=174.138.105.200 ansible_ssh_user=root ansible_ssh_pipelining=yes
