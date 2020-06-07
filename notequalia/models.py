@@ -3,7 +3,7 @@ import logging
 from typing import Optional
 from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
-from cahoots.utils import parse_jwt_token
+from notequalia.utils import parse_jwt_token
 
 
 logger = logging.getLogger(__name__)

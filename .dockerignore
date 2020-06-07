@@ -5,9 +5,9 @@
 /.mypy_cache/
 /.venv/
 /notequalia-io-uploads/
-/cahoots/__pycache__/
-/cahoots/web/__pycache__/
-/cahoots/worker/__pycache__/
+/notequalia/__pycache__/
+/notequalia/web/__pycache__/
+/notequalia/worker/__pycache__/
 /notequalia_io.egg-info/
 /file-server-uploads/
 /file_server.egg-info/

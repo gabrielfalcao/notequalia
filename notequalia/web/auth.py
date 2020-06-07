@@ -3,11 +3,11 @@ import json
 import logging
 
 from flask import redirect, session, request, g, url_for, make_response
-from cahoots.models import AdminRequest, JWTToken, OpaqueJWT
-from cahoots.utils import json_response, parse_jwt_token
+from notequalia.models import AdminRequest, JWTToken, OpaqueJWT
+from notequalia.utils import json_response, parse_jwt_token
 
-from cahoots.web.core import application
-from cahoots.web.core import oidc
+from notequalia.web.core import application
+from notequalia.web.core import oidc
 
 
 logger = logging.getLogger(__name__)

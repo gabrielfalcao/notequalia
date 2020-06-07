@@ -1,5 +1,5 @@
 from flask import Response
-from cahoots.utils import json_response
+from notequalia.utils import json_response
 
 
 def test_json_response_returns_flask_response():

@@ -57,7 +57,7 @@ spec:
 # apiVersion: networking.k8s.io/v1beta1
 # kind: Ingress
 # metadata:
-#   name: {{ include "notequalia-io.fullname" . }}-ingress-cahoots
+#   name: {{ include "notequalia-io.fullname" . }}-ingress-notequalia
 #   annotations:
 #     kubernetes.io/ingress.class: nginx
 #     cert-manager.io/cluster-issuer: "letsencrypt-staging"
@@ -68,7 +68,7 @@ spec:
 #   tls:
 #   - hosts:
 #     - notequalia.io
-#     secretName: cahoots-roots
+#     secretName: notequalia-roots
 #   rules:
 #   - host: notequalia.io
 #     http:

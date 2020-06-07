@@ -4,7 +4,7 @@
 
 replicaCount: 1
 
-cahoots_url: "https://keycloak.fulltest.co/"
+notequalia_url: "https://keycloak.fulltest.co/"
 # namespace: notequalia-k8sns
 
 image:
@@ -92,7 +92,7 @@ tolerations: []
 
 affinity: {}
 postgresql:
-  fullnameOverride: cahoots-db
+  fullnameOverride: notequalia-db
   enabled: true
   image:
     repository: postgres
@@ -117,7 +117,7 @@ postgresql:
 
 
 redis:
-  fullnameOverride: cahoots-redis
+  fullnameOverride: notequalia-redis
   enabled: false
   image:
     pullPolicy: IfNotPresent

@@ -27,7 +27,7 @@ class VersionFinder(ast.NodeVisitor):
 
 def read_version():
     finder = VersionFinder()
-    finder.visit(ast.parse(local_file("cahoots", "version.py")))
+    finder.visit(ast.parse(local_file("notequalia", "version.py")))
     return finder.version
 
 
@@ -42,14 +42,14 @@ setup(
         ]
     ),
     long_description=local_file("README.rst"),
-    entry_points={"console_scripts": ["notequalia-io = cahoots.cli:main"]},
+    entry_points={"console_scripts": ["notequalia-io = notequalia.cli:main"]},
     url="https://github.com/gabrielfalcao/kube-python-app-example",
     packages=find_packages(exclude=["*tests*"]),
     include_package_data=True,
     package_data={
-        "cahoots": ["README.rst", "*.png", "*.json", "*.rst", "docs/*", "docs/*/*"]
+        "notequalia": ["README.rst", "*.png", "*.json", "*.rst", "docs/*", "docs/*/*"]
     },
-    package_dir={"notequalia-io": "cahoots"},
+    package_dir={"notequalia-io": "notequalia"},
     zip_safe=False,
     author="Gabriel Falcão",
     author_email="gabriel@nacaolivre.org",

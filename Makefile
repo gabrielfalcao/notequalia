@@ -186,11 +186,11 @@ frontend/build/index.html:
 	cd frontend && npm run build
 
 react-app: frontend/build/index.html
-	cp -f frontend/build/index.html cahoots/web/templates/index.html
-	rm -rf cahoots/web/static/{js,css}
-	rsync -putaoz frontend/build/static/ cahoots/web/static/
-	rsync -putaoz frontend/build/ cahoots/web/static/
-	rm -rf cahoots/web/static/static
+	cp -f frontend/build/index.html notequalia/web/templates/index.html
+	rm -rf notequalia/web/static/{js,css}
+	rsync -putaoz frontend/build/static/ notequalia/web/static/
+	rsync -putaoz frontend/build/ notequalia/web/static/
+	rm -rf notequalia/web/static/static
 	rm -f frontend/build/index.html
 
 # https://cert-manager.io/docs/tutorials/backup/

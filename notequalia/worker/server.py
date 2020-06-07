@@ -1,7 +1,7 @@
 import logging
 from zmq import green as zmq
 from agentzero.core import SocketManager
-from cahoots.worker.config import DEFAULT_DEALER_ADDRESS
+from notequalia.worker.config import DEFAULT_DEALER_ADDRESS
 
 context = zmq.Context()
 

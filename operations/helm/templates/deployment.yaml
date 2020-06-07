@@ -80,7 +80,7 @@ spec:
               name: {{ include "notequalia-io.fullname" . }}-env
 
       volumes:
-        - name: cahoots-uploads-volume
+        - name: notequalia-uploads-volume
           persistentVolumeClaim:
             claimName: pvc-notequalia-io
 
@@ -118,5 +118,5 @@ spec:
           name: api
 
         volumeMounts:
-          - name: cahoots-uploads-volume
+          - name: notequalia-uploads-volume
             mountPath: /notequalia.io

@@ -1,6 +1,6 @@
 from sure import scenario
-from cahoots.config import dbconfig
-from cahoots.web import application
+from notequalia.config import dbconfig
+from notequalia.web import application
 from chemist import set_default_uri, metadata
 
 

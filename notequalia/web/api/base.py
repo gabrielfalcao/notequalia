@@ -4,14 +4,14 @@ import logging
 from flask_restplus import Api
 
 from flask import url_for
-from cahoots.utils import json_response
-from cahoots.web.base import application
+from notequalia.utils import json_response
+from notequalia.web.base import application
 
-from cahoots import config
+from notequalia import config
 
-# from cahoots.worker.client import EchoClient
+# from notequalia.worker.client import EchoClient
 
-from cahoots.web.core import oidc
+from notequalia.web.core import oidc
 
 logger = logging.getLogger(__name__)
 

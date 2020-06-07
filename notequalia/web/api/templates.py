@@ -6,7 +6,7 @@ from flask_restplus import fields
 from flask_restplus import reqparse
 from flask_restplus import inputs
 
-from cahoots.models import Template
+from notequalia.models import Template
 from .base import api, oidc
 
 logger = logging.getLogger(__name__)

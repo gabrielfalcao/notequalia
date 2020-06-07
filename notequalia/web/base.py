@@ -2,9 +2,9 @@
 
 from flask import render_template
 
-from cahoots.logs import set_log_level_by_name
-from cahoots.web.core import application
-# from cahoots import config
+from notequalia.logs import set_log_level_by_name
+from notequalia.web.core import application
+# from notequalia import config
 
 
 logger = set_log_level_by_name("DEBUG", __name__)

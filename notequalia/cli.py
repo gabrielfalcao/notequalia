@@ -12,18 +12,18 @@ from datetime import datetime
 from zmq.devices import Device
 from chemist import set_default_uri
 
-# import from cahoots.api to cascade all route declarations
-from cahoots.web import application
+# import from notequalia.api to cascade all route declarations
+from notequalia.web import application
 
-from cahoots import config
-from cahoots.config import dbconfig
-from cahoots.models import metadata
-from cahoots.worker.client import EchoClient
-from cahoots.worker.server import EchoServer
-from cahoots.es import es
-from cahoots.logs import set_log_level_by_name, set_debug_mode
-from cahoots import version
-from cahoots import email
+from notequalia import config
+from notequalia.config import dbconfig
+from notequalia.models import metadata
+from notequalia.worker.client import EchoClient
+from notequalia.worker.server import EchoServer
+from notequalia.es import es
+from notequalia.logs import set_log_level_by_name, set_debug_mode
+from notequalia import version
+from notequalia import email
 
 
 DEFAULT_ROUTER_PORT = os.getenv("ZMQ_ROUTER_PORT") or 4242
