@@ -466,22 +466,22 @@
       "clientId": "fake-newstore-api-v1",
       "name": "Fake NewStore API v1",
       "description": "Test client to experiment with scope-based api endpoint authorization",
-      "rootUrl": "https://api.cognod.es/",
-      "adminUrl": "https://api.cognod.es/auth/admin",
-      "baseUrl": "https://api.cognod.es",
+      "rootUrl": "https://api.visualcu.es/",
+      "adminUrl": "https://api.visualcu.es/auth/admin",
+      "baseUrl": "https://api.visualcu.es",
       "surrogateAuthRequired": false,
       "enabled": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://api.cognod.es/*",
+        "https://api.visualcu.es/*",
         "https://keycloak-fulltestco.ngrok.io/oidc_callback",
         "https://keycloak-fulltestco.ngrok.io/*",
         "*",
-        "https://api.cognod.es/oidc_callback"
+        "https://api.visualcu.es/oidc_callback"
       ],
       "webOrigins": [
-        "https://api.cognod.es",
+        "https://api.visualcu.es",
         "https://keycloak-fulltestco.ngrok.io/"
       ],
       "notBefore": 1590452804,
@@ -729,20 +729,20 @@
     {
       "id": "22fe3337-4406-4bee-918a-d1638611ef27",
       "clientId": "fake-nom",
-      "rootUrl": "https://api.cognod.es/",
-      "adminUrl": "https://api.cognod.es/",
+      "rootUrl": "https://api.visualcu.es/",
+      "adminUrl": "https://api.visualcu.es/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://api.cognod.es/*",
+        "https://api.visualcu.es/*",
         "https://keycloak-fulltestco.ngrok.io",
         "https://keycloak-fulltestco.ngrok.io/*",
         "*"
       ],
       "webOrigins": [
-        "https://api.cognod.es"
+        "https://api.visualcu.es"
       ],
       "notBefore": 0,
       "bearerOnly": false,

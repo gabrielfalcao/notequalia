@@ -9,12 +9,12 @@ export HTTPS_API	?= $(shell ps aux | grep ngrok | grep -v grep)
 export OAUTH2_ACCESS_TOKEN_URL	:= https://id.t.newstore.net/auth/realms/gabriel-NA-43928/protocol/openid-connect/token
 export OAUTH2_AUTHORIZE_URL	:= https://id.t.newstore.net/auth/realms/gabriel-NA-43928/protocol/openid-connect/auth
 export OAUTH2_BASE_URL		:= https://id.t.newstore.net/auth/realms/gabriel-NA-43928/protocol/openid-connect/
-export OAUTH2_CALLBACK_URL	:= https://api.cognod.es/callback/oauth2
+export OAUTH2_CALLBACK_URL	:= https://api.visualcu.es/callback/oauth2
 export OAUTH2_CLIENT_ID		:= fake-newstore-api-v1
 export OAUTH2_CLIENT_SCOPE	:= openid profile email
 export OAUTH2_CLIENT_SECRET	:= da341d0c-eaa4-460b-af6b-dac5de6443b5
 export OAUTH2_DOMAIN		:= id.t.newstore.net
-export OAUTH2_CLIENT_AUDIENCE	:= https://api.cognod.es/
+export OAUTH2_CLIENT_AUDIENCE	:= https://api.visualcu.es/
 export SECRET_KEY		:= $(shell 2>/dev/null dd bs=128 count=1 if=/dev/urandom | base64 | head -1)
 
 DEPLOY_TIMEOUT		:= 300

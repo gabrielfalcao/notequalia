@@ -24,7 +24,7 @@ class Login extends Component<LoginProps, LoginState> {
         // dummy login
         this.props.setUser({
             scope: "notes:write notes:read",
-            user: { email: "johndoe@mail.cognod.es" },
+            user: { email: "johndoe@mail.visualcu.es" },
             access_token: "FAKETOKEN",
             profile: {
                 preferred_name: "John Doe"

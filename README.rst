@@ -1,7 +1,7 @@
 ------
 
 
-NoteQualia (cognod.es)
+NoteQualia (visualcu.es)
 ======================
 
 

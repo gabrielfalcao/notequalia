@@ -33,7 +33,7 @@ GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 OAUTH2_DOMAIN = os.getenv("OAUTH2_DOMAIN") or "id.t.newstore.net"
 OAUTH2_CALLBACK_URL = (
-    os.getenv("OAUTH2_CALLBACK_URL") or "https://api.cognod.es/callback/oauth2"
+    os.getenv("OAUTH2_CALLBACK_URL") or "https://api.visualcu.es/callback/oauth2"
 )
 
 # https://id.t.newstore.net/admin/master/console/#/realms/gabriel-NA-43928/clients/c75308f7-99e9-4b18-aeca-6e742a0b361d/credentials
@@ -48,7 +48,7 @@ OAUTH2_ACCESS_TOKEN_URL = (
 )
 OAUTH2_AUTHORIZE_URL = os.getenv("OAUTH2_AUTHORIZE_URL") or "{OAUTH2_BASE_URL}/auth"
 OAUTH2_CLIENT_SCOPE = os.getenv("OAUTH2_CLIENT_SCOPE") or "openid profile email"
-OAUTH2_CLIENT_AUDIENCE = os.getenv("OAUTH2_CLIENT_AUDIENCE") or "https://api.cognod.es/"
+OAUTH2_CLIENT_AUDIENCE = os.getenv("OAUTH2_CLIENT_AUDIENCE") or "https://api.visualcu.es/"
 DOCKER_IMAGE = os.getenv("DOCKER_IMAGE") or "latest"
 
 OIDC_CLIENT_SECRETS = os.getenv("OIDC_CLIENT_SECRETS_JSON_PATH") or str(
@@ -59,7 +59,7 @@ OIDC_REQUIRE_VERIFIED_EMAIL = bool(os.getenv("OIDC_REQUIRE_VERIFIED_EMAIL"))
 # OIDC_VALID_ISSUERS = None
 OIDC_OPENID_REALM = os.getenv(
     "OIDC_OPENID_REALM"
-)  # or 'https://api.cognod.es/oidc_callback'
+)  # or 'https://api.visualcu.es/oidc_callback'
 # OIDC_CALLBACK_ROUTE = '/callback_oidc'
 OIDC_SCOPES = ["openid", "email", "profile", "template:write", "template:read"]
 # --------------------------------

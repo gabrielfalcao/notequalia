@@ -76,7 +76,7 @@ class NoteManager extends Component<NoteManagerProps, Note> {
             note: {
                 name: "First Note",
                 markdownContent: DEFAULT_MARKDOWN,
-                metadata: { uri_id: "https://data.cognod.es/johndoe/first-note" }
+                metadata: { uri_id: "https://data.visualcu.es/johndoe/first-note" }
             }
         };
 
