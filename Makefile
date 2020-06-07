@@ -30,6 +30,8 @@ HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AU
 NAMESPACE		:= notequalia-k8sns
 HELM_RELEASE		:= $(NAMESPACE)-v0
 FIGLET			:= $(shell which figlet)
+FRONTEND_REACT_NGROK	:= notequalia-fe
+BACKEND_FLASK_NGROK	:= notequalia-be
 
 all: dependencies tests
 
@@ -147,8 +149,9 @@ k8s-namespace:
 rollback:
 	iterm2 color cyan
 	-helm delete --purge $(HELM_RELEASE)
-	-kubectl get pv,pvc -n $(NAMESPACE) -o yaml  | kubectl delete -f -
-	iterm2 color purple
+	#-kubectl get pv,pvc -n $(NAMESPACE) -o yaml  | kubectl delete -f -
+	#iterm2 color purple
+	iterm2 color green
 
 undeploy: rollback
 	kubectl delete ns $(NAMESPACE)
@@ -174,10 +177,10 @@ setup-helm:
 
 
 tunnel:
-	ngrok http --subdomain=keycloak-fulltestco 5000
+	ngrok http --subdomain=$(BACKEND_FLASK_NGROK) 5000
 
 tunnel-react:
-	ngrok http --subdomain=reactkeycloak 3000
+	ngrok http --subdomain=$(FRONTEND_REACT_NGROK) 3000
 
 clean:
 	rm -rf .venv
