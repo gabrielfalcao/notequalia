@@ -18,4 +18,4 @@ application.config.from_object("notequalia.config")
 cors = CORS(application, resources="*")
 
 session_manager = Session(application)
-oidc = OpenIDConnect(application)
+# oidc = OpenIDConnect(application)

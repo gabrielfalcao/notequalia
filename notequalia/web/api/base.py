@@ -11,7 +11,7 @@ from notequalia import config
 
 # from notequalia.worker.client import EchoClient
 
-from notequalia.web.core import oidc
+# from notequalia.web.core import oidc
 
 logger = logging.getLogger(__name__)
 

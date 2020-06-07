@@ -8,7 +8,7 @@ def test_logout(context):
     # Given that I perform a GET /logout
     response = context.http.get("/logout")
 
-    # And check if the status was 302
-    response.status_code.should.equal(302)
+    # And check if the status was 200
+    response.status_code.should.equal(200)
 
-    response.headers.should.have.key("Set-Cookie").being.match("session=;")
+    response.headers.should.have.key("Set-Cookie").being.match("session=.*")

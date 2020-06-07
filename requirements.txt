@@ -21,3 +21,4 @@ requests==2.23.0
 uiclasses==2.2.1
 vcrpy==4.0.2
 werkzeug==0.16.1
+flasgger>=0.9.4

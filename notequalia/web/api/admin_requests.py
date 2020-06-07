@@ -4,10 +4,10 @@ import logging
 from flask_restplus import Resource
 from flask_restplus import fields
 from flask_restplus import reqparse
-from flask_restplus import inputs
+# from flask_restplus import inputs
 
 from notequalia.models import KeycloakRequest
-from .base import api, oidc
+from .base import api
 
 logger = logging.getLogger(__name__)
 

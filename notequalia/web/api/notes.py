@@ -7,7 +7,7 @@ from flask_restplus import reqparse
 from flask_restplus import inputs
 
 from notequalia.models import Note
-from .base import api, oidc
+from .base import api
 
 logger = logging.getLogger(__name__)
 
@@ -25,9 +25,8 @@ note_json = api.model(
 )
 
 parser = reqparse.RequestParser()
-parser.add_argument("access_token", location="args", help="The opaque JWT Acess Token")
+# parser.add_argument("access_token", location="args", help="The opaque JWT Acess Token")
 
-# parser.add_argument('oidc_id_token', location='cookies', help='the id token provided by keycloak')
 # parser.add_argument('session', location='cookies', help='the session id containing the state of authentication')
 
 note_ns = api.namespace(
@@ -40,13 +39,11 @@ note_ns = api.namespace(
 @note_ns.route("/notes")
 @note_ns.expect(parser)
 class NoteListEndpoint(Resource):
-    @oidc.accept_token(True, scopes_required=["note:read"])
     def get(self):
         notes = Note.all()
         return [u.to_dict() for u in notes]
 
     @note_ns.expect(note_json)
-    @oidc.accept_token(True, scopes_required=["note:write"])
     def post(self):
         name = api.payload.get("name")
         content = api.payload.get("content")
@@ -56,7 +53,6 @@ class NoteListEndpoint(Resource):
         except Exception as e:
             return {"error": str(e)}, 400
 
-    @oidc.accept_token(True, scopes_required=["note:write"])
     def delete(self):
         response = []
         try:
@@ -71,7 +67,6 @@ class NoteListEndpoint(Resource):
 @note_ns.route("/note/<note_id>")
 @note_ns.expect(parser)
 class NoteEndpoint(Resource):
-    @oidc.accept_token(True, scopes_required=["note:read"])
     def get(self, note_id):
         note = Note.find_one_by(id=note_id)
         if not note:
@@ -79,7 +74,6 @@ class NoteEndpoint(Resource):
 
         return note.to_dict()
 
-    @oidc.accept_token(True, scopes_required=["note:write"])
     def delete(self, note_id):
         note = Note.find_one_by(id=note_id)
         if not note:
@@ -88,7 +82,6 @@ class NoteEndpoint(Resource):
         note.delete()
         return {"deleted": note.to_dict()}
 
-    @oidc.accept_token(True, scopes_required=["note:write"])
     @note_ns.expect(note_json)
     def put(self, note_id):
         note = Note.find_one_by(id=note_id)

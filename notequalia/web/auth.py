@@ -7,7 +7,7 @@ from notequalia.models import KeycloakRequest
 from notequalia.utils import json_response, parse_jwt_token
 
 from notequalia.web.core import application
-from notequalia.web.core import oidc
+# from notequalia.web.core import oidc
 
 
 logger = logging.getLogger(__name__)
@@ -36,17 +36,17 @@ def set_global_vars(tokens: dict = None):
     g.id_token = tokens.get('id_token') or {}
 
 
-@application.route("/login/oauth2")
-@oidc.require_login
-def login_oauth2():
-    id_token = oidc.get_cookie_id_token()
-    access_token = oidc.get_access_token()
-    refresh_token = oidc.get_refresh_token()
-    tokens = locals()
+# @application.route("/login/oauth2")
+# @oidc.require_login
+# def login_oauth2():
+#     id_token = oidc.get_cookie_id_token()
+#     access_token = oidc.get_access_token()
+#     refresh_token = oidc.get_refresh_token()
+#     tokens = locals()
 
-    session.update(tokens)
-    set_global_vars(tokens)
-    return redirect("/")
+#     session.update(tokens)
+#     set_global_vars(tokens)
+#     return redirect("/")
 
 
 @application.route("/auth/admin", methods=["GET", "POST"])
