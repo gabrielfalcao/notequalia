@@ -150,7 +150,7 @@ k8s-namespace:
 rollback:
 	iterm2 color cyan
 	-helm delete --purge $(HELM_RELEASE)
-	-kubectl get pv -n $(NAMESPACE) -o yaml  | kubectl delete -f -
+	-kubectl get pv -n $(NAMESPACE) -o yaml  | kubectl delete --timeout=10s -f -
 	#iterm2 color purple
 	iterm2 color green
 
