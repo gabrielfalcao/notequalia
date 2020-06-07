@@ -192,6 +192,8 @@ react-app: frontend/build/index.html
 	rsync -putaoz frontend/build/ notequalia/web/static/
 	rm -rf notequalia/web/static/static
 	rm -f frontend/build/index.html
+	git add notequalia/web/static/
+	git commit notequalia/web/static/ -m "new release of react-app"
 
 # https://cert-manager.io/docs/tutorials/backup/
 cert-manager-backup.yaml:
