@@ -102,7 +102,7 @@ spec:
 
         env:
           - name: UPLOAD_FOLDER
-            value: /cahoots.in/file-uploads
+            value: /notequalia.app/file-uploads
           # - name: OAUTH2_CLIENT_SECRET
           #   valueFrom:
           #     secretKeyRef:
@@ -119,4 +119,4 @@ spec:
 
         volumeMounts:
           - name: cahoots-uploads-volume
-            mountPath: /cahoots.in
+            mountPath: /notequalia.app

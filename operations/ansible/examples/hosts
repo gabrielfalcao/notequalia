@@ -8,4 +8,4 @@
 # If this causes SSH connection troubles, feel free to disable it.
 
 [matrix-servers]
-matrix.cahoots.in ansible_host=<your-server's external IP address> ansible_ssh_user=root ansible_ssh_pipelining=yes
+matrix.notequalia.app ansible_host=<your-server's external IP address> ansible_ssh_user=root ansible_ssh_pipelining=yes

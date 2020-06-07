@@ -67,10 +67,10 @@ spec:
 # spec:
 #   tls:
 #   - hosts:
-#     - cahoots.in
+#     - notequalia.app
 #     secretName: cahoots-roots
 #   rules:
-#   - host: cahoots.in
+#   - host: notequalia.app
 #     http:
 #       paths:
 #       - path: /

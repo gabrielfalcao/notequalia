@@ -4,12 +4,12 @@ RUN apk --update --no-cache add \
     git
 
 
-VOLUME /cahoots.in
+VOLUME /notequalia.app
 
 ENV VENV /venv/
 ENV PATH "/venv/bin:${PATH}"
 ENV PYTHONPATH /app/
-ENV UPLOAD_FOLDER /cahoots.in/file-uploads
+ENV UPLOAD_FOLDER /notequalia.app/file-uploads
 
 COPY . /app/
 
