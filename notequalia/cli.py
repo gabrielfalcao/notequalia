@@ -135,7 +135,9 @@ def check():
     type=int,
     default=int(os.getenv("INBOX_PORT", 8825)),
 )
-@click.option("--host", "-H", help="HTTP HOST", default=os.getenv("INBOX_HOST") or '0.0.0.0')
+@click.option(
+    "--host", "-H", help="HTTP HOST", default=os.getenv("INBOX_HOST") or "0.0.0.0"
+)
 @click.option(
     "--debug",
     "-d",
@@ -153,7 +155,6 @@ def run_smtp(ctx, host, port, debug):
     email.inbox.serve(address=host, port=port)
 
 
-
 @main.command("web")
 @click.option(
     "--port",
@@ -162,7 +163,9 @@ def run_smtp(ctx, host, port, debug):
     type=int,
     default=int(os.getenv("FLASK_PORT", 5000)),
 )
-@click.option("--host", "-H", help="HTTP HOST", default=os.getenv("FLASK_HOST") or '0.0.0.0')
+@click.option(
+    "--host", "-H", help="HTTP HOST", default=os.getenv("FLASK_HOST") or "0.0.0.0"
+)
 @click.option(
     "--debug",
     "-d",

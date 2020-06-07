@@ -4,6 +4,7 @@ import logging
 from flask_restplus import Resource
 from flask_restplus import fields
 from flask_restplus import reqparse
+
 # from flask_restplus import inputs
 
 from notequalia.models import KeycloakRequest
@@ -29,7 +30,9 @@ parser = reqparse.RequestParser()
 # parser.add_argument('session', location='cookies', help='the session id containing the state of authentication')
 
 admin_request_ns = api.namespace(
-    "KeycloakRequest API V1", description="Fake NewStore KeycloakRequest API", path="/api/v1"
+    "KeycloakRequest API V1",
+    description="Fake NewStore KeycloakRequest API",
+    path="/api/v1",
 )
 
 

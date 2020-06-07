@@ -1,8 +1,10 @@
 import json
 import logging
+
 # from typing import Optional
 # from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
+
 # from notequalia.utils import parse_jwt_token
 
 

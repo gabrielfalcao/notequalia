@@ -7,6 +7,7 @@ from notequalia.models import KeycloakRequest
 from notequalia.utils import json_response, parse_jwt_token
 
 from notequalia.web.core import application
+
 # from notequalia.web.core import oidc
 
 
@@ -33,7 +34,7 @@ def inject_user_when_present():
 def set_global_vars(tokens: dict = None):
     tokens = tokens or session
 
-    g.id_token = tokens.get('id_token') or {}
+    g.id_token = tokens.get("id_token") or {}
 
 
 # @application.route("/login/oauth2")

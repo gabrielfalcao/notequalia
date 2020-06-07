@@ -18,7 +18,7 @@ class InboxServer(smtpd.SMTPServer, object):
         self._handler = handler
 
     def process_message(self, peer, mailfrom, rcpttos, data, **kw):
-        log.info('Collating message from {0}'.format(mailfrom))
+        log.info("Collating message from {0}".format(mailfrom))
         # subject = Parser().parsestr(data)['subject']
         log.debug(dict(to=rcpttos, sender=mailfrom, body=data, kw=kw))
         return None
@@ -43,23 +43,22 @@ class Inbox(object):
         port = port or self.port
         address = address or self.address
 
-        log.info('Starting SMTP server at {0}:{1}'.format(address, port))
+        log.info("Starting SMTP server at {0}:{1}".format(address, port))
 
         server = InboxServer(self.collator, (address, port), None)
 
         try:
             asyncore.loop()
         except KeyboardInterrupt:
-            log.info('Cleaning up')
+            log.info("Cleaning up")
 
     def dispatch(self):
         """Command-line dispatch."""
-        parser = argparse.ArgumentParser(description='Run an Inbox server.')
+        parser = argparse.ArgumentParser(description="Run an Inbox server.")
 
-        parser.add_argument('addr', metavar='addr', type=str, help='addr to bind to')
-        parser.add_argument('port', metavar='port', type=int, help='port to bind to')
+        parser.add_argument("addr", metavar="addr", type=str, help="addr to bind to")
+        parser.add_argument("port", metavar="port", type=int, help="port to bind to")
 
         args = parser.parse_args()
-
 
         self.serve(port=args.port, address=args.addr)
