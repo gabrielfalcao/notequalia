@@ -1,5 +1,0 @@
-2020-05-30 02:03:43,628 - root - INFO - LMTPReceiver started on <socket.socket fd=6, family=AddressFamily.AF_INET6, type=SocketKind.SOCK_STREAM, proto=0, laddr=('::1', 8823, 0, 0)>.
-2020-05-30 02:06:44,430 - root - INFO - LMTPReceiver started on <socket.socket fd=6, family=AddressFamily.AF_INET6, type=SocketKind.SOCK_STREAM, proto=0, laddr=('::1', 8823, 0, 0)>.
-2020-05-30 02:08:20,244 - root - INFO - LMTPReceiver started on <socket.socket fd=6, family=AddressFamily.AF_INET6, type=SocketKind.SOCK_STREAM, proto=0, laddr=('::1', 8823, 0, 0)>.
-2020-05-30 02:08:55,117 - root - INFO - LMTPReceiver started on <socket.socket fd=4, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8823)>.
-2020-05-30 02:08:59,425 - root - INFO - LMTPReceiver started on <socket.socket fd=4, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8823)>.

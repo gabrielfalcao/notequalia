@@ -1,4 +1,4 @@
 # flake8: noqa
 
-from .templates import *
+from .notes import *
 from .admin_requests import *

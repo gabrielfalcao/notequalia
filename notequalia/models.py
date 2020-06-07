@@ -1,17 +1,17 @@
 import json
 import logging
-from typing import Optional
-from uiclasses import Model as DataClass
+# from typing import Optional
+# from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
-from notequalia.utils import parse_jwt_token
+# from notequalia.utils import parse_jwt_token
 
 
 logger = logging.getLogger(__name__)
 
 
-class Template(Model):
+class Note(Model):
     table = db.Table(
-        "templates",
+        "notes",
         metadata,
         db.Column("id", db.Integer, primary_key=True),
         db.Column("name", db.UnicodeText, nullable=True, index=True),
@@ -27,56 +27,7 @@ class Template(Model):
             return self.get("content")
 
 
-class OpaqueJWT(DataClass):
-    opaque: str
-
-    def initialize(self, **kw):
-        self.__jwt__ = None
-
-    @property
-    def jwt(self) -> Optional[dict]:
-        if not self.__jwt__:
-            self.__jwt__ = parse_jwt_token(self.opaque, fallback={})
-
-        return self.__jwt__
-
-    @property
-    def sub(self):
-        return self.jwt.get('sub')
-
-    @property
-    def iss(self):
-        return self.jwt.get('iss')
-
-    @property
-    def type(self):
-        return self.jwt.get('typ') or 'unknown'
-
-    @property
-    def scope(self):
-        return self.jwt.get('scope')
-
-
-class JWTToken(Model):
-    table = db.Table(
-        "jwt_tokens",
-        metadata,
-        db.Column("id", db.Integer, primary_key=True),
-        db.Column("type", db.Unicode(100), nullable=True, index=True),
-        db.Column("opaque_data", db.UnicodeText, nullable=True),
-    )
-
-    @classmethod
-    def get_or_create_from_opaque_data(cls, data: str):
-        jwt = OpaqueJWT(opaque=data)
-        return cls.get_or_create_from_opaque_jwt(jwt)
-
-    @classmethod
-    def get_or_create_from_opaque_jwt(cls, jwt: OpaqueJWT):
-        return cls.get_or_create(opaque_data=jwt.opaque, type=jwt.type)
-
-
-class AdminRequest(Model):
+class KeycloakRequest(Model):
     table = db.Table(
         "keycloak_admin_requests",
         metadata,

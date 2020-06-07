@@ -8,7 +8,7 @@ export class Constants {
     public static clientScope =
         "openid profile email template:read template:write";
 
-    public static apiRoot = "https://keycloak.fulltest.co/api/";
+    public static apiRoot = "https://api.cognod.es/api/";
 }
 
 export class AuthService {

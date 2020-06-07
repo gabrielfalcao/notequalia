@@ -17,10 +17,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - keycloak.fulltest.co
+    - api.cognod.es
     secretName: keycloak-fulltest-co
   rules:
-  - host: keycloak.fulltest.co
+  - host: api.cognod.es
     http:
       paths:
       - path: /

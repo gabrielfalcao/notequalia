@@ -466,22 +466,22 @@
       "clientId": "fake-newstore-api-v1",
       "name": "Fake NewStore API v1",
       "description": "Test client to experiment with scope-based api endpoint authorization",
-      "rootUrl": "https://keycloak.fulltest.co/",
-      "adminUrl": "https://keycloak.fulltest.co/auth/admin",
-      "baseUrl": "https://keycloak.fulltest.co",
+      "rootUrl": "https://api.cognod.es/",
+      "adminUrl": "https://api.cognod.es/auth/admin",
+      "baseUrl": "https://api.cognod.es",
       "surrogateAuthRequired": false,
       "enabled": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://keycloak.fulltest.co/*",
+        "https://api.cognod.es/*",
         "https://keycloak-fulltestco.ngrok.io/oidc_callback",
         "https://keycloak-fulltestco.ngrok.io/*",
         "*",
-        "https://keycloak.fulltest.co/oidc_callback"
+        "https://api.cognod.es/oidc_callback"
       ],
       "webOrigins": [
-        "https://keycloak.fulltest.co",
+        "https://api.cognod.es",
         "https://keycloak-fulltestco.ngrok.io/"
       ],
       "notBefore": 1590452804,
@@ -729,20 +729,20 @@
     {
       "id": "22fe3337-4406-4bee-918a-d1638611ef27",
       "clientId": "fake-nom",
-      "rootUrl": "https://keycloak.fulltest.co/",
-      "adminUrl": "https://keycloak.fulltest.co/",
+      "rootUrl": "https://api.cognod.es/",
+      "adminUrl": "https://api.cognod.es/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://keycloak.fulltest.co/*",
+        "https://api.cognod.es/*",
         "https://keycloak-fulltestco.ngrok.io",
         "https://keycloak-fulltestco.ngrok.io/*",
         "*"
       ],
       "webOrigins": [
-        "https://keycloak.fulltest.co"
+        "https://api.cognod.es"
       ],
       "notBefore": 0,
       "bearerOnly": false,

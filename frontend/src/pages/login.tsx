@@ -60,7 +60,7 @@ class Login extends Component<{}, any> {
                                     Your user needs at least the scopes{" "}
                                     <code>template:read</code> or{" "}
                                     <code>template:write</code> to use the
-									<a href="https://keycloak.fulltest.co">
+									<a href="https://api.cognod.es">
                                         Fake NewStore API v1
 									</a>
 									.

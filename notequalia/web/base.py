@@ -20,6 +20,7 @@ def backend():
 @application.route("/app")
 @application.route("/app/<path:path>")
 @application.route("/login")
+@application.route("/logout")
 @application.route("/oauth2/callback")
 def index(path=None):
     return render_template("index.html")
