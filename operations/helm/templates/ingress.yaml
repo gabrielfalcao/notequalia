@@ -17,8 +17,12 @@ metadata:
 spec:
   tls:
   - hosts:
+    - cognod.es
     - api.cognod.es
-    secretName: keycloak-fulltest-co
+    - app.cognod.es
+    - data.cognod.es
+    - mail.cognod.es
+    secretName: cognod-es-letsencrypt-secret
   rules:
   - host: api.cognod.es
     http:
