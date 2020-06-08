@@ -1,4 +1,9 @@
 export const DEFAULT_MARKDOWN = `
+---
+title: First Post
+description: demo of front-matter support
+---
+
 # Welcome to NoteQualia
 
 ---
@@ -7,11 +12,7 @@ export const DEFAULT_MARKDOWN = `
 ---
 
 
-## No support to front-matter
-
-This has to be fixed!
-
-
+## Basic Front matter support
 
 ---
 

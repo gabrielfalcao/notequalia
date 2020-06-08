@@ -10,6 +10,7 @@
     "bootstrap": "4.4.1",
     "bootswatch": "4.4.1",
     "connected-react-router": "^6.8.0",
+    "front-matter": "^4.0.2",
     "history": "^4.10.1",
     "jquery": "3.5.0",
     "jwt-decode": "^2.2.0",

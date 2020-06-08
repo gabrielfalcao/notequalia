@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import marked from "marked";
+
 import Col from "react-bootstrap/Col";
 import "bootswatch/dist/journal/bootstrap.min.css";
+import { Markdown } from "../markdown";
 
 interface Props {
     markdownContent: string;
@@ -10,13 +11,13 @@ interface Props {
 }
 
 const Preview: React.FC<Props> = ({ markdownContent, theme }) => {
-    const markdown = markdownContent || "> Empty note";
-    const mardownFormattedContent = marked(markdown);
+    const content = markdownContent || "> Empty note";
+    const markdown = new Markdown(content);
 
     return (
         <Col id="preview">
             <main
-                dangerouslySetInnerHTML={{ __html: mardownFormattedContent }}
+                dangerouslySetInnerHTML={{ __html: markdown.toHTML() }}
             ></main>
         </Col>
     );
