@@ -18,11 +18,16 @@ import Editor from "../components/Editor";
 import Preview from "../components/Preview";
 import { DEFAULT_MARKDOWN } from "../constants";
 
-const NotePropTypes = {
+const NotePropTypes = PropTypes.shape({
     name: PropTypes.string,
     markdown: PropTypes.string,
-    metadata: PropTypes.any
-};
+    metadata: PropTypes.oneOf([
+        PropTypes.shape({
+            uri_id: PropTypes.string
+        }),
+        PropTypes.any
+    ])
+});
 const NoteManagerPropTypes = {
     saveNote: PropTypes.func,
     auth: AuthPropTypes,
@@ -32,9 +37,6 @@ const NoteManagerPropTypes = {
 type NoteProps = InferProps<typeof NotePropTypes> | any;
 type NoteManagerProps = InferProps<typeof NoteManagerPropTypes> | any;
 
-interface NoteManagerActionProps {
-    saveNote: () => void;
-}
 class NoteManager extends Component<NoteManagerProps, NoteProps> {
     constructor(props: any) {
         super(props);
@@ -42,29 +44,16 @@ class NoteManager extends Component<NoteManagerProps, NoteProps> {
         this.state = { markdown: DEFAULT_MARKDOWN };
     }
     static propTypes = {
-        auth: PropTypes.shape({
-            access_token: PropTypes.string,
-            scope: PropTypes.string
-        }),
-        note: PropTypes.shape({
-            name: PropTypes.string,
-            markdown: PropTypes.string,
-            metadata: PropTypes.shape({
-                uri_id: PropTypes.string
-            })
-        })
+        auth: AuthPropTypes,
+        note: NotePropTypes
     };
-    static defaultProps:
-        | InferProps<typeof NoteManager.propTypes>
-        | NoteManagerProps
-        | NoteManagerActionProps
-        | any = {
-            note: {
-                name: "First Note",
-                markdownContent: DEFAULT_MARKDOWN,
-                metadata: { uri_id: "https://data.visualcu.es/johndoe/first-note" }
-            }
-        };
+    static defaultProps: NoteManagerProps = {
+        note: {
+            name: "First Note",
+            markdownContent: DEFAULT_MARKDOWN,
+            metadata: { uri_id: "https://data.visualcu.es/johndoe/first-note" }
+        }
+    };
 
     componentDidMount() {
         const { note }: any = this.props;
@@ -120,7 +109,7 @@ class NoteManager extends Component<NoteManagerProps, NoteProps> {
     }
 }
 
-export default connect<NoteManagerProps & NoteManagerActionProps>(
+export default connect<NoteManagerProps>(
     state => {
         return { ...state, auth: {} };
     },
