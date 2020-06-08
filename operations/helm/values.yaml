@@ -58,6 +58,8 @@ elasticsearch:
 
 ingress:
   enabled: true
+  cognodes:
+    enabled: false
 
 oauth2:
   enabled: true
