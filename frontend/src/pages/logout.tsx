@@ -9,23 +9,14 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
-import { needs_login, AuthProps } from "../auth";
-// import { ComponentWithStore } from "../ui";
+import { needs_login, AuthPropTypes } from "../auth";
 
 const LogoutPropTypes = {
     logout: PropTypes.func,
-    auth: PropTypes.shape({
-        scope: PropTypes.string,
-        access_token: PropTypes.string,
-        id_token: PropTypes.string,
-        refresh_token: PropTypes.string,
-        profile: PropTypes.shape({
-            preferred_username: PropTypes.string
-        })
-    })
+    auth: AuthPropTypes
 };
 
-type LogoutProps = AuthProps | InferProps<typeof LogoutPropTypes> | any;
+type LogoutProps = InferProps<typeof LogoutPropTypes>;
 
 class Logout extends Component<LogoutProps> {
     static propTypes = LogoutPropTypes;

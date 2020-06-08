@@ -1,8 +1,4 @@
-export type AuthProps = {
-    scope: string | null;
-    access_token: string | null;
-    user: any | null;
-};
+import PropTypes, { InferProps } from "prop-types";
 
 export function needs_login(auth: any) {
     if (!auth) {
@@ -29,3 +25,14 @@ export class Scope {
         return this.matches(/notes:write/);
     }
 }
+export const AuthPropTypes = PropTypes.shape({
+    scope: PropTypes.string,
+    access_token: PropTypes.string,
+    id_token: PropTypes.string,
+    refresh_token: PropTypes.string,
+    profile: PropTypes.shape({
+        preferred_username: PropTypes.string
+    })
+});
+
+export type AuthProps = InferProps<typeof AuthPropTypes> | any;

@@ -14,7 +14,7 @@ export type FrontMatterAttributes =
 export class Markdown {
     public original: string;
     private parsed: FrontMatterResult<FrontMatterAttributes>;
-    private _err: string | null;
+    private _err: Error | null;
 
     constructor(markdownContent: string) {
         this.original = markdownContent.replace(/^\n*/, "");

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import PropTypes, { InferProps } from "prop-types";
+import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
 import Container from "react-bootstrap/Container";
@@ -11,15 +11,16 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
-import { needs_login } from "../auth";
-type LoginProps = {
-    setUser: any;
-};
-type LoginState = {
-    user: any;
+import { needs_login, AuthPropTypes } from "../auth";
+
+const LoginPropTypes = {
+    setUser: PropTypes.func,
+    auth: AuthPropTypes
 };
 
-class Login extends Component<LoginProps, LoginState> {
+type LoginProps = InferProps<typeof LoginPropTypes>;
+
+class Login extends Component<LoginProps> {
     public login = () => {
         // dummy login
         this.props.setUser({

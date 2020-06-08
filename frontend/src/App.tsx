@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import { InferProps } from "prop-types";
 
 import {
     BrowserRouter as Router,
@@ -7,32 +7,25 @@ import {
     Switch,
     Redirect
 } from "react-router-dom";
-/* import { NavLink } from "react-router-dom";*/
-// import { ComponentWithStore } from "./ui";
-
-import { LinkContainer } from "react-router-bootstrap";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
 
 import ProfilePage from "./pages/profile-page";
 import NoteManager from "./pages/NoteManager";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
 import { ComponentWithStore } from "./ui";
-import { needs_login } from "./auth";
+import TopNav from "./components/TopNav";
+import { needs_login, AuthPropTypes } from "./auth";
 
 type AppState = {
-    user: any;
     error: Error | null;
 };
-type AppProps = {
-    auth: any;
+const AppPropTypes = {
+    auth: AuthPropTypes
 };
+type AppProps = InferProps<typeof AppPropTypes> | any;
 
 class App extends Component<AppProps, AppState> {
-    static propTypes = {
-        auth: PropTypes.object
-    };
+    static propTypes = AppPropTypes;
     render() {
         const { auth } = this.props;
 
@@ -63,40 +56,7 @@ class App extends Component<AppProps, AppState> {
 
         return (
             <Router>
-                <Navbar bg="light" expand="lg" sticky="top" className="mb-3">
-                    <LinkContainer to="/">
-                        <Navbar.Brand>NoteQualia</Navbar.Brand>
-                    </LinkContainer>
-                    <Navbar.Toggle aria-controls="notequalia-navbar-nav" />
-
-                    <Navbar.Collapse
-                        className="justify-content-end"
-                        id="notequalia-navbar-nav"
-                    >
-                        <Nav>
-                            {needs_login(auth) ? (
-                                <LinkContainer to="/login">
-                                    <Nav.Link>Login</Nav.Link>
-                                </LinkContainer>
-                            ) : (
-                                    <React.Fragment>
-                                        <LinkContainer to="/notes">
-                                            <Nav.Link>Notes</Nav.Link>
-                                        </LinkContainer>
-
-                                        <Nav.Link href="/api">Browse API</Nav.Link>
-
-                                        <LinkContainer to="/profile">
-                                            <Nav.Link>Profile</Nav.Link>
-                                        </LinkContainer>
-                                        <LinkContainer to="/logout">
-                                            <Nav.Link>Logout</Nav.Link>
-                                        </LinkContainer>
-                                    </React.Fragment>
-                                )}
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
+                <TopNav />
                 <Switch>
                     <Route path="/login">
                         <Login />
