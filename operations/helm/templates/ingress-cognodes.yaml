@@ -2,10 +2,10 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-ingress-fulltestco
+  name: {{ include "notequalia-io.fullname" . }}-ingress-cognod-es
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
     nginx.ingress.kubernetes.io/proxy-body-size: 8m
     nginx.ingress.kubernetes.io/affinity: "cookie"
     nginx.ingress.kubernetes.io/session-cookie-name: "route"
@@ -17,42 +17,42 @@ metadata:
 spec:
   tls:
   - hosts:
-    - visualcu.es
-    - api.visualcu.es
-    - app.visualcu.es
-    - data.visualcu.es
-    - mail.visualcu.es
-    secretName: visualcu-es-letsencrypt-secret
+    - cognod.es
+    - api.cognod.es
+    - app.cognod.es
+    - data.cognod.es
+    - mail.cognod.es
+    secretName: cognod-es-letsencrypt-secret
   rules:
-  - host: visualcu.es
+  - host: cognod.es
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ include "notequalia-io.fullname" . }}
           servicePort: 5000
-  - host: api.visualcu.es
+  - host: api.cognod.es
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ include "notequalia-io.fullname" . }}
           servicePort: 5000
-  - host: data.visualcu.es
+  - host: data.cognod.es
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ include "notequalia-io.fullname" . }}
           servicePort: 5000
-  - host: app.visualcu.es
+  - host: app.cognod.es
     http:
       paths:
       - path: /
         backend:
           serviceName: {{ include "notequalia-io.fullname" . }}
           servicePort: 5000
-  - host: mail.visualcu.es
+  - host: mail.cognod.es
     http:
       paths:
       - path: /
