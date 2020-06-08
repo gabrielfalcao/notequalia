@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Preview: React.FC<Props> = ({ markdownContent, theme }) => {
-    const markdown = markdownContent || "# Dummy";
+    const markdown = markdownContent || "> Empty note";
     const mardownFormattedContent = marked(markdown);
 
     return (
