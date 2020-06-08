@@ -89,7 +89,7 @@ class NoteManager extends Component<NoteManagerProps, Note> {
 
         const markdown = note.markdown || this.state.markdown;
         return (
-            <Container fluid="md">
+            <Container fluid>
                 <Row>
                     <Editor
                         theme="light"
