@@ -17,6 +17,7 @@ import Nav from "react-bootstrap/Nav";
 import ProfilePage from "./pages/profile-page";
 import NoteManager from "./pages/NoteManager";
 import Login from "./pages/login";
+import MindMapView from "./pages/mindmap";
 import Logout from "./pages/logout";
 import { ComponentWithStore } from "./ui";
 import { needs_login } from "./auth";
@@ -83,6 +84,9 @@ class App extends Component<AppProps, AppState> {
                                         <LinkContainer to="/notes">
                                             <Nav.Link>Notes</Nav.Link>
                                         </LinkContainer>
+                                        <LinkContainer to="/map">
+                                            <Nav.Link>MindMap</Nav.Link>
+                                        </LinkContainer>
 
                                         <Nav.Link href="/api">Browse API</Nav.Link>
 
@@ -109,6 +113,9 @@ class App extends Component<AppProps, AppState> {
                     </Route>
                     <AuthenticatedRoute path="/profile">
                         <ProfilePage />
+                    </AuthenticatedRoute>
+                    <AuthenticatedRoute path="/map">
+                        <MindMapView />
                     </AuthenticatedRoute>
                     <AuthenticatedRoute path="/notes">
                         <NoteManager />
