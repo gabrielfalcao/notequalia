@@ -36,8 +36,9 @@ const NoteManagerPropTypes = {
 
 type NoteProps = InferProps<typeof NotePropTypes> | any;
 type NoteManagerProps = InferProps<typeof NoteManagerPropTypes> | any;
+type NoteManagerState = NoteProps;
 
-class NoteManager extends Component<NoteManagerProps, NoteProps> {
+class NoteManager extends Component<NoteManagerProps, NoteManagerState> {
     constructor(props: any) {
         super(props);
 
