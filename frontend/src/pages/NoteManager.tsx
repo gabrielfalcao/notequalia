@@ -13,32 +13,29 @@ import Button from "react-bootstrap/Button";
 // import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 // import { ComponentWithStore } from "../ui";
-import {
-    AuthProps
-    //, Scope
-} from "../auth";
+import { AuthPropTypes } from "../auth";
 import Editor from "../components/Editor";
 import Preview from "../components/Preview";
 import { DEFAULT_MARKDOWN } from "../constants";
 
-type Note =
-    | {
-        name: string;
-        markdown: string;
-        metadata: any;
-    }
-    | any;
+const NotePropTypes = {
+    name: PropTypes.string,
+    markdown: PropTypes.string,
+    metadata: PropTypes.any
+};
+const NoteManagerPropTypes = {
+    saveNote: PropTypes.func,
+    auth: AuthPropTypes,
+    note: NotePropTypes
+};
 
-type NoteManagerProps =
-    | {
-        auth: AuthProps | any;
-        note: Note | any;
-    }
-    | any;
+type NoteProps = InferProps<typeof NotePropTypes> | any;
+type NoteManagerProps = InferProps<typeof NoteManagerPropTypes> | any;
+
 interface NoteManagerActionProps {
     saveNote: () => void;
 }
-class NoteManager extends Component<NoteManagerProps, Note> {
+class NoteManager extends Component<NoteManagerProps, NoteProps> {
     constructor(props: any) {
         super(props);
 
