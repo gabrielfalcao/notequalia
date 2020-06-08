@@ -27,7 +27,7 @@ class Login extends Component<LoginProps, LoginState> {
             user: { email: "johndoe@mail.visualcu.es" },
             access_token: "FAKETOKEN",
             profile: {
-                preferred_name: "John Doe"
+                preferred_username: "John Doe"
             }
         });
     };

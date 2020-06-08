@@ -63,7 +63,7 @@ class ProfilePage extends Component<ProfilePageProps> {
                         <React.Fragment>
                             <Col md={12}>
                                 <h1>Hello {auth.profile.preferred_username}</h1>
-                                <h2>Welcome to Fake NOM</h2>
+                                <h2>Welcome to NoteQualia</h2>
 
                                 <hr />
                             </Col>

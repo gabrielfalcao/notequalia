@@ -14,7 +14,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 
-import ProfilePage from "./pages/home";
+import ProfilePage from "./pages/profile-page";
 import NoteManager from "./pages/NoteManager";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
@@ -86,11 +86,11 @@ class App extends Component<AppProps, AppState> {
 
                                         <Nav.Link href="/api">Browse API</Nav.Link>
 
-                                        <LinkContainer to="/logout">
-                                            <Nav.Link>Logout</Nav.Link>
-                                        </LinkContainer>
                                         <LinkContainer to="/profile">
                                             <Nav.Link>Profile</Nav.Link>
+                                        </LinkContainer>
+                                        <LinkContainer to="/logout">
+                                            <Nav.Link>Logout</Nav.Link>
                                         </LinkContainer>
                                     </React.Fragment>
                                 )}

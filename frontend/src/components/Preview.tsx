@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import marked from "marked";
 import Col from "react-bootstrap/Col";
+import "bootswatch/dist/journal/bootstrap.min.css";
 
 interface Props {
     markdownContent: string;
@@ -14,10 +15,9 @@ const Preview: React.FC<Props> = ({ markdownContent, theme }) => {
 
     return (
         <Col id="preview">
-            <h2>Preview</h2>
-            <div
+            <main
                 dangerouslySetInnerHTML={{ __html: mardownFormattedContent }}
-            ></div>
+            ></main>
         </Col>
     );
 };

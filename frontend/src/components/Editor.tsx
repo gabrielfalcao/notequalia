@@ -18,7 +18,11 @@ const Editor: React.FC<Props> = ({
         <Col id="editor">
             <Form.Control
                 as="textarea"
-                rows={20}
+                rows={
+                    typeof markdownContent === "string"
+                        ? markdownContent.split("\n").length
+                        : 10
+                }
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                     setMarkdownContent(e.target.value)
                 }

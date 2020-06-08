@@ -19,18 +19,7 @@ import {
 } from "../auth";
 import Editor from "../components/Editor";
 import Preview from "../components/Preview";
-
-const DEFAULT_MARKDOWN = `
-# H1
-## H2
-### H3
-#### H4
-##### H5
-
-__bold__
-**bold**
-_italic_
-`;
+import { DEFAULT_MARKDOWN } from "../constants";
 
 type Note =
     | {
