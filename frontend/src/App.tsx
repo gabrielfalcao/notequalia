@@ -11,10 +11,12 @@ import {
 import ProfilePage from "./pages/profile-page";
 import NoteManager from "./pages/NoteManager";
 import Login from "./pages/login";
+import MindMapView from "./views/MindMapView";
 import Logout from "./pages/logout";
 import { ComponentWithStore } from "./ui";
 import TopNav from "./components/TopNav";
 import { needs_login, AuthPropTypes } from "./auth";
+import { DEFAULT_GRAPH } from "./constants";
 
 type AppState = {
     error: Error | null;
@@ -58,6 +60,13 @@ class App extends Component<AppProps, AppState> {
             <Router>
                 <TopNav />
                 <Switch>
+                    <Route path="/mindmap">
+                        <MindMapView
+                            width={500}
+                            height={500}
+                            graph={DEFAULT_GRAPH}
+                        />
+                    </Route>
                     <Route path="/login">
                         <Login />
                     </Route>

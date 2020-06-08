@@ -41,8 +41,9 @@ class TopNav extends Component<TopNavProps, any> {
                                         <Nav.Link>Notes</Nav.Link>
                                     </LinkContainer>
 
-                                    <Nav.Link href="/api">Browse API</Nav.Link>
-
+                                    <LinkContainer to="/mindmap">
+                                        <Nav.Link>MindMap</Nav.Link>
+                                    </LinkContainer>
                                     <LinkContainer to="/profile">
                                         <Nav.Link>Profile</Nav.Link>
                                     </LinkContainer>

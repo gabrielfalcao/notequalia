@@ -8,7 +8,8 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": true,
+      "esModuleInterop": true,
+      "allowUmdGlobalAccess": false,
     "allowSyntheticDefaultImports": true,
     "strict": false,
     "outDir": "./lib",                        /* Redirect output structure to the directory. */
