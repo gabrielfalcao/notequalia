@@ -18,6 +18,8 @@ def backend():
 
 @application.route("/")
 @application.route("/admin")
+@application.route("/notes")
+@application.route("/profile")
 @application.route("/app")
 @application.route("/app/<path:path>")
 @application.route("/login")
