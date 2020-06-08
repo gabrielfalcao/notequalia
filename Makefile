@@ -197,7 +197,7 @@ react-app: frontend/build/index.html
 	rm -rf notequalia/web/static/static
 	rm -f frontend/build/index.html
 	git add notequalia/web/static/
-	git commit notequalia/web/{templates,static}/ -m "new release of react-app"
+	-git commit notequalia/web/{templates,static}/ -m "new release of react-app"
 
 # https://cert-manager.io/docs/tutorials/backup/
 cert-manager-backup.yaml:
