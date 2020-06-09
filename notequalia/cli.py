@@ -24,6 +24,7 @@ from notequalia.es import es
 from notequalia.logs import set_log_level_by_name, set_debug_mode
 from notequalia import version
 from notequalia import email
+from notequalia import mailserver
 
 
 DEFAULT_ROUTER_PORT = os.getenv("ZMQ_ROUTER_PORT") or 4242
@@ -152,7 +153,7 @@ def run_smtp(ctx, host, port, debug):
     if debug:
         set_debug_mode()
 
-    email.inbox.serve(address=host, port=port)
+    mailserver.run(host=host, port=port)
 
 
 @main.command("web")

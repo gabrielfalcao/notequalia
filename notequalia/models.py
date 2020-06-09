@@ -13,12 +13,32 @@ logger = logging.getLogger(__name__)
 
 class Note(Model):
     table = db.Table(
-        "notes",
+        "note",
         metadata,
         db.Column("id", db.Integer, primary_key=True),
         db.Column("name", db.UnicodeText, nullable=True, index=True),
         db.Column("content", db.UnicodeText, nullable=True),
+        db.Column(
+            "parent_id",
+            db.Integer,
+            db.ForeignKey("note.id", ondelete="RESTRICT"),
+            nullable=True,
+        ),
     )
+
+    @property
+    def parent(self):
+        self._parent = getattr(self, "_parent", None)
+        if not self.parent:
+            self._parent = self.get_parent()
+
+        return self._parent
+
+    def get_parent(self):
+        if not self.parent_id:
+            return
+
+        return Note.find_one_by(id=self.parent_id)
 
     @property
     def content(self):
@@ -27,6 +47,38 @@ class Note(Model):
         except Exception:
             logger.exception(f"{self}.content property")
             return self.get("content")
+
+
+class NoteMail(Model):
+    table = db.Table(
+        "note_email",
+        metadata,
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("sender", db.String(320), nullable=True, index=True),
+        db.Column("recipient", db.String(320), nullable=True, index=True),
+        db.Column("data", db.UnicodeText, nullable=True),
+        db.Column("extra", db.UnicodeText, nullable=True),
+        db.Column(
+            "note_id",
+            db.Integer,
+            db.ForeignKey("note.id", ondelete="CASCADE"),
+            nullable=True,
+        ),
+    )
+
+    @property
+    def note(self):
+        self._note = getattr(self, "_note", None)
+        if not self.note:
+            self._note = self.get_note()
+
+        return self._note
+
+    def get_note(self):
+        if not self.note_id:
+            return
+
+        return Note.find_one_by(id=self.note_id)
 
 
 class KeycloakRequest(Model):

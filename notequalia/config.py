@@ -48,7 +48,9 @@ OAUTH2_ACCESS_TOKEN_URL = (
 )
 OAUTH2_AUTHORIZE_URL = os.getenv("OAUTH2_AUTHORIZE_URL") or "{OAUTH2_BASE_URL}/auth"
 OAUTH2_CLIENT_SCOPE = os.getenv("OAUTH2_CLIENT_SCOPE") or "openid profile email"
-OAUTH2_CLIENT_AUDIENCE = os.getenv("OAUTH2_CLIENT_AUDIENCE") or "https://api.visualcu.es/"
+OAUTH2_CLIENT_AUDIENCE = (
+    os.getenv("OAUTH2_CLIENT_AUDIENCE") or "https://api.visualcu.es/"
+)
 DOCKER_IMAGE = os.getenv("DOCKER_IMAGE") or "latest"
 
 OIDC_CLIENT_SECRETS = os.getenv("OIDC_CLIENT_SECRETS_JSON_PATH") or str(
