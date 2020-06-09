@@ -1,0 +1,61 @@
+{{- if .Values.notequalia.mailserver.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "notequalia-io.fullname" . }}-email-server
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+        app.kubernetes.io/instance: {{ .Release.Name }}
+
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Chart.Name }}
+        command: ['/venv/bin/notequalia-io', 'smtp', '--port={{ .Values.notequalia.mailserver.port }}']
+        envFrom:
+          - configMapRef:
+              name: {{ include "notequalia-io.fullname" . }}-env
+
+        ports:
+        - containerPort: {{ .Values.zmq.publisher_port }}
+          protocol: TCP
+          name: publisher
+        - containerPort: {{ .Values.zmq.subscriber_port }}
+          protocol: TCP
+          name: subscriber
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "notequalia-io.fullname" . }}-email-server
+  labels:
+    app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.zmq.publisher_port }}
+      targetPort: {{ .Values.zmq.publisher_port }}
+      protocol: TCP
+      name: publisher
+    - port: {{ .Values.zmq.subscriber_port }}
+      targetPort: {{ .Values.zmq.subscriber_port }}
+      protocol: TCP
+      name: subscriber
+  selector:
+    app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
