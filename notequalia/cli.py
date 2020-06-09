@@ -204,6 +204,7 @@ def check_db(ctx):
 
 
 @main.command("migrate-db")
+@click.option("--target", default="HEAD")
 @click.option("--drop/--no-drop", default=False)
 @click.pass_context
 def migrate_db(ctx, drop):
@@ -216,12 +217,9 @@ def migrate_db(ctx, drop):
         raise SystemExit(1)
 
     engine = ctx.obj["engine"]
-    url = engine.url
-
-    metadata.drop_all(engine)
 
     alembic_cfg = AlembicConfig(str(alembic_ini_path))
-    alembic_cfg.set_section_option('alembic', 'sqlalchemy.url', dbconfig.sqlalchemy_url())
+    alembic_cfg.set_section_option('alembic', 'sqlalchemy.url', engine.url)
     alembic_command.upgrade(alembic_cfg, "head")
 
 
