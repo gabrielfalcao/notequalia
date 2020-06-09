@@ -44,14 +44,10 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.zmq.publisher_port }}
-      targetPort: {{ .Values.zmq.publisher_port }}
+    - port: {{ .Values.notequalia.mailserver.port }}
+      targetPort: smtp
       protocol: TCP
-      name: publisher
-    - port: {{ .Values.zmq.subscriber_port }}
-      targetPort: {{ .Values.zmq.subscriber_port }}
-      protocol: TCP
-      name: subscriber
+      name: smtp
   selector:
     app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
     app.kubernetes.io/instance: {{ .Release.Name }}
