@@ -29,12 +29,9 @@ spec:
               name: {{ include "notequalia-io.fullname" . }}-env
 
         ports:
-        - containerPort: {{ .Values.zmq.publisher_port }}
+        - containerPort: {{ .Values.notequalia.mailserver.port }}
           protocol: TCP
-          name: publisher
-        - containerPort: {{ .Values.zmq.subscriber_port }}
-          protocol: TCP
-          name: subscriber
+          name: smtp
 ---
 apiVersion: v1
 kind: Service
