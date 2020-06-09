@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
+import { v5 as uuidv5 } from "uuid"; // For version 5
 
+import { RouteComponentProps } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
 import Row from "react-bootstrap/Row";
@@ -13,32 +15,26 @@ import Button from "react-bootstrap/Button";
 // import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 // import { ComponentWithStore } from "../ui";
-import { AuthPropTypes } from "../auth";
+import { AuthPropTypes } from "../domain/auth";
 import Editor from "../components/Editor";
 import Preview from "../components/Preview";
 import { DEFAULT_MARKDOWN } from "../constants";
+import { NotePropTypes, NoteProps } from "../domain/notes";
+import { Markdown } from "../markdown";
 
-const NotePropTypes = PropTypes.shape({
-    name: PropTypes.string,
-    markdown: PropTypes.string,
-    metadata: PropTypes.oneOf([
-        PropTypes.shape({
-            uri_id: PropTypes.string
-        }),
-        PropTypes.any
-    ])
-});
-const NoteManagerPropTypes = {
+const NoteEditorPropTypes = {
     saveNote: PropTypes.func,
     auth: AuthPropTypes,
     note: NotePropTypes
 };
 
-type NoteProps = InferProps<typeof NotePropTypes> | any;
-type NoteManagerProps = InferProps<typeof NoteManagerPropTypes> | any;
-type NoteManagerState = NoteProps;
+type NoteEditorProps =
+    | InferProps<typeof NoteEditorPropTypes>
+    | RouteComponentProps
+    | any;
+type NoteEditorState = NoteProps;
 
-class NoteManager extends Component<NoteManagerProps, NoteManagerState> {
+class NoteEditor extends Component<NoteEditorProps, NoteEditorState> {
     constructor(props: any) {
         super(props);
 
@@ -48,7 +44,7 @@ class NoteManager extends Component<NoteManagerProps, NoteManagerState> {
         auth: AuthPropTypes,
         note: NotePropTypes
     };
-    static defaultProps: NoteManagerProps = {
+    static defaultProps: NoteEditorProps = {
         note: {
             name: "First Note",
             markdownContent: DEFAULT_MARKDOWN,
@@ -68,33 +64,30 @@ class NoteManager extends Component<NoteManagerProps, NoteManagerState> {
         }
     }
     render() {
-        const {
-            // auth,
-            note,
-            saveNote
-        }: any = this.props;
+        const { note, saveNote }: NoteEditorProps = this.props;
 
-        const markdown = note.markdown || this.state.markdown;
+        const content = note.markdown || this.state.markdown;
+
         return (
             <Container fluid>
-                <Row>
-                    <Editor
-                        theme="light"
-                        markdownContent={markdown}
-                        setMarkdownContent={markdown => {
-                            this.setState({ markdown: markdown });
-                        }}
-                    />
-
-                    <Preview
-                        theme={"light"}
-                        markdownContent={this.state.markdown}
-                    />
-                </Row>
                 <Row>
                     <Col md={12}>
                         <Button
                             onClick={() => {
+                                const markdown = new Markdown(
+                                    this.state.markdown
+                                );
+                                note.metadata = {
+                                    ...note.metadata,
+                                    ...markdown.attributes
+                                };
+                                if (!note.id) {
+                                    note.id = uuidv5(
+                                        note.metadata.title,
+                                        uuidv5.DNS
+                                    );
+                                }
+
                                 saveNote({
                                     ...note,
                                     markdown: this.state.markdown
@@ -105,14 +98,29 @@ class NoteManager extends Component<NoteManagerProps, NoteManagerState> {
 						</Button>
                     </Col>
                 </Row>
+
+                <Row>
+                    <Editor
+                        theme="light"
+                        markdownContent={content}
+                        setMarkdownContent={md => {
+                            this.setState({ markdown: md });
+                        }}
+                    />
+
+                    <Preview
+                        theme={"light"}
+                        markdownContent={this.state.markdown}
+                    />
+                </Row>
             </Container>
         );
     }
 }
 
-export default connect<NoteManagerProps>(
+export default connect<NoteEditorProps>(
     state => {
-        return { ...state, auth: {} };
+        return { ...state };
     },
     {
         saveNote: function(note: any) {
@@ -122,4 +130,4 @@ export default connect<NoteManagerProps>(
             };
         }
     }
-)(NoteManager);
+)(NoteEditor);

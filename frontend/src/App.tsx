@@ -8,14 +8,17 @@ import {
     Redirect
 } from "react-router-dom";
 
-import ProfilePage from "./pages/profile-page";
-import NoteManager from "./pages/NoteManager";
+import NoteEditor from "./pages/NoteEditor";
+import DeleteNote from "./pages/DeleteNote";
+import NoteList from "./components/NoteList";
 import Login from "./pages/login";
 import MindMapView from "./views/MindMapView";
 import Logout from "./pages/logout";
+import Dashboard from "./pages/Dashboard";
+import NotFound from "./pages/NotFound";
 import { ComponentWithStore } from "./ui";
 import TopNav from "./components/TopNav";
-import { needs_login, AuthPropTypes } from "./auth";
+import { needs_login, AuthPropTypes } from "./domain/auth";
 import { DEFAULT_GRAPH } from "./constants";
 
 type AppState = {
@@ -73,15 +76,22 @@ class App extends Component<AppProps, AppState> {
                     <Route path="/logout">
                         <Logout />
                     </Route>
-                    <Route exact path="/">
-                        <Redirect to="/notes" />
+                    <AuthenticatedRoute exact path="/">
+                        <Dashboard />
+                    </AuthenticatedRoute>
+                    <Route exact path="/notes">
+                        <NoteList />
                     </Route>
-                    <AuthenticatedRoute path="/profile">
-                        <ProfilePage />
+                    <AuthenticatedRoute path="/notes/new">
+                        <NoteEditor />
                     </AuthenticatedRoute>
-                    <AuthenticatedRoute path="/notes">
-                        <NoteManager />
+                    <AuthenticatedRoute path="/notes/edit/:noteID">
+                        <NoteEditor />
                     </AuthenticatedRoute>
+                    <AuthenticatedRoute path="/notes/delete/:noteID">
+                        <DeleteNote />
+                    </AuthenticatedRoute>
+                    <Route component={NotFound} />
                 </Switch>
             </Router>
         );

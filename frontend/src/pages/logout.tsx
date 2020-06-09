@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
-import { needs_login, AuthPropTypes } from "../auth";
+import { needs_login, AuthPropTypes } from "../domain/auth";
 
 const LogoutPropTypes = {
     logout: PropTypes.func,

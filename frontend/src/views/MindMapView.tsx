@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
-import { AuthPropTypes } from "../auth";
+import { AuthPropTypes } from "../domain/auth";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";

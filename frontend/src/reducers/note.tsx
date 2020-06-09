@@ -5,6 +5,7 @@ const DEFAULT_STATE = {};
 export const note = (state: any = DEFAULT_STATE, action: any = {}) => {
     switch (action.type) {
         case "LOGOUT":
+        case "PURGE_DATA":
             return {};
 
         case "SAVE_NOTE":

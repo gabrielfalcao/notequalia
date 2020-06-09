@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { ComponentWithStore } from "../ui";
 
-import { needs_login, AuthPropTypes } from "../auth";
+import { needs_login, AuthPropTypes } from "../domain/auth";
 
 const TopNavPropTypes = {
     logout: PropTypes.func,
@@ -37,15 +37,16 @@ class TopNav extends Component<TopNavProps, any> {
                             </LinkContainer>
                         ) : (
                                 <React.Fragment>
+                                    <LinkContainer to="/">
+                                        <Nav.Link>Dashboard</Nav.Link>
+                                    </LinkContainer>
+
                                     <LinkContainer to="/notes">
                                         <Nav.Link>Notes</Nav.Link>
                                     </LinkContainer>
 
                                     <LinkContainer to="/mindmap">
                                         <Nav.Link>MindMap</Nav.Link>
-                                    </LinkContainer>
-                                    <LinkContainer to="/profile">
-                                        <Nav.Link>Profile</Nav.Link>
                                     </LinkContainer>
                                     <LinkContainer to="/logout">
                                         <Nav.Link>Logout</Nav.Link>
