@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
+import { RouteComponentProps } from "react-router";
+import { withRouter } from "react-router";
+import { Redirect } from "react-router-dom";
 
-import { RouteComponentProps } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
 import Row from "react-bootstrap/Row";
@@ -16,30 +18,38 @@ import Modal from "react-bootstrap/Modal";
 import Col from "react-bootstrap/Col";
 // import { ComponentWithStore } from "../ui";
 import { AuthPropTypes } from "../domain/auth";
-import { NotePropTypes, NoteProps } from "../domain/notes";
+import { NoteProps } from "../domain/notes";
+import { NotesReducerState } from "../reducers/types";
 import Error from "../components/Error";
+
 const DeleteNotePropTypes = {
     deleteNote: PropTypes.func,
-    auth: AuthPropTypes,
-    note: NotePropTypes
+    auth: AuthPropTypes
+};
+
+type MatchParams = {
+    noteID: string;
 };
 
 type DeleteNoteProps =
-    | (RouteComponentProps & InferProps<typeof DeleteNotePropTypes>)
+    | (RouteComponentProps<MatchParams> & {
+        notes: NotesReducerState;
+    } & InferProps<typeof DeleteNotePropTypes>)
     | any;
-type DeleteNoteState = NoteProps;
 
-class DeleteNote extends Component<DeleteNoteProps, DeleteNoteState> {
+class DeleteNote extends Component<DeleteNoteProps, any> {
     render() {
         const { notes, match, deleteNote }: DeleteNoteProps = this.props;
 
-        console.log("PROPS", this.props);
         if (!match) {
             return <Error message="failed to parse note id from url" />;
         }
         const { noteID } = match.params;
+        const note: NoteProps = notes.by_id[noteID];
 
-        const note: NoteProps = notes[noteID];
+        if (!note) {
+            return <Redirect to="/" />;
+        }
         return (
             <Container fluid>
                 <Row>
@@ -51,19 +61,19 @@ class DeleteNote extends Component<DeleteNoteProps, DeleteNoteState> {
 
                             <Modal.Body>
                                 <p>
-                                    Are you sure you want to delete the note{" "}
-                                    {note}?
+                                    Are you sure you want to delete the note "
+									{note.id}"?
 								</p>
                             </Modal.Body>
 
                             <Modal.Footer>
                                 <Button
                                     onClick={() => {
-                                        deleteNote();
+                                        deleteNote(note);
                                     }}
                                     variant="danger"
                                 >
-                                    Proceed
+                                    Yes, delete it
 								</Button>
                             </Modal.Footer>
                         </Modal.Dialog>
@@ -74,16 +84,18 @@ class DeleteNote extends Component<DeleteNoteProps, DeleteNoteState> {
     }
 }
 
-export default connect<DeleteNoteProps>(
-    state => {
-        return { ...state };
-    },
-    {
-        deleteNote: function(note: any) {
-            return {
-                type: "DELETE_NOTE",
-                note
-            };
+export default withRouter(
+    connect<DeleteNoteProps>(
+        state => {
+            return { ...state };
+        },
+        {
+            deleteNote: function(note: any) {
+                return {
+                    type: "DELETE_NOTE",
+                    note
+                };
+            }
         }
-    }
-)(DeleteNote);
+    )(DeleteNote)
+);

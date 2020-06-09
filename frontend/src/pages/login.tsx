@@ -3,7 +3,6 @@ import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
 import Container from "react-bootstrap/Container";
-// import * as toastr from "toastr";
 import { Redirect } from "react-router-dom";
 // import { LinkContainer } from "react-router-bootstrap";
 

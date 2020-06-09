@@ -8,9 +8,10 @@ import {
     Redirect
 } from "react-router-dom";
 
+import NewNote from "./pages/NewNote";
 import NoteEditor from "./pages/NoteEditor";
 import DeleteNote from "./pages/DeleteNote";
-import NoteList from "./components/NoteList";
+
 import Login from "./pages/login";
 import MindMapView from "./views/MindMapView";
 import Logout from "./pages/logout";
@@ -76,21 +77,21 @@ class App extends Component<AppProps, AppState> {
                     <Route path="/logout">
                         <Logout />
                     </Route>
-                    <AuthenticatedRoute exact path="/">
-                        <Dashboard />
-                    </AuthenticatedRoute>
+                    <Route exact path="/">
+                        <Dashboard utilities />
+                    </Route>
                     <Route exact path="/notes">
-                        <NoteList />
+                        <Dashboard />
                     </Route>
                     <AuthenticatedRoute path="/notes/new">
-                        <NoteEditor />
+                        <NewNote />
                     </AuthenticatedRoute>
                     <AuthenticatedRoute path="/notes/edit/:noteID">
                         <NoteEditor />
                     </AuthenticatedRoute>
-                    <AuthenticatedRoute path="/notes/delete/:noteID">
+                    <Route path="/notes/delete/:noteID">
                         <DeleteNote />
-                    </AuthenticatedRoute>
+                    </Route>
                     <Route component={NotFound} />
                 </Switch>
             </Router>

@@ -16,6 +16,7 @@ import NoteList from "../components/NoteList";
 const DashboardPropTypes = {
     logout: PropTypes.func,
     purgeData: PropTypes.func,
+    utilities: PropTypes.bool,
     auth: AuthPropTypes
 };
 
@@ -34,7 +35,7 @@ class Dashboard extends Component<DashboardProps> {
     };
 
     render() {
-        const { auth, purgeData } = this.props;
+        const { auth, purgeData, utilities } = this.props;
         if (needs_login(auth)) {
             return <Redirect to="/" />;
         }
@@ -57,23 +58,25 @@ class Dashboard extends Component<DashboardProps> {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md={6}>
-                        <Card bg="light" text="dark" className="mb-2">
-                            <Card.Header>Utilities</Card.Header>
-                            <Card.Body>
-                                <Card.Text>
-                                    <Button
-                                        variant="danger"
-                                        onClick={() => {
-                                            purgeData();
-                                        }}
-                                    >
-                                        Purge all data
-									</Button>
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
+                    {utilities ? (
+                        <Col md={6}>
+                            <Card bg="light" text="dark" className="mb-2">
+                                <Card.Header>Utilities</Card.Header>
+                                <Card.Body>
+                                    <Card.Text>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => {
+                                                purgeData();
+                                            }}
+                                        >
+                                            Purge all data
+										</Button>
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ) : null}
                 </Row>
             </Container>
         );

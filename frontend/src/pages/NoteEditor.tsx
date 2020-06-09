@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
-import { v5 as uuidv5 } from "uuid"; // For version 5
+
+import { withRouter } from "react-router";
 
 import { RouteComponentProps } from "react-router-dom";
 import Container from "react-bootstrap/Container";
@@ -18,80 +19,68 @@ import Col from "react-bootstrap/Col";
 import { AuthPropTypes } from "../domain/auth";
 import Editor from "../components/Editor";
 import Preview from "../components/Preview";
-import { DEFAULT_MARKDOWN } from "../constants";
-import { NotePropTypes, NoteProps } from "../domain/notes";
+
+import { NoteProps } from "../domain/notes";
 import { Markdown } from "../markdown";
+import { NotesReducerState } from "../reducers/types";
+import Error from "../components/Error";
 
 const NoteEditorPropTypes = {
     saveNote: PropTypes.func,
-    auth: AuthPropTypes,
-    note: NotePropTypes
+    auth: AuthPropTypes
+};
+type MatchParams = {
+    noteID: string;
 };
 
 type NoteEditorProps =
-    | InferProps<typeof NoteEditorPropTypes>
-    | RouteComponentProps
+    | (RouteComponentProps<MatchParams> & {
+        notes: NotesReducerState;
+    } & InferProps<typeof NoteEditorPropTypes>)
     | any;
 type NoteEditorState = NoteProps;
 
 class NoteEditor extends Component<NoteEditorProps, NoteEditorState> {
-    constructor(props: any) {
+    constructor(props: NoteEditorProps) {
         super(props);
+        const { notes, match }: NoteEditorProps = this.props;
+        const { noteID } = match.params;
+        const note: NoteProps = notes.by_id[noteID];
 
-        this.state = { markdown: DEFAULT_MARKDOWN };
+        this.state = {
+            markdown: note.markdown
+        };
     }
-    static propTypes = {
-        auth: AuthPropTypes,
-        note: NotePropTypes
-    };
-    static defaultProps: NoteEditorProps = {
-        note: {
-            name: "First Note",
-            markdownContent: DEFAULT_MARKDOWN,
-            metadata: { uri_id: "https://data.visualcu.es/johndoe/first-note" }
-        }
-    };
 
-    componentDidMount() {
-        const { note }: any = this.props;
-
-        if (note && typeof note.markdown === "string") {
-            if (note.markdown !== this.state.markdown) {
-                this.setState({
-                    markdown: note.markdown
-                });
-            }
-        }
-    }
     render() {
-        const { note, saveNote }: NoteEditorProps = this.props;
+        const { notes, match, saveNote, history }: NoteEditorProps = this.props;
+        if (!match) {
+            return <Error message="failed to parse note id from url" />;
+        }
+        const { noteID } = match.params;
+        const note: NoteProps = notes.by_id[noteID];
 
-        const content = note.markdown || this.state.markdown;
+        const content = this.state.markdown;
 
         return (
-            <Container fluid>
+            <Container>
                 <Row>
                     <Col md={12}>
                         <Button
+                            variant="info"
                             onClick={() => {
-                                const markdown = new Markdown(
-                                    this.state.markdown
-                                );
-                                note.metadata = {
-                                    ...note.metadata,
-                                    ...markdown.attributes
-                                };
-                                if (!note.id) {
-                                    note.id = uuidv5(
-                                        note.metadata.title,
-                                        uuidv5.DNS
-                                    );
-                                }
-
+                                const markdown = new Markdown(content);
+                                note.metadata = markdown.attributes;
+                                // console.log(
+                                //     "state.markdown",
+                                //     this.state.markdown
+                                // );
+                                // console.log("note.markdown", note.markdown);
                                 saveNote({
                                     ...note,
-                                    markdown: this.state.markdown
+                                    markdown: content
                                 });
+                                history.push("/");
                             }}
                         >
                             Save
@@ -108,26 +97,25 @@ class NoteEditor extends Component<NoteEditorProps, NoteEditorState> {
                         }}
                     />
 
-                    <Preview
-                        theme={"light"}
-                        markdownContent={this.state.markdown}
-                    />
+                    <Preview theme={"light"} markdownContent={content} />
                 </Row>
             </Container>
         );
     }
 }
 
-export default connect<NoteEditorProps>(
-    state => {
-        return { ...state };
-    },
-    {
-        saveNote: function(note: any) {
-            return {
-                type: "SAVE_NOTE",
-                note
-            };
+export default withRouter(
+    connect<NoteEditorProps>(
+        state => {
+            return { ...state };
+        },
+        {
+            saveNote: function(note: any) {
+                return {
+                    type: "SAVE_NOTE",
+                    note
+                };
+            }
         }
-    }
-)(NoteEditor);
+    )(NoteEditor)
+);

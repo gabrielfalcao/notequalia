@@ -40,7 +40,7 @@ class NoteList extends Component<NoteListProps, NoteListState> {
             );
         }
         return (
-            <Table responsive>
+            <Table responsive bordered hover>
                 <thead>
                     <tr>
                         <th>ID</th>
