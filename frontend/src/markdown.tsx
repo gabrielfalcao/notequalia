@@ -1,4 +1,7 @@
 import marked from "marked";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
+
 import extractor, { FrontMatterResult } from "front-matter";
 
 export type FrontMatterAttributes =
@@ -25,6 +28,11 @@ export class Markdown {
             this._err = e;
             this.parsed = null;
         }
+        marked.setOptions({
+            highlight: function(code) {
+                return hljs.highlightAuto(code).value;
+            }
+        });
     }
     public toHTML(): string {
         if (this.parsed) {
