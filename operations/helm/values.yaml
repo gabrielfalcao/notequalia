@@ -10,7 +10,7 @@ notequalia_url: "https://api.visualcu.es/"
 notequalia:
   mailserver:
     enabled: true
-    port: 8825
+    port: 25
 
 image:
   repository: gabrielfalcao/k8s-notequalia-io
