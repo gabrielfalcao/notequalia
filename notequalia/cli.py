@@ -21,10 +21,13 @@ from notequalia.models import metadata
 from notequalia.worker.client import EchoClient
 from notequalia.worker.server import EchoServer
 from notequalia.es import es
+from notequalia.filesystem import alembic_ini_path
 from notequalia.logs import set_log_level_by_name, set_debug_mode
 from notequalia import version
 from notequalia import email
 from notequalia import mailserver
+from alembic.config import Config as AlembicConfig
+from alembic import command as alembic_command
 
 
 DEFAULT_ROUTER_PORT = os.getenv("ZMQ_ROUTER_PORT") or 4242
@@ -215,19 +218,11 @@ def migrate_db(ctx, drop):
     engine = ctx.obj["engine"]
     url = engine.url
 
-    if drop:
-        try:
-            metadata.drop_all(engine)
-            logger.warning(f"DROPPED DB due to --drop")
-        except Exception as e:
-            logger.exception(f"failed to connect to migrate {url}: {e}")
+    metadata.drop_all(engine)
 
-    logger.info(f"Migrating SQL database: {str(engine.url)!r}")
-    try:
-        metadata.create_all(engine)
-        logger.info(f"SUCCESS")
-    except Exception as e:
-        logger.exception(f"failed to connect to migrate {url}: {e}")
+    alembic_cfg = AlembicConfig(str(alembic_ini_path))
+    alembic_cfg.set_section_option('alembic', 'sqlalchemy.url', dbconfig.sqlalchemy_url())
+    alembic_command.upgrade(alembic_cfg, "head")
 
 
 @main.command("worker")
