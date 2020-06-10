@@ -4,7 +4,7 @@ title: First Post
 description: demo of front-matter support
 ---
 
-# Welcome to NoteQualia
+# Welcome to CogNodes
 
 ---
 - On the left you have an editor

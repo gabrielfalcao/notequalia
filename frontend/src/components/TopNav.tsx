@@ -22,7 +22,7 @@ class TopNav extends Component<TopNavProps, any> {
         return (
             <Navbar bg="light" expand="lg" sticky="top" className="mb-3">
                 <LinkContainer to="/">
-                    <Navbar.Brand>NoteQualia</Navbar.Brand>
+                    <Navbar.Brand>CogNodes</Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls="cognodes-navbar-nav" />
 

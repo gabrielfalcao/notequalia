@@ -1,7 +1,7 @@
 ------
 
 
-NoteQualia (visualcu.es)
+CogNodes (visualcu.es)
 ======================
 
 
