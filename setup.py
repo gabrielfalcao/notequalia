@@ -27,12 +27,12 @@ class VersionFinder(ast.NodeVisitor):
 
 def read_version():
     finder = VersionFinder()
-    finder.visit(ast.parse(local_file("notequalia", "version.py")))
+    finder.visit(ast.parse(local_file("cognodes", "version.py")))
     return finder.version
 
 
 setup(
-    name="notequalia-io",
+    name="cognodes-io",
     version=read_version(),
     description="\n".join(
         [
@@ -42,14 +42,14 @@ setup(
         ]
     ),
     long_description=local_file("README.rst"),
-    entry_points={"console_scripts": ["notequalia-io = notequalia.cli:main"]},
+    entry_points={"console_scripts": ["cognodes-io = cognodes.cli:main"]},
     url="https://github.com/gabrielfalcao/kube-python-app-example",
     packages=find_packages(exclude=["*tests*"]),
     include_package_data=True,
     package_data={
-        "notequalia": ["README.rst", "*.png", "*.json", "*.rst", "docs/*", "docs/*/*"]
+        "cognodes": ["README.rst", "*.png", "*.json", "*.rst", "docs/*", "docs/*/*"]
     },
-    package_dir={"notequalia-io": "notequalia"},
+    package_dir={"cognodes-io": "cognodes"},
     zip_safe=False,
     author="Gabriel Falcão",
     author_email="gabriel@nacaolivre.org",

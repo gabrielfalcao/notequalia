@@ -1,21 +1,21 @@
-{{- if .Values.notequalia.mailserver.enabled }}
+{{- if .Values.cognodes.mailserver.enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-email-server
+  name: {{ include "cognodes-io.fullname" . }}-email-server
 spec:
   minReadySeconds: 5
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+      app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-email-server
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+        app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-email-server
         app.kubernetes.io/instance: {{ .Release.Name }}
 
     spec:
@@ -23,32 +23,32 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: {{ .Chart.Name }}
-        command: ['/venv/bin/notequalia-io', 'smtp', '--port={{ .Values.notequalia.mailserver.port }}']
+        command: ['/venv/bin/cognodes-io', 'smtp', '--port={{ .Values.cognodes.mailserver.port }}']
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
 
         ports:
-        - containerPort: {{ .Values.notequalia.mailserver.port }}
+        - containerPort: {{ .Values.cognodes.mailserver.port }}
           protocol: TCP
           name: smtp
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-email-server
+  name: {{ include "cognodes-io.fullname" . }}-email-server
   labels:
-    app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+    app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-email-server
     app.kubernetes.io/instance: {{ .Release.Name }}
 
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.notequalia.mailserver.port }}
+    - port: {{ .Values.cognodes.mailserver.port }}
       targetPort: smtp
       protocol: TCP
       name: smtp
   selector:
-    app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-email-server
+    app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-email-server
     app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

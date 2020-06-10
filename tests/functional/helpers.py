@@ -1,8 +1,8 @@
 import shutil
 from sure import scenario
-from notequalia.config import dbconfig
-from notequalia.web import application
-from notequalia.logs import set_debug_mode
+from cognodes.config import dbconfig
+from cognodes.web import application
+from cognodes.logs import set_debug_mode
 from chemist import set_default_uri, metadata
 
 

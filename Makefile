@@ -25,14 +25,14 @@ BASE_TAG		:= latest
 PROD_TAG		?= $(shell git log --pretty="format:%H" -n1 . | tail -1)
 #PROD_TAG		?= e5602ba7df33e573bc278ea71bfd5322f9ebbcdd  # stable
 DOCKER_AUTHOR		:= gabrielfalcao
-BASE_IMAGE		:= notequalia-io-base
-PROD_IMAGE		:= k8s-notequalia-io
+BASE_IMAGE		:= cognodes-io-base
+PROD_IMAGE		:= k8s-cognodes-io
 HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE) --set oauth2.client_id=$(OAUTH2_CLIENT_ID) --set oauth2.client_secret=$(OAUTH2_CLIENT_SECRET) --set flask.secret_key=$(SECRET_KEY)-$(PROD_TAG)
-NAMESPACE		:= notequalia-k8sns
+NAMESPACE		:= cognodes-k8sns
 HELM_RELEASE		:= $(NAMESPACE)-v0
 FIGLET			:= $(shell which figlet)
-FRONTEND_REACT_NGROK	:= notequalia-fe
-BACKEND_FLASK_NGROK	:= notequalia-be
+FRONTEND_REACT_NGROK	:= cognodes-fe
+BACKEND_FLASK_NGROK	:= cognodes-be
 
 all: dependencies tests
 
@@ -40,7 +40,7 @@ $(VENV):  # creates $(VENV) folder if does not exist
 	python3 -mvenv $(VENV)
 	$(VENV)/bin/pip install -U pip setuptools
 
-$(VENV)/bin/notequalia-io $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
+$(VENV)/bin/cognodes-io $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
 	test -e $(VENV)/bin/pip || $(MAKE) $(VENV)
 	$(VENV)/bin/pip install -r development.txt
 	$(VENV)/bin/pip install -e .
@@ -55,10 +55,10 @@ dependencies: | $(VENV)/bin/nosetests
 	$(VENV)/bin/pip install -e .
 
 check:
-	$(VENV)/bin/notequalia-io check
+	$(VENV)/bin/cognodes-io check
 
 migrate:
-	$(VENV)/bin/notequalia-io migrate-db
+	$(VENV)/bin/cognodes-io migrate-db
 
 # runs unit tests
 
@@ -70,7 +70,7 @@ functional:| $(VENV)/bin/nosetests  # runs functional tests
 
 # runs the server, exposing the routes to http://localhost:5000
 run: purge-sessions | $(VENV)/bin/python
-	$(VENV)/bin/notequalia-io web --port=5000
+	$(VENV)/bin/cognodes-io web --port=5000
 
 
 docker-base-image:
@@ -110,17 +110,17 @@ port-forward:
 forward-queue-port:
 	kubepfm --target "$(NAMESPACE):.*queue:4242:4242"
 
-db: purge-sessions | $(VENV)/bin/notequalia-io
-	-@2>/dev/null dropdb notequalia_io || echo ''
-	-@2>/dev/null dropuser notequalia_io || echo 'no db user'
-	-@2>/dev/null createuser notequalia_io --createrole --createdb
-	-@2>/dev/null createdb notequalia_io
-	-@psql postgres << "CREATE ROLE notequalia_io WITH LOGIN PASSWORD 'Wh15K3y'"
-	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE notequalia_io TO notequalia_io;"
-	$(VENV)/bin/notequalia-io migrate-db
+db: purge-sessions | $(VENV)/bin/cognodes-io
+	-@2>/dev/null dropdb cognodes_io || echo ''
+	-@2>/dev/null dropuser cognodes_io || echo 'no db user'
+	-@2>/dev/null createuser cognodes_io --createrole --createdb
+	-@2>/dev/null createdb cognodes_io
+	-@psql postgres << "CREATE ROLE cognodes_io WITH LOGIN PASSWORD 'Wh15K3y'"
+	-@psql postgres << "GRANT ALL PRIVILEGES ON DATABASE cognodes_io TO cognodes_io;"
+	$(VENV)/bin/cognodes-io migrate-db
 
 purge-sessions:
-	$(VENV)/bin/notequalia-io purge-sessions
+	$(VENV)/bin/cognodes-io purge-sessions
 
 
 template:
@@ -165,13 +165,13 @@ redeploy:
 	$(MAKE) undeploy deploy
 
 enqueue:
-	$(VENV)/bin/notequalia-io enqueue -x $(X) -n 10 --address='tcp://127.0.0.1:4242' "$${USER}@$$(hostname):[SENT=$$(date +'%s')]"
+	$(VENV)/bin/cognodes-io enqueue -x $(X) -n 10 --address='tcp://127.0.0.1:4242' "$${USER}@$$(hostname):[SENT=$$(date +'%s')]"
 
 close:
-	$(VENV)/bin/notequalia-io close --address='tcp://127.0.0.1:4242'
+	$(VENV)/bin/cognodes-io close --address='tcp://127.0.0.1:4242'
 
 worker:
-	$(VENV)/bin/notequalia-io worker --address='tcp://127.0.0.1:6969'
+	$(VENV)/bin/cognodes-io worker --address='tcp://127.0.0.1:6969'
 
 setup-helm:
 	helm repo add elastic https://helm.elastic.co
@@ -190,14 +190,14 @@ frontend/build/index.html:
 	cd frontend && npm run build
 
 react-app: frontend/build/index.html
-	cp -f frontend/build/index.html notequalia/web/templates/index.html
-	rm -rf notequalia/web/static/{js,css}
-	rsync -putaoz frontend/build/static/ notequalia/web/static/
-	rsync -putaoz frontend/build/ notequalia/web/static/
-	rm -rf notequalia/web/static/static
+	cp -f frontend/build/index.html cognodes/web/templates/index.html
+	rm -rf cognodes/web/static/{js,css}
+	rsync -putaoz frontend/build/static/ cognodes/web/static/
+	rsync -putaoz frontend/build/ cognodes/web/static/
+	rm -rf cognodes/web/static/static
 	rm -f frontend/build/index.html
-	git add notequalia/web/static/
-	-git commit notequalia/web/{templates,static}/ -m "new release of react-app"
+	git add cognodes/web/static/
+	-git commit cognodes/web/{templates,static}/ -m "new release of react-app"
 
 # https://cert-manager.io/docs/tutorials/backup/
 cert-manager-backup.yaml:

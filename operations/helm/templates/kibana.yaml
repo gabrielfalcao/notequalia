@@ -2,19 +2,19 @@
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
-#   name: {{ include "notequalia-io.fullname" . }}-kibana
+#   name: {{ include "cognodes-io.fullname" . }}-kibana
 # spec:
 #   minReadySeconds: 5
 #   replicas: 1
 #   revisionHistoryLimit: 10
 #   selector:
 #     matchLabels:
-#       app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-kibana
+#       app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-kibana
 #       app.kubernetes.io/instance: {{ .Release.Name }}
 #   template:
 #     metadata:
 #       labels:
-#         app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-kibana
+#         app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-kibana
 #         app.kubernetes.io/instance: {{ .Release.Name }}
 
 #     spec:
@@ -33,9 +33,9 @@
 # apiVersion: v1
 # kind: Service
 # metadata:
-#   name: {{ include "notequalia-io.fullname" . }}-kibana
+#   name: {{ include "cognodes-io.fullname" . }}-kibana
 #   labels:
-#     app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-kibana
+#     app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-kibana
 #     app.kubernetes.io/instance: {{ .Release.Name }}
 
 # spec:
@@ -45,5 +45,5 @@
 #       protocol: TCP
 #       name: kibana
 #   selector:
-#     app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-kibana
+#     app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-kibana
 #     app.kubernetes.io/instance: {{ .Release.Name }}

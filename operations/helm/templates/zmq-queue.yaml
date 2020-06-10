@@ -3,19 +3,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-queue
+  name: {{ include "cognodes-io.fullname" . }}-queue
 spec:
   minReadySeconds: 5
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-queue
+      app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-queue
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-queue
+        app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-queue
         app.kubernetes.io/instance: {{ .Release.Name }}
 
     spec:
@@ -23,10 +23,10 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: {{ .Chart.Name }}
-        command: ['/venv/bin/notequalia-io', 'queue']
+        command: ['/venv/bin/cognodes-io', 'queue']
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
 
         ports:
         - containerPort: {{ .Values.zmq.router_port }}
@@ -39,9 +39,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-queue
+  name: {{ include "cognodes-io.fullname" . }}-queue
   labels:
-    app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-queue
+    app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-queue
     app.kubernetes.io/instance: {{ .Release.Name }}
 
 spec:
@@ -56,6 +56,6 @@ spec:
       protocol: TCP
       name: dealer
   selector:
-    app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-queue
+    app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-queue
     app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

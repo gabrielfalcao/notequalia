@@ -1,5 +1,5 @@
 from chemist import set_default_uri
-from notequalia.models import metadata
+from cognodes.models import metadata
 
 engine = set_default_uri(f"sqlite:///:memory:")
 

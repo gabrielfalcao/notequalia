@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-web
+  name: {{ include "cognodes-io.fullname" . }}-web
 spec:
   minReadySeconds: 5
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
+      app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-web
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
+        app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-web
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       affinity:
@@ -40,31 +40,31 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: check-installation
-        command: ['/venv/bin/notequalia-io', 'check']
+        command: ['/venv/bin/cognodes-io', 'check']
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
 
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: check-db-connection
-        command: ['/venv/bin/notequalia-io', 'check-db']
+        command: ['/venv/bin/cognodes-io', 'check-db']
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
 
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: run-database-migrations
-        command: ['/venv/bin/notequalia-io', 'migrate-db']
+        command: ['/venv/bin/cognodes-io', 'migrate-db']
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
         env:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ template "notequalia-io.fullname" . }}-secrets
+              name: {{ template "cognodes-io.fullname" . }}-secrets
               key: postgresql-password
 
         env:
@@ -74,21 +74,21 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: purge-sessions
-        command: ['/venv/bin/notequalia-io', 'purge-sessions']
+        command: ['/venv/bin/cognodes-io', 'purge-sessions']
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
 
       volumes:
-        - name: notequalia-uploads-volume
+        - name: cognodes-uploads-volume
           persistentVolumeClaim:
-            claimName: pvc-notequalia-io
+            claimName: pvc-cognodes-io
 
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: {{ .Chart.Name }}-web-application-server
-        command: ['/venv/bin/notequalia-io', 'web']
+        command: ['/venv/bin/cognodes-io', 'web']
         livenessProbe:
           httpGet:
             path: /health
@@ -102,21 +102,21 @@ spec:
 
         env:
           - name: UPLOAD_FOLDER
-            value: /notequalia.io/file-uploads
+            value: /cognodes.io/file-uploads
           # - name: OAUTH2_CLIENT_SECRET
           #   valueFrom:
           #     secretKeyRef:
-          #       name: {{ template "notequalia-io.fullname" . }}-secrets
+          #       name: {{ template "cognodes-io.fullname" . }}-secrets
           #       key: oauth2-client-secret
 
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
 
         ports:
         - containerPort: 5000
           name: api
 
         volumeMounts:
-          - name: notequalia-uploads-volume
-            mountPath: /notequalia.io
+          - name: cognodes-uploads-volume
+            mountPath: /cognodes.io

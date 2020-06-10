@@ -5,7 +5,7 @@ import logging
 # from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
 
-# from notequalia.utils import parse_jwt_token
+# from cognodes.utils import parse_jwt_token
 
 
 logger = logging.getLogger(__name__)

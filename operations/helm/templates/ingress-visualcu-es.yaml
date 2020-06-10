@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-ingress-visualcu-es
+  name: {{ include "cognodes-io.fullname" . }}-ingress-visualcu-es
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
@@ -29,35 +29,35 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: api.visualcu.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: data.visualcu.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: app.visualcu.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: mail.visualcu.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
 {{- end }}
 
@@ -65,7 +65,7 @@ spec:
 # apiVersion: networking.k8s.io/v1beta1
 # kind: Ingress
 # metadata:
-#   name: {{ include "notequalia-io.fullname" . }}-ingress-wavemandala
+#   name: {{ include "cognodes-io.fullname" . }}-ingress-wavemandala
 #   annotations:
 #     kubernetes.io/ingress.class: nginx
 #     cert-manager.io/cluster-issuer: "letsencrypt-staging"
@@ -83,13 +83,13 @@ spec:
 #       paths:
 #       - path: /
 #         backend:
-#           serviceName: {{ include "notequalia-io.fullname" . }}
+#           serviceName: {{ include "cognodes-io.fullname" . }}
 #           servicePort: 5000
 # ---
 # apiVersion: networking.k8s.io/v1beta1
 # kind: Ingress
 # metadata:
-#   name: {{ include "notequalia-io.fullname" . }}-ingress-notequalia
+#   name: {{ include "cognodes-io.fullname" . }}-ingress-cognodes
 #   annotations:
 #     kubernetes.io/ingress.class: nginx
 #     cert-manager.io/cluster-issuer: "letsencrypt-staging"
@@ -99,14 +99,14 @@ spec:
 # spec:
 #   tls:
 #   - hosts:
-#     - notequalia.io
-#     secretName: notequalia-roots
+#     - cognodes.io
+#     secretName: cognodes-roots
 #   rules:
-#   - host: notequalia.io
+#   - host: cognodes.io
 #     http:
 #       paths:
 #       - path: /
 #         backend:
-#           serviceName: {{ include "notequalia-io.fullname" . }}
+#           serviceName: {{ include "cognodes-io.fullname" . }}
 #           servicePort: 5000
 # ---

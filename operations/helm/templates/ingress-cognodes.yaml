@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-ingress-cognod-es
+  name: {{ include "cognodes-io.fullname" . }}-ingress-cognod-es
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
@@ -29,34 +29,34 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: api.cognod.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: data.cognod.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: app.cognod.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
   - host: mail.cognod.es
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
+          serviceName: {{ include "cognodes-io.fullname" . }}
           servicePort: 5000
 {{- end }}

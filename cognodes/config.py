@@ -6,7 +6,7 @@ module_path = Path(__file__).parent
 
 current_working_path = Path(os.getcwd()).expanduser().absolute()
 
-DEFAULT_UPLOAD_PATH = current_working_path.joinpath("notequalia-io-uploads")
+DEFAULT_UPLOAD_PATH = current_working_path.joinpath("cognodes-io-uploads")
 APP_URL_EXTERNAL = os.getenv("APP_URL_EXTERNAL") or "https://pron-f1l3-serv3r.ngrok.io/"
 
 REDIS_HOST = os.getenv("REDIS_HOST")
@@ -84,9 +84,9 @@ OIDC_RESOURCE_SERVER_ONLY = False
 class dbconfig:
     host = os.getenv("POSTGRES_HOST") or "localhost"
     port = int(os.getenv("POSTGRES_PORT") or 5432)
-    username = os.getenv("POSTGRES_USERNAME") or "notequalia_io"
+    username = os.getenv("POSTGRES_USERNAME") or "cognodes_io"
     password = os.getenv("POSTGRES_PASSWORD") or "Wh15k3y"
-    database = os.getenv("POSTGRES_DATABASE") or "notequalia_io"
+    database = os.getenv("POSTGRES_DATABASE") or "cognodes_io"
     auth = os.getenv("POSTGRES_AUTH") or (
         password and f"{username}:{password}" or username
     )

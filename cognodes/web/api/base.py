@@ -4,14 +4,14 @@ import logging
 from flask_restplus import Api
 
 from flask import url_for
-from notequalia.utils import json_response
-from notequalia.web.base import application
+from cognodes.utils import json_response
+from cognodes.web.base import application
 
-from notequalia import config
+from cognodes import config
 
-# from notequalia.worker.client import EchoClient
+# from cognodes.worker.client import EchoClient
 
-# from notequalia.web.core import oidc
+# from cognodes.web.core import oidc
 
 logger = logging.getLogger(__name__)
 

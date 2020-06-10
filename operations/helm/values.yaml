@@ -1,19 +1,19 @@
-# Default values for notequalia-io.
+# Default values for cognodes-io.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
-notequalia_url: "https://api.visualcu.es/"
-# namespace: notequalia-k8sns
+cognodes_url: "https://api.visualcu.es/"
+# namespace: cognodes-k8sns
 
-notequalia:
+cognodes:
   mailserver:
     enabled: true
     port: 25
 
 image:
-  repository: gabrielfalcao/k8s-notequalia-io
+  repository: gabrielfalcao/k8s-cognodes-io
   tag: latest
   pullPolicy: Always
 
@@ -99,32 +99,32 @@ tolerations: []
 
 affinity: {}
 postgresql:
-  fullnameOverride: notequalia-db
+  fullnameOverride: cognodes-db
   enabled: true
   image:
     repository: postgres
     tag: 10.6
 
-  postgresqlDataDir: /notequalia.io/data/postgresql-10.6/pgdata-2020-05-19
+  postgresqlDataDir: /cognodes.io/data/postgresql-10.6/pgdata-2020-05-19
   persistence:
     enabled: true
-    mountPath: /notequalia.io/data/postgresql-10.6
-    existingClaim: pvc-notequalia-io
+    mountPath: /cognodes.io/data/postgresql-10.6
+    existingClaim: pvc-cognodes-io
     size: 10Gi
 
   postgresqlPassword: b5fi41dz1BE4C22F44u
-  postgresqlDatabase: notequalia_io
+  postgresqlDatabase: cognodes_io
   postgresqlUsername: web
   # master:
   #   extraInitContainers:
   #   - image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
   #     imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
   #     name: create postgres users
-  #     command: ['bash', '-c', '"echo \"grant all privileges on database notequalia_io to postgres\""']
+  #     command: ['bash', '-c', '"echo \"grant all privileges on database cognodes_io to postgres\""']
 
 
 redis:
-  fullnameOverride: notequalia-redis
+  fullnameOverride: cognodes-redis
   enabled: false
   image:
     pullPolicy: IfNotPresent

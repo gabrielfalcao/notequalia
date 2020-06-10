@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pvc-notequalia-io
+  name: pvc-cognodes-io
 spec:
   accessModes:
   - ReadWriteOnce
@@ -14,7 +14,7 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: volume-notequalia-io
+  name: volume-cognodes-io
   annotations:
     # fake it by indicating this is provisioned dynamically, so the system
     # works properly

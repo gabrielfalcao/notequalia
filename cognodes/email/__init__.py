@@ -9,7 +9,7 @@ import json
 
 from .inbox import Inbox
 
-from notequalia import logs
+from cognodes import logs
 
 logger = logging.getLogger(__name__)
 inbox = Inbox()

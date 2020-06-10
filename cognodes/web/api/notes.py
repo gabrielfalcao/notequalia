@@ -6,7 +6,7 @@ from flask_restplus import fields
 from flask_restplus import reqparse
 from flask_restplus import inputs
 
-from notequalia.models import Note
+from cognodes.models import Note
 from .base import api
 
 logger = logging.getLogger(__name__)

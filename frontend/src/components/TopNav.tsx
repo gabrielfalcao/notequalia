@@ -24,11 +24,11 @@ class TopNav extends Component<TopNavProps, any> {
                 <LinkContainer to="/">
                     <Navbar.Brand>NoteQualia</Navbar.Brand>
                 </LinkContainer>
-                <Navbar.Toggle aria-controls="notequalia-navbar-nav" />
+                <Navbar.Toggle aria-controls="cognodes-navbar-nav" />
 
                 <Navbar.Collapse
                     className="justify-content-end"
-                    id="notequalia-navbar-nav"
+                    id="cognodes-navbar-nav"
                 >
                     <Nav>
                         {needs_login(auth) ? (

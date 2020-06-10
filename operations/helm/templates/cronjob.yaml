@@ -3,7 +3,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-cron
+  name: {{ include "cognodes-io.fullname" . }}-cron
 spec:
   schedule: "*/30 * * * *"
   jobTemplate:
@@ -14,9 +14,9 @@ spec:
           - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             name: {{ .Chart.Name }}
-            command: ['notequalia-io', 'enqueue', '{{ .Chart.Name }}']
+            command: ['cognodes-io', 'enqueue', '{{ .Chart.Name }}']
             envFrom:
               - configMapRef:
-                  name: {{ include "notequalia-io.fullname" . }}-env
+                  name: {{ include "cognodes-io.fullname" . }}-env
           restartPolicy: OnFailure
 {{- end }}

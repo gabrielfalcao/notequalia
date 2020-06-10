@@ -3,7 +3,7 @@ import json
 import smtpd
 import asyncore
 from typing import List
-from notequalia.models import NoteMail
+from cognodes.models import NoteMail
 
 logger = logging.getLogger(__name__)
 

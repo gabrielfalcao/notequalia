@@ -12,20 +12,20 @@ from datetime import datetime
 from zmq.devices import Device
 from chemist import set_default_uri
 
-# import from notequalia.api to cascade all route declarations
-from notequalia.web import application
+# import from cognodes.api to cascade all route declarations
+from cognodes.web import application
 
-from notequalia import config
-from notequalia.config import dbconfig
-from notequalia.models import metadata
-from notequalia.worker.client import EchoClient
-from notequalia.worker.server import EchoServer
-from notequalia.es import es
-from notequalia.filesystem import alembic_ini_path
-from notequalia.logs import set_log_level_by_name, set_debug_mode
-from notequalia import version
-from notequalia import email
-from notequalia import mailserver
+from cognodes import config
+from cognodes.config import dbconfig
+from cognodes.models import metadata
+from cognodes.worker.client import EchoClient
+from cognodes.worker.server import EchoServer
+from cognodes.es import es
+from cognodes.filesystem import alembic_ini_path
+from cognodes.logs import set_log_level_by_name, set_debug_mode
+from cognodes import version
+from cognodes import email
+from cognodes import mailserver
 from alembic.config import Config as AlembicConfig
 from alembic import command as alembic_command
 
@@ -91,14 +91,14 @@ def check_database_dns():
         sock.close()
 
 
-logger = logging.getLogger("notequalia-io")
+logger = logging.getLogger("cognodes-io")
 
 
 @click.group()
 @click.option("--loglevel", default="INFO", type=level_choices)
 @click.pass_context
 def main(ctx, loglevel):
-    "notequalia-io command-line manager"
+    "cognodes-io command-line manager"
     set_log_level_by_name(loglevel)
     ctx.obj = dict(engine=set_default_uri(dbconfig.sqlalchemy_url()))
 
@@ -106,7 +106,7 @@ def main(ctx, loglevel):
 @main.command(name="version")
 def print_version():
     "prints the version to the STDOUT"
-    print(f"notequalia-io {version} / {sys.platform}")
+    print(f"cognodes-io {version} / {sys.platform}")
 
 
 @main.command(name="purge-sessions")

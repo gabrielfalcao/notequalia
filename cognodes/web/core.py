@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_session import Session
 from flask_oidc import OpenIDConnect
 
-from notequalia.filesystem import templates_path, static_path
+from cognodes.filesystem import templates_path, static_path
 
 params = {
     "template_folder": str(templates_path),
@@ -13,7 +13,7 @@ params = {
 }
 
 application = Flask(__name__, **params)
-application.config.from_object("notequalia.config")
+application.config.from_object("cognodes.config")
 
 cors = CORS(application, resources="*")
 

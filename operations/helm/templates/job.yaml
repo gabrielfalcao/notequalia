@@ -2,7 +2,7 @@
 # apiVersion: batch/v1
 # kind: Job
 # metadata:
-#   name: {{ include "notequalia-io.fullname" . }}-worker
+#   name: {{ include "cognodes-io.fullname" . }}-worker
 # spec:
 #   template:
 #     spec:
@@ -10,10 +10,10 @@
 #       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 #         imagePullPolicy: {{ .Values.image.pullPolicy }}
 #         name: {{ .Chart.Name }}-worker
-#         command: ['/venv/bin/notequalia-io', 'worker']
+#         command: ['/venv/bin/cognodes-io', 'worker']
 #         envFrom:
 #           - configMapRef:
-#               name: {{ include "notequalia-io.fullname" . }}-env
+#               name: {{ include "cognodes-io.fullname" . }}-env
 
 #       restartPolicy: Never
 #   backoffLimit: 6 # number of retries before throwing error

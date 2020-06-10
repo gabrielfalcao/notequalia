@@ -3,12 +3,12 @@ import json
 import logging
 
 from flask import redirect, session, request, g, url_for, make_response
-from notequalia.models import KeycloakRequest
-from notequalia.utils import json_response, parse_jwt_token
+from cognodes.models import KeycloakRequest
+from cognodes.utils import json_response, parse_jwt_token
 
-from notequalia.web.core import application
+from cognodes.web.core import application
 
-# from notequalia.web.core import oidc
+# from cognodes.web.core import oidc
 
 
 logger = logging.getLogger(__name__)

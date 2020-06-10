@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-env
+  name: {{ include "cognodes-io.fullname" . }}-env
   labels:
-{{ include "notequalia-io.labels" . | indent 4 }}
+{{ include "cognodes-io.labels" . | indent 4 }}
 data:
   HTTPS_API: "false"
   FLASK_HOST: "0.0.0.0"
   FLASK_PORT: {{ .Values.service.port | quote }}
   # FLASK_DEBUG: "true"  # disable for production usage
-  APP_URL_EXTERNAL: {{ .Values.notequalia_url | quote }}
+  APP_URL_EXTERNAL: {{ .Values.cognodes_url | quote }}
 
 # PostgreSQL
 {{- if .Values.postgresql.enabled }}
@@ -41,10 +41,10 @@ data:
   ZMQ_DEALER_PORT: {{ .Values.zmq.dealer_port | quote }}
   ZMQ_PUBLISHER_PORT: {{ .Values.zmq.publisher_port | quote }}
   ZMQ_SUBSCRIBER_PORT: {{ .Values.zmq.subscriber_port | quote }}
-  ZMQ_ROUTER_HOST: {{ include "notequalia-io.zmq-queue.hostname" . | quote }}
-  ZMQ_DEALER_HOST: {{ include "notequalia-io.zmq-queue.hostname" . | quote }}
-  ZMQ_PUBLISHER_HOST: {{ include "notequalia-io.zmq-queue.hostname" . | quote }}
-  ZMQ_SUBSCRIBER_HOST: {{ include "notequalia-io.zmq-queue.hostname" . | quote }}
+  ZMQ_ROUTER_HOST: {{ include "cognodes-io.zmq-queue.hostname" . | quote }}
+  ZMQ_DEALER_HOST: {{ include "cognodes-io.zmq-queue.hostname" . | quote }}
+  ZMQ_PUBLISHER_HOST: {{ include "cognodes-io.zmq-queue.hostname" . | quote }}
+  ZMQ_SUBSCRIBER_HOST: {{ include "cognodes-io.zmq-queue.hostname" . | quote }}
 {{- end }}
 
 # Authentication

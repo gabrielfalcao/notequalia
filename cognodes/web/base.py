@@ -2,10 +2,10 @@
 
 from flask import render_template
 
-from notequalia.logs import set_log_level_by_name
-from notequalia.web.core import application
+from cognodes.logs import set_log_level_by_name
+from cognodes.web.core import application
 
-# from notequalia import config
+# from cognodes import config
 
 
 logger = set_log_level_by_name("DEBUG", __name__)

@@ -4,11 +4,11 @@
 /.coverage
 /.mypy_cache/
 /.venv/
-/notequalia-io-uploads/
-/notequalia/__pycache__/
-/notequalia/web/__pycache__/
-/notequalia/worker/__pycache__/
-/notequalia_io.egg-info/
+/cognodes-io-uploads/
+/cognodes/__pycache__/
+/cognodes/web/__pycache__/
+/cognodes/worker/__pycache__/
+/cognodes_io.egg-info/
 /file-server-uploads/
 /file_server.egg-info/
 /flask_session/

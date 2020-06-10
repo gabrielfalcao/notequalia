@@ -7,7 +7,7 @@ from flask_restplus import reqparse
 
 # from flask_restplus import inputs
 
-from notequalia.models import KeycloakRequest
+from cognodes.models import KeycloakRequest
 from .base import api
 
 logger = logging.getLogger(__name__)

@@ -3,14 +3,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-ngrok-tunnel
+  name: {{ include "cognodes-io.fullname" . }}-ngrok-tunnel
 spec:
   minReadySeconds: 5
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-ngrok-tunnel
+      app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-ngrok-tunnel
       app.kubernetes.io/instance: {{ .Release.Name }}
   strategy:
     type: RollingUpdate
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-ngrok-tunnel
+        app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-ngrok-tunnel
         app.kubernetes.io/instance: {{ .Release.Name }}
 
     spec:
@@ -36,12 +36,12 @@ spec:
         #   - '{{ .Values.ngrok.subdomain | quote }}'
         #   - '--bindtls=true'
         #   - '--log=stderr'
-        #   - '{{ include "notequalia-io.web.fqdn" . | quote }}'
+        #   - '{{ include "cognodes-io.web.fqdn" . | quote }}'
         env:
           - name: NGROK_AUTH
             valueFrom:
               secretKeyRef:
-                name: {{ include "notequalia-io.fullname" . }}-secrets
+                name: {{ include "cognodes-io.fullname" . }}-secrets
                 key: ngrok-token
 
           - name: NGROK_SUBDOMAIN
@@ -59,5 +59,5 @@ spec:
           # due to a problem with the ngrok image the hostname:port
           # needs be provided here
           - name: NGROK_PORT
-            value: {{ include "notequalia-io.web.fqdn" . | quote }}
+            value: {{ include "cognodes-io.web.fqdn" . | quote }}
 {{- end }}

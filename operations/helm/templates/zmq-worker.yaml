@@ -3,19 +3,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "notequalia-io.fullname" . }}-worker
+  name: {{ include "cognodes-io.fullname" . }}-worker
 spec:
   minReadySeconds: 5
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-worker
+      app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-worker
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-worker
+        app.kubernetes.io/name: {{ include "cognodes-io.name" . }}-worker
         app.kubernetes.io/instance: {{ .Release.Name }}
 
     spec:
@@ -23,8 +23,8 @@ spec:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: {{ .Chart.Name }}
-        command: ['/venv/bin/notequalia-io', 'worker', '--polling-timeout=30000']
+        command: ['/venv/bin/cognodes-io', 'worker', '--polling-timeout=30000']
         envFrom:
           - configMapRef:
-              name: {{ include "notequalia-io.fullname" . }}-env
+              name: {{ include "cognodes-io.fullname" . }}-env
 {{- end }}
