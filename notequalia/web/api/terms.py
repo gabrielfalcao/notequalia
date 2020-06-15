@@ -42,10 +42,13 @@ class DefinitionsEndpoint(Resource):
     @term_ns.expect(definition_json)
     def post(self):
         term = (api.payload.get("term") or "").strip()
+        model = Term.find_one_by(term=term)
+        if model:
+            return json_response(model.to_dict(), 200)
+
         result = LexiconEngine().define_term(term)
-        model = Term.get_or_create(term=term)
-        model.set(content=json.dumps(result))
-        model.save()
+        content = json.dumps(result)
+        model = Term.create(term=term, content=content)
         try:
             return json_response(model.to_dict(), 201)
         except Exception as e:
