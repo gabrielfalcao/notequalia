@@ -124,7 +124,7 @@ class Term(Model):
         "terms",
         metadata,
         db.Column("id", db.Integer, primary_key=True),
-        db.Column("term", db.UnicodeText, nullable=True, index=True),
+        db.Column("term", db.UnicodeText, nullable=True, index=True, unique=True),
         db.Column("content", db.UnicodeText, nullable=True),
         db.Column(
             "parent_id",
