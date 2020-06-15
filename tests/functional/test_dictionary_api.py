@@ -24,7 +24,7 @@ def test_create_definition(context):
 
 @vcr.use_cassette("ap1/v1/dict/definitions/POST:200.yaml")
 @web_test
-def test_create_definition(context):
+def test_get_or_create_definition(context):
     ("POST on /api/v1/dict/definitions should return 201")
 
     # Given that I perform a POST /api/v1/dict/definitions twice
