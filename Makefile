@@ -124,13 +124,14 @@ purge-sessions:
 	$(VENV)/bin/notequalia-io purge-sessions
 
 
-template:
+operations/helm/charts:
 	helm dependency update --skip-refresh operations/helm/
+
+template: operations/helm/charts
 	helm template $(HELM_SET_VARS) operations/helm
 
-deploy: tests k8s-namespace
+deploy: tests k8s-namespace operations/helm/charts
 	iterm2 color orange
-	helm template $(HELM_SET_VARS) operations/helm > /dev/null
 	git push
 	helm dependency update --skip-refresh operations/helm/
 	iterm2 color red
