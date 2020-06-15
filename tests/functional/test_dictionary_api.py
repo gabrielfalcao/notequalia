@@ -1,8 +1,8 @@
-# import vcr
 import json
-from .helpers import web_test
+from .helpers import web_test, vcr
 
 
+@vcr.use_cassette("ap1/v1/dict/definitions/POST:201.yaml")
 @web_test
 def test_create_definition(context):
     ("POST on /api/v1/dict/definitions should return 201")
@@ -19,6 +19,4 @@ def test_create_definition(context):
     response.status_code.should.equal(201)
 
     # And it contains a definition
-    json.loads(response.data).should.equal({
-        "term": "inadvertently"
-    })
+    json.loads(response.data).should.equal({'content': '{"pydictionary": {"googlemeaning": null, "meaning": {"Adverb": ["without knowledge or intention"]}, "synonym": null, "antonym": null}}', 'id': 1, 'parent_id': None, 'term': 'inadvertently'})

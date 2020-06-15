@@ -1,9 +1,15 @@
 import shutil
+from vcr import VCR
 from sure import scenario
+from pathlib import Path
 from notequalia.config import dbconfig
 from notequalia.web import application
 from notequalia.logs import set_debug_mode
 from chemist import set_default_uri, metadata
+
+functional_tests_path = Path(__file__).parent.absolute()
+tests_path = functional_tests_path.parent
+vcr = VCR(cassette_library_dir=str(functional_tests_path.joinpath(".cassetes")))
 
 
 def supports_postgres():

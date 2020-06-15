@@ -111,6 +111,7 @@ forward-queue-port:
 	kubepfm --target "$(NAMESPACE):.*queue:4242:4242"
 
 db: purge-sessions | $(VENV)/bin/notequalia-io
+	@echo "recreating database from scratch..."
 	-@2>/dev/null dropdb notequalia_io || echo ''
 	-@2>/dev/null dropuser notequalia_io || echo 'no db user'
 	-@2>/dev/null createuser notequalia_io --createrole --createdb
