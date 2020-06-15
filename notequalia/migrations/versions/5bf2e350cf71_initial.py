@@ -6,7 +6,7 @@ Create Date: 2020-06-09 03:20:31.879874
 
 """
 from alembic import op
-import sqlalchemy as sa
+import sqlalchemy as db
 
 
 # revision identifiers, used by Alembic.
@@ -19,39 +19,39 @@ depends_on = None
 def upgrade():
     op.create_table(
         "note",
-        sa.Column("id", sa.Integer, primary_key=True),
-        sa.Column("name", sa.UnicodeText, nullable=True, index=True),
-        sa.Column("content", sa.UnicodeText, nullable=True),
-        sa.Column(
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("name", db.UnicodeText, nullable=True, index=True),
+        db.Column("content", db.UnicodeText, nullable=True),
+        db.Column(
             "parent_id",
-            sa.Integer,
-            sa.ForeignKey("note.id", ondelete="RESTRICT"),
+            db.Integer,
+            db.ForeignKey("note.id", ondelete="RESTRICT"),
             nullable=True,
         ),
     )
     op.create_table(
         "note_email",
-        sa.Column("id", sa.Integer, primary_key=True),
-        sa.Column("sender", sa.String(320), nullable=True, index=True),
-        sa.Column("recipient", sa.String(320), nullable=True, index=True),
-        sa.Column("data", sa.UnicodeText, nullable=True),
-        sa.Column("extra", sa.UnicodeText, nullable=True),
-        sa.Column(
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("sender", db.String(320), nullable=True, index=True),
+        db.Column("recipient", db.String(320), nullable=True, index=True),
+        db.Column("data", db.UnicodeText, nullable=True),
+        db.Column("extra", db.UnicodeText, nullable=True),
+        db.Column(
             "note_id",
-            sa.Integer,
-            sa.ForeignKey("note.id", ondelete="CASCADE"),
+            db.Integer,
+            db.ForeignKey("note.id", ondelete="CASCADE"),
             nullable=True,
         ),
     )
     op.create_table(
         "keycloak_admin_requests",
-        sa.Column("id", sa.Integer, primary_key=True),
-        sa.Column("method", sa.Unicode(20), nullable=True, index=True),
-        sa.Column("path", sa.UnicodeText, nullable=True, index=True),
-        sa.Column("jwt_token", sa.UnicodeText, nullable=True),
-        sa.Column("args", sa.UnicodeText, nullable=True),
-        sa.Column("data", sa.UnicodeText, nullable=True),
-        sa.Column("headers", sa.UnicodeText, nullable=True),
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("method", db.Unicode(20), nullable=True, index=True),
+        db.Column("path", db.UnicodeText, nullable=True, index=True),
+        db.Column("jwt_token", db.UnicodeText, nullable=True),
+        db.Column("args", db.UnicodeText, nullable=True),
+        db.Column("data", db.UnicodeText, nullable=True),
+        db.Column("headers", db.UnicodeText, nullable=True),
     )
 
 

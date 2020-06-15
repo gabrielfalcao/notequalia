@@ -117,3 +117,41 @@ class KeycloakRequest(Model):
     #     data["args"] = self.args
     #     data["jwt_token"] = self.jwt_token
     #     return data
+
+
+class Term(Model):
+    table = db.Table(
+        "terms",
+        metadata,
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("term", db.UnicodeText, nullable=True, index=True),
+        db.Column("content", db.UnicodeText, nullable=True),
+        db.Column(
+            "parent_id",
+            db.Integer,
+            db.ForeignKey("terms.id", ondelete="RESTRICT"),
+            nullable=True,
+        ),
+    )
+
+    @property
+    def parent(self):
+        self._parent = getattr(self, "_parent", None)
+        if not self.parent:
+            self._parent = self.get_parent()
+
+        return self._parent
+
+    def get_parent(self):
+        if not self.parent_id:
+            return
+
+        return Note.find_one_by(id=self.parent_id)
+
+    @property
+    def content(self):
+        try:
+            return json.loads(self.get("content", "null"), default=str)
+        except Exception:
+            logger.exception(f"{self}.content property")
+            return self.get("content")

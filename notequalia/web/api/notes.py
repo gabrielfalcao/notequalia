@@ -30,11 +30,11 @@ parser = reqparse.RequestParser()
 # parser.add_argument('session', location='cookies', help='the session id containing the state of authentication')
 
 note_ns = api.namespace(
-    "Note API V1", description="Fake NewStore Note API", path="/api/v1/notes"
+    "Note API V1", description="Notes API", path="/api/v1/notes"
 )
 
 
-@note_ns.route("/notes")
+@note_ns.route("/")
 @note_ns.expect(parser)
 class NoteListEndpoint(Resource):
     def get(self):
@@ -62,7 +62,7 @@ class NoteListEndpoint(Resource):
             return {"error": str(e)}, 400
 
 
-@note_ns.route("/note/<note_id>")
+@note_ns.route("/<note_id>")
 @note_ns.expect(parser)
 class NoteEndpoint(Resource):
     def get(self, note_id):
