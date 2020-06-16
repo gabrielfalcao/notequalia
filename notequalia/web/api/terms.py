@@ -62,7 +62,6 @@ class DefinitionsEndpoint(Resource):
 @term_ns.route("/term/<term>")
 @term_ns.expect(parser)
 class TermEndpoint(Resource):
-    @term_ns.expect(definition_json)
     def delete(self, term):
         found = Term.find_one_by(term=term)
         if not found:
