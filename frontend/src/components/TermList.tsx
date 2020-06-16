@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import * as rm from "typed-rest-client/HttpClient";
 
-import { InferProps } from "prop-types";
+import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
 import Table from "react-bootstrap/Table";
@@ -16,49 +15,36 @@ import { AuthPropTypes } from "../domain/auth";
 
 import { TermPropTypes, TermProps } from "../domain/terms";
 import { TermsReducerState } from "../reducers/types";
+import { DictionaryAPIClient } from "../networking";
 
 // const x = { FormControl< "input" >}
 const TermListPropTypes = {
-    auth: AuthPropTypes
+    auth: AuthPropTypes,
+    addError: PropTypes.func,
+    addTerms: PropTypes.func
 };
 
 type TermListProps =
     | (InferProps<typeof TermListPropTypes> & { terms: TermsReducerState })
     | any;
-type TermListState = {
-    term: string;
-};
+type TermListState = {};
 
 class TermList extends Component<TermListProps, TermListState> {
-    private http: rm.HttpClient;
+    private api: DictionaryAPIClient;
     static propTypes = {
         auth: AuthPropTypes,
         terms: TermPropTypes
     };
     constructor(props: TermListProps) {
         super(props);
-        this.state = {
-            term: ""
-        };
-        this.http = new rm.HttpClient("list-terms");
+        const { addError } = props;
+        this.api = new DictionaryAPIClient(addError);
     }
 
     public fetchDefinitions = () => {
         const { addTerms }: TermListProps = this.props;
 
-        fetch("https://cognod.es/api/v1/dict/definitions")
-            .then(body => {
-                const items = body.json();
-
-                return items;
-            })
-            .then(terms => {
-                addTerms(terms);
-            })
-
-            .catch(err => {
-                console.log("AJAX ERROR", err);
-            });
+        this.api.listDefinitions(addTerms);
     };
 
     componentDidMount() { }
@@ -85,6 +71,9 @@ class TermList extends Component<TermListProps, TermListState> {
                             const meta: any = JSON.parse(term.content);
                             const { pydictionary } = meta;
 
+                            if (!pydictionary) {
+                                return null;
+                            }
                             return (
                                 <tr key={`${index}`}>
                                     <td>
@@ -93,42 +82,51 @@ class TermList extends Component<TermListProps, TermListState> {
                                     {pydictionary ? (
                                         <React.Fragment>
                                             <td>
-                                                <ListGroup variant="flush">
-                                                    {Object.keys(
-                                                        pydictionary.meaning
-                                                    ).map(
-                                                        (
-                                                            key: string,
-                                                            index: number
-                                                        ) => {
-                                                            const values: string[] =
-                                                                pydictionary
-                                                                    .meaning[
-                                                                key
-                                                                ];
-                                                            return (
-                                                                <ListGroup.Item
-                                                                    key={index}
-                                                                >
-                                                                    <h4>
-                                                                        {key}
-                                                                    </h4>
-                                                                    {values.map(
-                                                                        description => (
-                                                                            <ListGroup.Item>
-                                                                                <h5>
-                                                                                    {
-                                                                                        description
-                                                                                    }
-                                                                                </h5>
-                                                                            </ListGroup.Item>
-                                                                        )
-                                                                    )}
-                                                                </ListGroup.Item>
-                                                            );
-                                                        }
-                                                    )}
-                                                </ListGroup>
+                                                {pydictionary.meaning ? (
+                                                    <ListGroup variant="flush">
+                                                        {Object.keys(
+                                                            pydictionary.meaning
+                                                        ).map(
+                                                            (
+                                                                key: string,
+                                                                index: number
+                                                            ) => {
+                                                                const values: string[] =
+                                                                    pydictionary
+                                                                        .meaning[
+                                                                    key
+                                                                    ];
+                                                                return (
+                                                                    <ListGroup.Item
+                                                                        key={`${index}`}
+                                                                    >
+                                                                        <h4>
+                                                                            {
+                                                                                key
+                                                                            }
+                                                                        </h4>
+                                                                        {values.map(
+                                                                            (
+                                                                                description,
+                                                                                index
+                                                                            ) => (
+                                                                                    <ListGroup.Item
+                                                                                        key={`${index}`}
+                                                                                    >
+                                                                                        <h5>
+                                                                                            {
+                                                                                                description
+                                                                                            }
+                                                                                        </h5>
+                                                                                    </ListGroup.Item>
+                                                                                )
+                                                                        )}
+                                                                    </ListGroup.Item>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </ListGroup>
+                                                ) : null}
                                             </td>
                                             {
                                                 // <td>
@@ -171,6 +169,12 @@ export default connect<TermListProps>(
             return {
                 type: "ADD_TERMS",
                 terms
+            };
+        },
+        addError: function(error: Error) {
+            return {
+                type: "ADD_ERROR",
+                error
             };
         }
     }

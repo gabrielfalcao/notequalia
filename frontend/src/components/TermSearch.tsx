@@ -1,7 +1,6 @@
 import React, { Component, ChangeEvent } from "react";
-import * as rm from "typed-rest-client/RestClient";
+import PropTypes, { InferProps } from "prop-types";
 
-import { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
 import Modal from "react-bootstrap/Modal";
@@ -11,12 +10,15 @@ import Button from "react-bootstrap/Button";
 
 import { AuthPropTypes } from "../domain/auth";
 
-import { TermPropTypes } from "../domain/terms";
+import { TermPropTypes, TermProps } from "../domain/terms";
+import { DictionaryAPIClient } from "../networking";
 import { TermsReducerState } from "../reducers/types";
 
 // const x = { FormControl< "input" >}
 const TermSearchPropTypes = {
-    auth: AuthPropTypes
+    auth: AuthPropTypes,
+    addError: PropTypes.func,
+    addTerms: PropTypes.func
 };
 
 type TermSearchProps =
@@ -28,46 +30,29 @@ type TermSearchState = {
 
 class TermSearch extends Component<TermSearchProps, TermSearchState> {
     // private termInputRef = React.createRef<HTMLInputElement>();
-    private http: rm.RestClient;
+    private api: DictionaryAPIClient;
     static propTypes = {
         auth: AuthPropTypes,
         terms: TermPropTypes
     };
     constructor(props: TermSearchProps) {
         super(props);
+        const { addError } = props;
+
         this.state = {
             term: ""
         };
-        const baseUrl = "https://cognod.es/api/v1/";
-        this.http = new rm.RestClient("rest-samples", baseUrl);
+
+        this.api = new DictionaryAPIClient(addError);
     }
 
     public search = () => {
         const { addTerms }: TermSearchProps = this.props;
-        interface TermQuery {
-            term: string;
-        }
-        const term = this.getTerm();
-        let query: TermQuery = { term };
 
-        console.log("POSTing to API");
-        this.http
-            .create<TermQuery>(
-                "https://cognod.es/api/v1/dict/definitions",
-                query
-            )
-            .then((response: any) => {
-                addTerms([response.result]);
-            })
-            .catch(err => {
-                console.log("AJAX ERROR", err);
-            });
-
-        console.log(
-            "isTermValidForSubmission",
-            this.isTermValidForSubmission()
-        );
-        console.log("getTerm", this.getTerm());
+        this.api.searchDefinition(this.getTerm(), (term: TermProps) => {
+            addTerms([term]);
+            this.setState({ term: "" });
+        });
     };
 
     public handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -98,6 +83,7 @@ class TermSearch extends Component<TermSearchProps, TermSearchState> {
                             type="text"
                             placeholder="e.g.: elated"
                             onChange={handleChange}
+                            value={this.state.term}
                         />
                         <Form.Text className="text-muted">
                             For now only support words, no support to phrases{" "}
@@ -129,6 +115,12 @@ export default connect<TermSearchProps>(
             return {
                 type: "ADD_TERMS",
                 terms
+            };
+        },
+        addError: function(error: Error) {
+            return {
+                type: "ADD_ERROR",
+                error
             };
         }
     }

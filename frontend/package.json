@@ -6,6 +6,7 @@
     "98.css": "0.1.1",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
+    "axios": "^0.19.2",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "4.4.1",
     "bootswatch": "4.4.1",
@@ -35,7 +36,6 @@
     "restful-react": "^12.0.0",
     "superagent": "5.2.2",
     "toastr": "2.1.4",
-    "typed-rest-client": "^1.7.3",
     "uuid": "^8.1.0"
   },
   "scripts": {

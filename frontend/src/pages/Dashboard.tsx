@@ -45,56 +45,51 @@ class Dashboard extends Component<DashboardProps> {
         return (
             <Container>
                 <Row>
-                    <Col md={12}>
-                        <Card bg="light" text="dark" className="mb-2">
-                            <Card.Header>Lexicon</Card.Header>
-                            <Card.Body>
-                                <Card.Text>
-                                    <TermList />
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
+                    {utilities ? (
+                        <React.Fragment>
+                            <Col md={6}>
+                                <TermSearch />
+                            </Col>
+
+                            <Col md={6}>
+                                <Card bg="light" text="dark" className="mb-2">
+                                    <Card.Header>Utilities</Card.Header>
+                                    <Card.Body>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => {
+                                                purgeData();
+                                            }}
+                                        >
+                                            Purge all data{" "}
+                                        </Button>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </React.Fragment>
+                    ) : null}
 
                     <Col md={12}>
                         <Card bg="light" text="dark" className="mb-2">
                             <Card.Header>Notes</Card.Header>
                             <Card.Body>
-                                <Card.Text>
-                                    <NoteList />
-                                    <LinkContainer to="/notes/new">
-                                        <Button variant="success">
-                                            Add new Note{" "}
-                                        </Button>
-                                    </LinkContainer>
-                                </Card.Text>
+                                <NoteList />
+                                <LinkContainer to="/notes/new">
+                                    <Button variant="success">
+                                        Add new Note{" "}
+                                    </Button>
+                                </LinkContainer>
                             </Card.Body>
                         </Card>
                     </Col>
-                    {utilities ? (
-                        <React.Fragment>
-                            <Col md={6}>
-                                <Card bg="light" text="dark" className="mb-2">
-                                    <Card.Header>Utilities</Card.Header>
-                                    <Card.Body>
-                                        <Card.Text>
-                                            <Button
-                                                variant="danger"
-                                                onClick={() => {
-                                                    purgeData();
-                                                }}
-                                            >
-                                                Purge all data{" "}
-                                            </Button>
-                                        </Card.Text>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                            <Col md={6}>
-                                <TermSearch />
-                            </Col>
-                        </React.Fragment>
-                    ) : null}
+                    <Col md={12}>
+                        <Card bg="light" text="dark" className="mb-2">
+                            <Card.Header>Lexicon</Card.Header>
+                            <Card.Body>
+                                <TermList />
+                            </Card.Body>
+                        </Card>
+                    </Col>
                 </Row>
             </Container>
         );
