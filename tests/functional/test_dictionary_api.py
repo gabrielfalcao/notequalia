@@ -90,8 +90,11 @@ def test_list_definitions(context):
     term, _ = define_new_term("prerogative")
     term, _ = define_new_term("rapport")
 
-    # When I perform a DELETE one definition
+    # When I perform a DELETE one definition via URL
     response = context.http.delete("/api/v1/dict/term/prerogative")
+
+    # # And I perform a DELETE one definition via body
+    # response = context.http.delete("/api/v1/dict/definitions", data=json.dumps({"term": "substrate"}))
 
     # Then the response should be 200
     response.status_code.should.equal(200)
