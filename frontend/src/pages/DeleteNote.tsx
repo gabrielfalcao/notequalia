@@ -60,11 +60,9 @@ class DeleteNote extends Component<DeleteNoteProps, any> {
                             </Modal.Header>
 
                             <Modal.Body>
-                                <p>
-                                    Are you sure you want to delete the note "
-									{note.id}"?
-								</p>
-                            </Modal.Body>
+                                Are you sure you want to delete the note "
+								{note.id}"?
+							</Modal.Body>
 
                             <Modal.Footer>
                                 <Button

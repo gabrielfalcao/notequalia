@@ -47,16 +47,14 @@ class Login extends Component<LoginProps> {
                             </Modal.Header>
 
                             <Modal.Body>
-                                <p>
-                                    This is a dummy login for now, just click
-                                    login.
-								</p>
+                                This is a dummy login for now, just click login
+								{"."}
                             </Modal.Body>
 
                             <Modal.Footer>
                                 <Button onClick={this.login} variant="success">
-                                    Proceed
-								</Button>
+                                    Proceed{""}
+                                </Button>
                             </Modal.Footer>
                         </Modal.Dialog>
                     </Col>

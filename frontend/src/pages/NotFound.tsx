@@ -21,18 +21,14 @@ class NotFound extends Component<RouteComponentProps> {
                             </Modal.Header>
 
                             <Modal.Body>
-                                <p>
-                                    No match for url{" "}
-                                    <code>{location.pathname}</code>
-                                </p>
+                                No match for url{" "}
+                                <code>{location.pathname}</code>
                             </Modal.Body>
 
                             <Modal.Footer>
-                                <p>
-                                    <LinkContainer to="/">
-                                        <Button>Back to dashboard</Button>
-                                    </LinkContainer>
-                                </p>
+                                <LinkContainer to="/">
+                                    <Button>Back to dashboard</Button>
+                                </LinkContainer>
                             </Modal.Footer>
                         </Modal.Dialog>
                     </Col>

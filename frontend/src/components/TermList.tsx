@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as rm from "typed-rest-client/RestClient";
+import * as rm from "typed-rest-client/HttpClient";
 
 import { InferProps } from "prop-types";
 import { connect } from "react-redux";
@@ -30,7 +30,7 @@ type TermListState = {
 };
 
 class TermList extends Component<TermListProps, TermListState> {
-    private http: rm.RestClient;
+    private http: rm.HttpClient;
     static propTypes = {
         auth: AuthPropTypes,
         terms: TermPropTypes
@@ -40,8 +40,7 @@ class TermList extends Component<TermListProps, TermListState> {
         this.state = {
             term: ""
         };
-        const baseUrl = "https://cognod.es/api/v1/";
-        this.http = new rm.RestClient("rest-samples", baseUrl);
+        this.http = new rm.HttpClient("list-terms");
     }
 
     public fetchDefinitions = () => {
@@ -49,8 +48,18 @@ class TermList extends Component<TermListProps, TermListState> {
 
         this.http
             .get("https://cognod.es/api/v1/dict/definitions")
-            .then((response: any) => {
-                addTerms(response.result);
+            .then(res => {
+                const bodyPromise = res.readBody();
+
+                bodyPromise.then(
+                    body => {
+                        const items = JSON.parse(body);
+                        addTerms(items);
+                    },
+                    reason => {
+                        console.log("AJAX ERROR", reason);
+                    }
+                );
             })
             .catch(err => {
                 console.log("AJAX ERROR", err);
@@ -97,22 +106,20 @@ class TermList extends Component<TermListProps, TermListState> {
                                                             pydictionary
                                                                 .meaning[key];
                                                         return (
-                                                            <p>
+                                                            <ListGroup.Item>
                                                                 <h4>{key}</h4>
-                                                                <ListGroup.Item>
-                                                                    {values.map(
-                                                                        description => (
-                                                                            <ListGroup.Item>
-                                                                                <h5>
-                                                                                    {
-                                                                                        description
-                                                                                    }
-                                                                                </h5>
-                                                                            </ListGroup.Item>
-                                                                        )
-                                                                    )}
-                                                                </ListGroup.Item>
-                                                            </p>
+                                                                {values.map(
+                                                                    description => (
+                                                                        <ListGroup.Item>
+                                                                            <h5>
+                                                                                {
+                                                                                    description
+                                                                                }
+                                                                            </h5>
+                                                                        </ListGroup.Item>
+                                                                    )
+                                                                )}
+                                                            </ListGroup.Item>
                                                         );
                                                     })}
                                                 </ListGroup>

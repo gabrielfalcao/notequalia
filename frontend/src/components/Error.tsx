@@ -29,9 +29,7 @@ class Error extends Component<ErrorProps> {
                             </Modal.Header>
 
                             <Modal.Body>
-                                <Alert variant="danger">
-                                    <p>{message}</p>
-                                </Alert>
+                                <Alert variant="danger">{message}</Alert>
                             </Modal.Body>
 
                             <Modal.Footer>
