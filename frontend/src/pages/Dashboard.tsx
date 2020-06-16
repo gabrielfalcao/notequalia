@@ -12,6 +12,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import { needs_login, AuthPropTypes } from "../domain/auth";
 import NoteList from "../components/NoteList";
+import TermSearch from "../components/TermSearch";
 
 const DashboardPropTypes = {
     logout: PropTypes.func,
@@ -51,31 +52,36 @@ class Dashboard extends Component<DashboardProps> {
                                     <NoteList />
                                     <LinkContainer to="/notes/new">
                                         <Button variant="success">
-                                            Add new Note
-										</Button>
+                                            Add new Note{" "}
+                                        </Button>
                                     </LinkContainer>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
                     {utilities ? (
-                        <Col md={6}>
-                            <Card bg="light" text="dark" className="mb-2">
-                                <Card.Header>Utilities</Card.Header>
-                                <Card.Body>
-                                    <Card.Text>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => {
-                                                purgeData();
-                                            }}
-                                        >
-                                            Purge all data
-										</Button>
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                        <React.Fragment>
+                            <Col md={6}>
+                                <Card bg="light" text="dark" className="mb-2">
+                                    <Card.Header>Utilities</Card.Header>
+                                    <Card.Body>
+                                        <Card.Text>
+                                            <Button
+                                                variant="danger"
+                                                onClick={() => {
+                                                    purgeData();
+                                                }}
+                                            >
+                                                Purge all data{" "}
+                                            </Button>
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                            <Col md={6}>
+                                <TermSearch />
+                            </Col>
+                        </React.Fragment>
                     ) : null}
                 </Row>
             </Container>

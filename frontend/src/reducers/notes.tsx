@@ -60,7 +60,6 @@ export const notes = (
             return {
                 ...state,
                 current: action.note,
-                error: action.error,
                 loaded: true
             };
 
