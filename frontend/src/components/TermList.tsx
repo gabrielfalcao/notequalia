@@ -46,21 +46,16 @@ class TermList extends Component<TermListProps, TermListState> {
     public fetchDefinitions = () => {
         const { addTerms }: TermListProps = this.props;
 
-        this.http
-            .get("https://cognod.es/api/v1/dict/definitions")
-            .then(res => {
-                const bodyPromise = res.readBody();
+        fetch("https://cognod.es/api/v1/dict/definitions")
+            .then(body => {
+                const items = body.json();
 
-                bodyPromise.then(
-                    body => {
-                        const items = JSON.parse(body);
-                        addTerms(items);
-                    },
-                    reason => {
-                        console.log("AJAX ERROR", reason);
-                    }
-                );
+                return items;
             })
+            .then(terms => {
+                addTerms(terms);
+            })
+
             .catch(err => {
                 console.log("AJAX ERROR", err);
             });
@@ -101,27 +96,38 @@ class TermList extends Component<TermListProps, TermListState> {
                                                 <ListGroup variant="flush">
                                                     {Object.keys(
                                                         pydictionary.meaning
-                                                    ).map(key => {
-                                                        const values: string[] =
-                                                            pydictionary
-                                                                .meaning[key];
-                                                        return (
-                                                            <ListGroup.Item>
-                                                                <h4>{key}</h4>
-                                                                {values.map(
-                                                                    description => (
-                                                                        <ListGroup.Item>
-                                                                            <h5>
-                                                                                {
-                                                                                    description
-                                                                                }
-                                                                            </h5>
-                                                                        </ListGroup.Item>
-                                                                    )
-                                                                )}
-                                                            </ListGroup.Item>
-                                                        );
-                                                    })}
+                                                    ).map(
+                                                        (
+                                                            key: string,
+                                                            index: number
+                                                        ) => {
+                                                            const values: string[] =
+                                                                pydictionary
+                                                                    .meaning[
+                                                                key
+                                                                ];
+                                                            return (
+                                                                <ListGroup.Item
+                                                                    key={index}
+                                                                >
+                                                                    <h4>
+                                                                        {key}
+                                                                    </h4>
+                                                                    {values.map(
+                                                                        description => (
+                                                                            <ListGroup.Item>
+                                                                                <h5>
+                                                                                    {
+                                                                                        description
+                                                                                    }
+                                                                                </h5>
+                                                                            </ListGroup.Item>
+                                                                        )
+                                                                    )}
+                                                                </ListGroup.Item>
+                                                            );
+                                                        }
+                                                    )}
                                                 </ListGroup>
                                             </td>
                                             {
