@@ -39,7 +39,7 @@ def test_get_or_create_definition(context):
     ("POST on /api/v1/dict/definitions should return 200 when term already exists")
 
     # Given that a term exists in the database
-    term = define_new_term("rife")
+    term, _ = define_new_term("rife")
 
     # When I perform a POST /api/v1/dict/definitions
     response = context.http.post(
@@ -61,11 +61,11 @@ def test_list_definitions(context):
     ("GET /api/v1/dict/definitions should return 200 with a list of definitions")
 
     # Given that there are 5 definitions in the database
-    term = define_new_term("ensue")
-    term = define_new_term("excise")
-    term = define_new_term("substrate")
-    term = define_new_term("prerogative")
-    term = define_new_term("rapport")
+    term, _ = define_new_term("ensue")
+    term, _ = define_new_term("excise")
+    term, _ = define_new_term("substrate")
+    term, _ = define_new_term("prerogative")
+    term, _ = define_new_term("rapport")
 
     # When I perform a GET on /api/v1/dict/definitions
     response = context.http.get("/api/v1/dict/definitions")

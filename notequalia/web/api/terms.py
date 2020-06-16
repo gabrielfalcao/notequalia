@@ -2,6 +2,7 @@
 #
 import json
 import logging
+from typing import Tuple
 from flask_restplus import Resource
 from flask_restplus import fields
 from flask_restplus import reqparse
@@ -30,10 +31,18 @@ term_ns = api.namespace(
 )
 
 
-def define_new_term(term: str) -> Term:
+def define_new_term(term: str) -> Tuple[Term, bool]:
     result = LexiconEngine().define_term(term)
     content = json.dumps(result)
-    return Term.create(term=term, content=content)
+    model = Term.find_one_by(term=term)
+    created = False
+    if not model:
+        created = True
+        model =  Term.create(term=term, content=content)
+    else:
+        model.set(content=content).save()
+
+    return model, created
 
 
 @term_ns.route("/definitions")
@@ -42,12 +51,8 @@ class DefinitionsEndpoint(Resource):
     @term_ns.expect(definition_json)
     def post(self):
         term = (api.payload.get("term") or "").strip()
-        model = Term.find_one_by(term=term)
-        if model:
-            return json_response(model.to_dict(), 200)
-
-        model = define_new_term(term)
-        return json_response(model.to_dict(), 201)
+        model, created = define_new_term(term)
+        return json_response(model.to_dict(), created and 201 or 200)
 
     def get(self):
         terms = [t.to_dict() for t in Term.all()]
