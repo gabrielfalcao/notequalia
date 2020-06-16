@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import { withRouter } from "react-router";
-import { Redirect } from "react-router-dom";
+// import { withRouter } from "react-router";
+// import { Redirect } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
 
@@ -58,9 +58,10 @@ class DeleteTerm extends Component<DeleteTermProps, TermsReducerState> {
         const term: TermProps = terms.by_term[termID];
 
         console.log("DeleteTerm", terms.by_term);
-        if (!term) {
-            return <pre>{JSON.stringify(terms, null, 4)}</pre>;
+        if (!match) {
+            return <Error message={JSON.stringify(terms, null, 2)} />;
         }
+
         return (
             <Container fluid>
                 <Row>
