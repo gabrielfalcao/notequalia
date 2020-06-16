@@ -89,32 +89,33 @@ class TermList extends Component<TermListProps, TermListState> {
                                     {pydictionary ? (
                                         <React.Fragment>
                                             <td>
-                                                {Object.keys(
-                                                    pydictionary.meaning
-                                                ).map(key => {
-                                                    const values: string[] =
-                                                        pydictionary.meaning[
-                                                        key
-                                                        ];
-                                                    return (
-                                                        <p>
-                                                            <h4>{key}</h4>
-                                                            <ListGroup variant="flush">
-                                                                {values.map(
-                                                                    description => (
-                                                                        <ListGroup.Item>
-                                                                            <h5>
-                                                                                {
-                                                                                    description
-                                                                                }
-                                                                            </h5>
-                                                                        </ListGroup.Item>
-                                                                    )
-                                                                )}
-                                                            </ListGroup>
-                                                        </p>
-                                                    );
-                                                })}
+                                                <ListGroup variant="flush">
+                                                    {Object.keys(
+                                                        pydictionary.meaning
+                                                    ).map(key => {
+                                                        const values: string[] =
+                                                            pydictionary
+                                                                .meaning[key];
+                                                        return (
+                                                            <p>
+                                                                <h4>{key}</h4>
+                                                                <ListGroup.Item>
+                                                                    {values.map(
+                                                                        description => (
+                                                                            <ListGroup.Item>
+                                                                                <h5>
+                                                                                    {
+                                                                                        description
+                                                                                    }
+                                                                                </h5>
+                                                                            </ListGroup.Item>
+                                                                        )
+                                                                    )}
+                                                                </ListGroup.Item>
+                                                            </p>
+                                                        );
+                                                    })}
+                                                </ListGroup>
                                             </td>
                                             {
                                                 // <td>
