@@ -10,7 +10,7 @@ import sqlalchemy as db
 
 
 # revision identifiers, used by Alembic.
-revision = '5bf2e350cf71'
+revision = "5bf2e350cf71"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -56,6 +56,6 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_table('keycloak_admin_requests')
-    op.drop_table('note_email')
-    op.drop_table('note')
+    op.drop_table("keycloak_admin_requests")
+    op.drop_table("note_email")
+    op.drop_table("note")

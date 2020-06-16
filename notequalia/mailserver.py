@@ -13,18 +13,16 @@ class NoteMailInboxServer(smtpd.SMTPServer):
 
     def accept_recepients(self, rcpttos: List[str]) -> bool:
         for email in rcpttos:
-            if not email.startswith('note-'):
+            if not email.startswith("note-"):
                 continue
             for domain in self.allowed_recepient_domains:
                 if email.endswith(f"@{domain}"):
                     return True
 
     def process_message(self, peer, mailfrom, rcpttos, data, **kwargs):
-        logger.debug(f'process_message -> {peer!r} {mailfrom!r} {rcpttos!r} {kwargs!r}')
+        logger.debug(f"process_message -> {peer!r} {mailfrom!r} {rcpttos!r} {kwargs!r}")
         if not self.accept_recepients(rcpttos):
-            logger.info(
-                f"ignoring message from {mailfrom!r} to {rcpttos!r}"
-            )
+            logger.info(f"ignoring message from {mailfrom!r} to {rcpttos!r}")
             return
 
         for to in rcpttos:

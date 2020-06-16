@@ -5,6 +5,7 @@ import coloredlogs
 
 __INSTALLED = {}
 
+CHATTY_LOGGER_NAMES = ["vcr", "urllib3"]
 
 __LEVEL_STYLES = {
     "critical": {"color": "red", "bold": True},
@@ -37,6 +38,7 @@ def install(levelname):
     )
     coloredlogs.install(levelname, **params)
     __INSTALLED[levelname] = time.time()
+    mute_chatty_loggers()
 
 
 def set_log_level_by_name(loglevel: str, loggername=None):
@@ -48,6 +50,7 @@ def set_log_level_by_name(loglevel: str, loggername=None):
         logger = logging.getLogger()
 
     logger.setLevel(getattr(logging, loglevel.upper(), logging.DEBUG))
+    mute_chatty_loggers()
     return logger
 
 
@@ -56,3 +59,8 @@ def set_debug_mode():
     # logger.addHandler(logging.StreamHandler(sys.stderr))
     # return logger
     return set_log_level_by_name("DEBUG")
+
+
+def mute_chatty_loggers():
+    for chatty in CHATTY_LOGGER_NAMES:
+        logging.getLogger(chatty).setLevel(logging.CRITICAL)

@@ -13,7 +13,7 @@ vcr = VCR(cassette_library_dir=str(functional_tests_path.joinpath(".cassetes")))
 
 
 def supports_postgres():
-    return shutil.which('initdb') is not None
+    return shutil.which("initdb") is not None
 
 
 def before_each_test(context):
@@ -22,7 +22,7 @@ def before_each_test(context):
     context.http = context.web.test_client()
     if supports_postgres():
         context.engine = set_default_uri(dbconfig.sqlalchemy_url())
-        args = (context.engine, )
+        args = (context.engine,)
     else:
         context.engine = None
         args = ()

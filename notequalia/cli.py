@@ -217,7 +217,9 @@ def migrate_db(ctx, drop, target):
         raise SystemExit(1)
 
     alembic_cfg = AlembicConfig(str(alembic_ini_path))
-    alembic_cfg.set_section_option('alembic', 'sqlalchemy.url', dbconfig.sqlalchemy_url())
+    alembic_cfg.set_section_option(
+        "alembic", "sqlalchemy.url", dbconfig.sqlalchemy_url()
+    )
     alembic_command.upgrade(alembic_cfg, target)
 
 
