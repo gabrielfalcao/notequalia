@@ -27,7 +27,7 @@ type TermSearchState = {
 };
 
 class TermSearch extends Component<TermSearchProps, TermSearchState> {
-    private termInputRef = React.createRef<HTMLInputElement>();
+    // private termInputRef = React.createRef<HTMLInputElement>();
     private http: rm.RestClient;
     static propTypes = {
         auth: AuthPropTypes,

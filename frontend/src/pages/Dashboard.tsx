@@ -12,6 +12,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import { needs_login, AuthPropTypes } from "../domain/auth";
 import NoteList from "../components/NoteList";
+import TermList from "../components/TermList";
 import TermSearch from "../components/TermSearch";
 
 const DashboardPropTypes = {
@@ -44,6 +45,17 @@ class Dashboard extends Component<DashboardProps> {
         return (
             <Container>
                 <Row>
+                    <Col md={12}>
+                        <Card bg="light" text="dark" className="mb-2">
+                            <Card.Header>Lexicon</Card.Header>
+                            <Card.Body>
+                                <Card.Text>
+                                    <TermList />
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
                     <Col md={12}>
                         <Card bg="light" text="dark" className="mb-2">
                             <Card.Header>Notes</Card.Header>
