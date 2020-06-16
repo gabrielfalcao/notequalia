@@ -57,3 +57,23 @@ class DefinitionsEndpoint(Resource):
     def get(self):
         terms = [t.to_dict() for t in Term.all()]
         return json_response(terms, 200)
+
+
+@term_ns.route("/term/<term>")
+@term_ns.expect(parser)
+class TermEndpoint(Resource):
+    @term_ns.expect(definition_json)
+    def delete(self, term):
+        found = Term.find_one_by(term=term)
+        if not found:
+            return json_response({"error": f"term {term!r} does not exist"}, 404)
+
+        found.delete()
+        return json_response(found.to_dict(), 200)
+
+    def get(self, term):
+        found = Term.find_one_by(term=term)
+        if not found:
+            return json_response({"error": f"term {term!r} does not exist"}, 404)
+
+        return json_response(found.to_dict(), 200)
