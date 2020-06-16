@@ -70,8 +70,10 @@ class TermList extends Component<TermListProps, TermListState> {
                         <tr>
                             <th>Term</th>
                             <th>Meaning</th>
-                            <th>Synonyms</th>
-                            <th>Antonyms</th>
+                            {
+                                //     <th>Synonyms</th>
+                                // <th>Antonyms</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -81,7 +83,9 @@ class TermList extends Component<TermListProps, TermListState> {
 
                             return (
                                 <tr key={`${index}`}>
-                                    <td>{term.term}</td>
+                                    <td>
+                                        <h3>{term.term}</h3>
+                                    </td>
                                     {pydictionary ? (
                                         <React.Fragment>
                                             <td>
@@ -99,9 +103,11 @@ class TermList extends Component<TermListProps, TermListState> {
                                                                 {values.map(
                                                                     description => (
                                                                         <ListGroup.Item>
-                                                                            {
-                                                                                description
-                                                                            }
+                                                                            <h5>
+                                                                                {
+                                                                                    description
+                                                                                }
+                                                                            </h5>
                                                                         </ListGroup.Item>
                                                                     )
                                                                 )}
@@ -110,17 +116,17 @@ class TermList extends Component<TermListProps, TermListState> {
                                                     );
                                                 })}
                                             </td>
-                                            <td>
-                                                {pydictionary.synonym || ""}
-                                            </td>
-                                            <td>
-                                                {pydictionary.antonym || ""}
-                                            </td>
+                                            {
+                                                // <td>
+                                                //     {pydictionary.synonym || ""}
+                                                // </td>
+                                                // <td>
+                                                //     {pydictionary.antonym || ""}
+                                                // </td>
+                                            }
                                         </React.Fragment>
                                     ) : (
                                             <React.Fragment>
-                                                <td>UNDEFINED</td>
-                                                <td>UNDEFINED</td>
                                                 <td>UNDEFINED</td>
                                             </React.Fragment>
                                         )}
