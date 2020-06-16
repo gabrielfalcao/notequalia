@@ -1,4 +1,6 @@
 import React, { Component, ChangeEvent } from "react";
+import * as rm from "typed-rest-client/RestClient";
+
 import { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
@@ -26,7 +28,7 @@ type TermSearchState = {
 
 class TermSearch extends Component<TermSearchProps, TermSearchState> {
     private termInputRef = React.createRef<HTMLInputElement>();
-
+    private http: rm.RestClient;
     static propTypes = {
         auth: AuthPropTypes,
         terms: TermPropTypes
@@ -36,13 +38,31 @@ class TermSearch extends Component<TermSearchProps, TermSearchState> {
         this.state = {
             term: ""
         };
+        const baseUrl = "https://cognod.es/api/v1/";
+        this.http = new rm.RestClient("rest-samples", baseUrl);
     }
 
     public search = () => {
         const { addTerms }: TermSearchProps = this.props;
-        if (this.isTermValidForSubmission()) {
-            addTerms([{ term: this.getTerm(), content: "{}" }]);
+        interface TermQuery {
+            term: string;
         }
+        const term = this.getTerm();
+        let query: TermQuery = { term };
+
+        console.log("POSTing to API");
+        this.http
+            .create<TermQuery>(
+                "https://cognod.es/api/v1/dict/definitions",
+                query
+            )
+            .then((response: any) => {
+                addTerms([response.result]);
+            })
+            .catch(err => {
+                console.log("AJAX ERROR", err);
+            });
+
         console.log(
             "isTermValidForSubmission",
             this.isTermValidForSubmission()

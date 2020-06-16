@@ -35,6 +35,7 @@
     "restful-react": "^12.0.0",
     "superagent": "5.2.2",
     "toastr": "2.1.4",
+    "typed-rest-client": "^1.7.3",
     "uuid": "^8.1.0"
   },
   "scripts": {
