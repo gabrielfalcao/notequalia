@@ -27,3 +27,6 @@ export type TermsAction =
         terms: Array<TermProps>;
     }
     | any;
+export type TermListState = {
+    terms: TermProps[];
+};

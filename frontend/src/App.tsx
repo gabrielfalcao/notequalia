@@ -11,6 +11,8 @@ import {
 import NewNote from "./pages/NewNote";
 import NoteEditor from "./pages/NoteEditor";
 import DeleteNote from "./pages/DeleteNote";
+import DeleteTerm from "./pages/DeleteTerm";
+import ViewTerm from "./pages/ViewTerm";
 
 import Login from "./pages/login";
 import MindMapView from "./views/MindMapView";
@@ -91,6 +93,13 @@ class App extends Component<AppProps, AppState> {
                     </AuthenticatedRoute>
                     <Route path="/notes/delete/:noteID">
                         <DeleteNote />
+                    </Route>
+                    <AuthenticatedRoute path="/terms/:termID">
+                        <ViewTerm />
+                    </AuthenticatedRoute>
+
+                    <Route path="/terms/delete/:termID">
+                        <DeleteTerm />
                     </Route>
                     <Route component={NotFound} />
                 </Switch>

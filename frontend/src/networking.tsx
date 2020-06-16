@@ -62,4 +62,14 @@ export class DictionaryAPIClient {
             .catch(this.handleError)
             .then(handler);
     };
+    public deleteDefinition = (term: string, handler: SuccessHandler): void => {
+        const url = this.api.urlFor(`/api/v1/dict/term/${term}`);
+        axios
+            .delete(url, this.getOptions())
+            .then((response: AxiosResponse<TermProps>) => {
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
 }

@@ -4,9 +4,10 @@ import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
 import Table from "react-bootstrap/Table";
+import { withRouter } from "react-router";
 // import Alert from "react-bootstrap/Alert";
 
-// import { LinkContainer } from "react-router-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 
 import Button from "react-bootstrap/Button";
 
@@ -14,7 +15,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { AuthPropTypes } from "../domain/auth";
 
 import { TermPropTypes, TermProps } from "../domain/terms";
-import { TermsReducerState } from "../reducers/types";
+import { TermsReducerState, TermListState } from "../reducers/types";
 import { DictionaryAPIClient } from "../networking";
 
 // const x = { FormControl< "input" >}
@@ -27,7 +28,6 @@ const TermListPropTypes = {
 type TermListProps =
     | (InferProps<typeof TermListPropTypes> & { terms: TermsReducerState })
     | any;
-type TermListState = {};
 
 class TermList extends Component<TermListProps, TermListState> {
     private api: DictionaryAPIClient;
@@ -60,6 +60,7 @@ class TermList extends Component<TermListProps, TermListState> {
                         <tr>
                             <th>Term</th>
                             <th>Meaning</th>
+                            <th>Action</th>
                             {
                                 //     <th>Synonyms</th>
                                 // <th>Antonyms</th>
@@ -128,6 +129,15 @@ class TermList extends Component<TermListProps, TermListState> {
                                                     </ListGroup>
                                                 ) : null}
                                             </td>
+                                            <td>
+                                                <LinkContainer
+                                                    to={`/terms/delete/${term.term}`}
+                                                >
+                                                    <Button variant="danger">
+                                                        Delete
+													</Button>
+                                                </LinkContainer>
+                                            </td>
                                             {
                                                 // <td>
                                                 //     {pydictionary.synonym || ""}
@@ -160,22 +170,24 @@ class TermList extends Component<TermListProps, TermListState> {
     }
 }
 
-export default connect<TermListProps>(
-    state => {
-        return { ...state };
-    },
-    {
-        addTerms: function(terms: TermListState[]) {
-            return {
-                type: "ADD_TERMS",
-                terms
-            };
+export default withRouter(
+    connect<TermListProps>(
+        state => {
+            return { ...state };
         },
-        addError: function(error: Error) {
-            return {
-                type: "ADD_ERROR",
-                error
-            };
+        {
+            addTerms: function(terms: TermListState[]) {
+                return {
+                    type: "ADD_TERMS",
+                    terms
+                };
+            },
+            addError: function(error: Error) {
+                return {
+                    type: "ADD_ERROR",
+                    error
+                };
+            }
         }
-    }
-)(TermList);
+    )(TermList)
+);
