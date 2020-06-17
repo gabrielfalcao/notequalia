@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-// import { withRouter } from "react-router";
-// import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router";
+import { Redirect } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
 
@@ -19,14 +19,14 @@ import Col from "react-bootstrap/Col";
 // import { ComponentWithStore } from "../ui";
 import { AuthPropTypes } from "../domain/auth";
 import { TermProps } from "../domain/terms";
-import { TermsReducerState, TermListState } from "../reducers/types";
+import { TermsReducerState } from "../reducers/types";
 
 import Error from "../components/Error";
 import { DictionaryAPIClient } from "../networking";
 
 const DeleteTermPropTypes = {
     addError: PropTypes.func,
-    addTerms: PropTypes.func,
+    deleteTerm: PropTypes.func,
     auth: AuthPropTypes
 };
 
@@ -48,15 +48,25 @@ class DeleteTerm extends Component<DeleteTermProps, TermsReducerState> {
         this.api = new DictionaryAPIClient(addError);
     }
 
+    deleteTerm = (term: string) => {
+        const { deleteTerm }: DeleteTermProps = this.props;
+        this.api.deleteDefinition(term, (term: TermProps) => {
+            deleteTerm(term.term);
+        });
+    };
     render() {
-        const { terms, match, deleteTerm }: DeleteTermProps = this.props;
+        const { terms, match }: DeleteTermProps = this.props;
+        const { deleteTerm } = this;
 
         if (!match) {
-            return <Error message="failed to parse term id from url" />;
+            return <Error message="failed to parse term name from url" />;
         }
         const { termID } = match.params;
         const term: TermProps = terms.by_term[termID];
 
+        if (!term) {
+            return <Redirect to="/" />;
+        }
         console.log("DeleteTerm", terms.by_term);
         if (!match) {
             return <Error message={JSON.stringify(terms, null, 2)} />;
@@ -79,7 +89,7 @@ class DeleteTerm extends Component<DeleteTermProps, TermsReducerState> {
                             <Modal.Footer>
                                 <Button
                                     onClick={() => {
-                                        deleteTerm(term);
+                                        deleteTerm(term.term);
                                     }}
                                     variant="danger"
                                 >
@@ -94,22 +104,24 @@ class DeleteTerm extends Component<DeleteTermProps, TermsReducerState> {
     }
 }
 
-export default connect<DeleteTermProps>(
-    state => {
-        return { ...state };
-    },
-    {
-        addTerms: function(terms: TermListState[]) {
-            return {
-                type: "ADD_TERMS",
-                terms
-            };
+export default withRouter(
+    connect<DeleteTermProps>(
+        state => {
+            return { ...state };
         },
-        addError: function(error: Error) {
-            return {
-                type: "ADD_ERROR",
-                error
-            };
+        {
+            deleteTerm: function(term: string) {
+                return {
+                    type: "DELETE_TERM",
+                    term
+                };
+            },
+            addError: function(error: Error) {
+                return {
+                    type: "ADD_ERROR",
+                    error
+                };
+            }
         }
-    }
-)(DeleteTerm);
+    )(DeleteTerm)
+);

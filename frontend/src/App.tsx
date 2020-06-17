@@ -10,6 +10,7 @@ import {
 
 import NewNote from "./pages/NewNote";
 import NoteEditor from "./pages/NoteEditor";
+import NoteView from "./pages/NoteView";
 import DeleteNote from "./pages/DeleteNote";
 import DeleteTerm from "./pages/DeleteTerm";
 import ViewTerm from "./pages/ViewTerm";
@@ -64,7 +65,18 @@ class App extends Component<AppProps, AppState> {
 
         return (
             <Router>
-                <TopNav />
+                <Route
+                    path={[
+                        "/dashboard",
+                        "/notes/edit",
+                        "/notes/delete",
+                        "/login",
+                        "/mindmap",
+                        "/logout"
+                    ]}
+                >
+                    <TopNav />
+                </Route>
                 <Switch>
                     <Route path="/mindmap">
                         <MindMapView
@@ -80,8 +92,12 @@ class App extends Component<AppProps, AppState> {
                         <Logout />
                     </Route>
                     <Route exact path="/">
-                        <Dashboard utilities />
+                        <Redirect to="/dashboard" />
                     </Route>
+
+                    <AuthenticatedRoute exact path="/dashboard">
+                        <Dashboard utilities />
+                    </AuthenticatedRoute>
                     <Route exact path="/notes">
                         <Dashboard />
                     </Route>
@@ -91,16 +107,19 @@ class App extends Component<AppProps, AppState> {
                     <AuthenticatedRoute path="/notes/edit/:noteID">
                         <NoteEditor />
                     </AuthenticatedRoute>
+                    <Route path="/notes/view/:noteID">
+                        <NoteView />
+                    </Route>
                     <Route path="/notes/delete/:noteID">
                         <DeleteNote />
                     </Route>
-                    <AuthenticatedRoute path="/terms/:termID">
+                    <AuthenticatedRoute path="/terms/view/:termID">
                         <ViewTerm />
                     </AuthenticatedRoute>
 
-                    <Route path="/terms/delete/:termID">
+                    <AuthenticatedRoute path="/terms/delete/:termID">
                         <DeleteTerm />
-                    </Route>
+                    </AuthenticatedRoute>
                     <Route component={NotFound} />
                 </Switch>
             </Router>

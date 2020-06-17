@@ -34,6 +34,13 @@ export const terms = (
                 terms: terms
             };
 
+        case "DELETE_TERM":
+            delete state.by_term[action.term];
+            return {
+                ...state,
+                terms: Object.values(state.by_term)
+            };
+
         case "LOADING_TERMS":
             return { ...state, loaded: false, current: null };
 

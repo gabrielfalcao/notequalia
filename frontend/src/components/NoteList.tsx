@@ -56,9 +56,12 @@ class NoteList extends Component<NoteListProps, NoteListState> {
                             <td>
                                 <LinkContainer to={`/notes/edit/${note.id}`}>
                                     <Button variant="info">Edit</Button>
-                                </LinkContainer>
+                                </LinkContainer>{" "}
                                 <LinkContainer to={`/notes/delete/${note.id}`}>
                                     <Button variant="danger">Delete</Button>
+                                </LinkContainer>{" "}
+                                <LinkContainer to={`/notes/view/${note.id}`}>
+                                    <Button variant="primary">View</Button>
                                 </LinkContainer>
                             </td>
                         </tr>

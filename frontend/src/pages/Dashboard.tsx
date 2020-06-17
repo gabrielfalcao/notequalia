@@ -82,14 +82,16 @@ class Dashboard extends Component<DashboardProps> {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col md={12}>
-                        <Card bg="light" text="dark" className="mb-2">
-                            <Card.Header>Lexicon</Card.Header>
-                            <Card.Body>
-                                <TermList />
-                            </Card.Body>
-                        </Card>
-                    </Col>
+                    {utilities ? (
+                        <Col md={12}>
+                            <Card bg="light" text="dark" className="mb-2">
+                                <Card.Header>Lexicon</Card.Header>
+                                <Card.Body>
+                                    <TermList />
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ) : null}
                 </Row>
             </Container>
         );
