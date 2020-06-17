@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
+import { withRouter } from "react-router";
 import Button from "react-bootstrap/Button";
 
 import { AuthPropTypes } from "../domain/auth";
@@ -47,11 +48,12 @@ class TermSearch extends Component<TermSearchProps, TermSearchState> {
     }
 
     public search = () => {
-        const { addTerms }: TermSearchProps = this.props;
+        const { addTerms, history }: TermSearchProps = this.props;
 
         this.api.searchDefinition(this.getTerm(), (term: TermProps) => {
             addTerms([term]);
             this.setState({ term: "" });
+            history.push(`/terms/view/${term.term}`);
         });
     };
 
@@ -106,22 +108,24 @@ class TermSearch extends Component<TermSearchProps, TermSearchState> {
     }
 }
 
-export default connect<TermSearchProps>(
-    state => {
-        return { ...state };
-    },
-    {
-        addTerms: function(terms: TermSearchState[]) {
-            return {
-                type: "ADD_TERMS",
-                terms
-            };
+export default withRouter(
+    connect<TermSearchProps>(
+        state => {
+            return { ...state };
         },
-        addError: function(error: Error) {
-            return {
-                type: "ADD_ERROR",
-                error
-            };
+        {
+            addTerms: function(terms: TermSearchState[]) {
+                return {
+                    type: "ADD_TERMS",
+                    terms
+                };
+            },
+            addError: function(error: Error) {
+                return {
+                    type: "ADD_ERROR",
+                    error
+                };
+            }
         }
-    }
-)(TermSearch);
+    )(TermSearch)
+);

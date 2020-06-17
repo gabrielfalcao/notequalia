@@ -8,6 +8,7 @@ import { Redirect } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
 import Row from "react-bootstrap/Row";
+import { LinkContainer } from "react-router-bootstrap";
 // import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 // import ButtonGroup from "react-bootstrap/ButtonGroup";
@@ -49,7 +50,7 @@ class ViewTerm extends Component<ViewTermProps, any> {
     }
 
     render() {
-        const { terms, match, viewTerm }: ViewTermProps = this.props;
+        const { terms, match }: ViewTermProps = this.props;
 
         if (!match) {
             return <Error message="failed to parse term id from url" />;
@@ -128,14 +129,9 @@ class ViewTerm extends Component<ViewTermProps, any> {
                             </Modal.Body>
 
                             <Modal.Footer>
-                                <Button
-                                    onClick={() => {
-                                        viewTerm(term);
-                                    }}
-                                    variant="danger"
-                                >
-                                    Yes, view it
-								</Button>
+                                <LinkContainer to={`/`}>
+                                    <Button variant="warning">Back{""}</Button>
+                                </LinkContainer>
                             </Modal.Footer>
                         </Modal.Dialog>
                     </Col>

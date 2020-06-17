@@ -134,8 +134,15 @@ class TermList extends Component<TermListProps, TermListState> {
                                                     to={`/terms/delete/${term.term}`}
                                                 >
                                                     <Button variant="danger">
-                                                        Delete
-													</Button>
+                                                        Delete{""}
+                                                    </Button>
+                                                </LinkContainer>
+                                                <LinkContainer
+                                                    to={`/terms/view/${term.term}`}
+                                                >
+                                                    <Button variant="primary">
+                                                        View{""}
+                                                    </Button>
                                                 </LinkContainer>
                                             </td>
                                             {
