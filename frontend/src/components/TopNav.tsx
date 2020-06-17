@@ -22,13 +22,13 @@ class TopNav extends Component<TopNavProps, any> {
         return (
             <Navbar bg="light" expand="lg" sticky="top" className="mb-3">
                 <LinkContainer to="/">
-                    <Navbar.Brand>NoteQualia</Navbar.Brand>
+                    <Navbar.Brand>COGNOD.ES</Navbar.Brand>
                 </LinkContainer>
-                <Navbar.Toggle aria-controls="notequalia-navbar-nav" />
+                <Navbar.Toggle aria-controls="cognodes-navbar-nav" />
 
                 <Navbar.Collapse
                     className="justify-content-end"
-                    id="notequalia-navbar-nav"
+                    id="cognodes-navbar-nav"
                 >
                     <Nav>
                         {needs_login(auth) ? (
