@@ -51,6 +51,9 @@ class DefinitionsEndpoint(Resource):
     @term_ns.expect(definition_json)
     def post(self):
         term = (api.payload.get("term") or "").strip()
+        if not term:
+            return json_response({"error": "term is required"}, 400)
+
         model, created = define_new_term(term)
         return json_response(model.to_dict(), created and 201 or 200)
 

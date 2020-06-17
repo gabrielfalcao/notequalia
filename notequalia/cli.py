@@ -17,7 +17,7 @@ from notequalia.web import application
 
 from notequalia import config
 from notequalia.config import dbconfig
-from notequalia.models import metadata
+from notequalia.models import metadata, Term
 from notequalia.worker.client import EchoClient
 from notequalia.worker.server import EchoServer
 from notequalia.es import es
@@ -221,7 +221,12 @@ def migrate_db(ctx, drop, target):
         "alembic", "sqlalchemy.url", dbconfig.sqlalchemy_url()
     )
     alembic_command.upgrade(alembic_cfg, target)
+    delete_invalid_terms()
 
+def delete_invalid_terms():
+    for term in Term.all():
+        if not term.term:
+            print(f"deleting term {term}: {term.delete()}")
 
 @main.command("worker")
 @click.option(
