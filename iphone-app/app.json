@@ -1,0 +1,17 @@
+{
+  "name": "lexicon",
+  "displayName": "lexicon",
+  "expo": {
+    "name": "lexicon",
+    "slug": "lexicon",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
