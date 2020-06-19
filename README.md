@@ -19,6 +19,7 @@ Components in this repo by folder
 ---------------------------------
 
 -   `frontend` - React App hosted at <https://cognod.es>
+-   `iphone-app` - React-Native App
 -   `notequalia` - Python Restful API for finding word definitions and
     store notes.
 -   `operations` - Full infrastructure-as-code that deploys the project
@@ -37,6 +38,21 @@ cd ./frontend
 npm install
 npm start
 ```
+
+Then open your browser at http://localhost:3000 to browse the live app - changes to code are automatically reflected.
+
+### Frontend: React-Native App
+
+TypeScript + React + Redux + [NativeBase Components](https://docs.nativebase.io/Components.html#Components)
+
+``` {.sourceCode .bash}
+cd ./iphone-app
+npm install
+npm run web
+```
+
+
+Then install [Expo](https://itunes.apple.com/app/apple-store/id982107779) in your iphone and scan the QR Code to run the live app on your phone - changes to code are automatically reflected.
 
 ### Backend: Python App
 
