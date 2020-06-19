@@ -19,6 +19,7 @@ Components in this repo by folder
 ---------------------------------
 
 -   `frontend` - React App hosted at <https://cognod.es>
+-   `desktop-app` - Electron App (just a boilerplate for now, the goal is to run the same code as frontend app here)
 -   `iphone-app` - React-Native App
 -   `notequalia` - Python Restful API for finding word definitions and
     store notes.
@@ -60,4 +61,15 @@ Python + PostgreSQL with migrations
 
 ``` {.sourceCode .bash}
 make db tests run
+```
+
+
+### Frontend: Desktop App
+
+Electron running the stack of the Frontend React App
+
+``` {.sourceCode .bash}
+cd ./desktop-app
+npm install
+npm start
 ```
