@@ -31,7 +31,7 @@ HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AU
 NAMESPACE		:= notequalia-k8sns
 HELM_RELEASE		:= $(NAMESPACE)-v0
 FIGLET			:= $(shell which figlet)
-FRONTEND_REACT_NGROK	:= notequalia-fe
+WEB-APP_REACT_NGROK	:= notequalia-fe
 BACKEND_FLASK_NGROK	:= notequalia-be
 
 all: dependencies tests
@@ -186,21 +186,21 @@ tunnel:
 	ngrok http --subdomain=$(BACKEND_FLASK_NGROK) 5000
 
 tunnel-react:
-	ngrok http --subdomain=$(FRONTEND_REACT_NGROK) 3000
+	ngrok http --subdomain=$(WEB-APP_REACT_NGROK) 3000
 
 clean:
 	rm -rf .venv
 
-frontend/build/index.html:
-	cd frontend && npm run build
+web-app/build/index.html:
+	cd web-app && npm run build
 
-react-app: frontend/build/index.html
-	cp -f frontend/build/index.html notequalia/web/templates/index.html
+react-app: web-app/build/index.html
+	cp -f web-app/build/index.html notequalia/web/templates/index.html
 	rm -rf notequalia/web/static/{js,css}
-	rsync -putaoz frontend/build/static/ notequalia/web/static/
-	rsync -putaoz frontend/build/ notequalia/web/static/
+	rsync -putaoz web-app/build/static/ notequalia/web/static/
+	rsync -putaoz web-app/build/ notequalia/web/static/
 	rm -rf notequalia/web/static/static
-	rm -f frontend/build/index.html
+	rm -f web-app/build/index.html
 	git add notequalia/web/static/
 	-git commit notequalia/web/{templates,static}/ -m "new release of react-app"
 

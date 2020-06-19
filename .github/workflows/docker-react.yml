@@ -18,6 +18,6 @@ jobs:
         repository: gabrielfalcao/notequalia-react
         tag_with_ref: false  # prevent pushing "latest" tag
         tag_with_sha: true
-        dockerfile: frontend/Dockerfile
-        path: frontend/
+        dockerfile: web-app/Dockerfile
+        path: web-app/
         tags: "${{ github.sha }}"

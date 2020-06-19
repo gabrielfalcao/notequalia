@@ -18,8 +18,8 @@ navigate note references.
 Components in this repo by folder
 ---------------------------------
 
--   `frontend` - React App hosted at <https://cognod.es>
--   `desktop-app` - Electron App (just a boilerplate for now, the goal is to run the same code as frontend app here)
+-   `web-app` - React App hosted at <https://cognod.es>
+-   `desktop-app` - Electron App (just a boilerplate for now, the goal is to run the same code as web-app app here)
 -   `iphone-app` - React-Native App
 -   `notequalia` - Python Restful API for finding word definitions and
     store notes.
@@ -30,12 +30,12 @@ Components in this repo by folder
 Running locally
 ---------------
 
-### Frontend: React App
+### Frontend: React Web App
 
 TypeScript + React + Redux + Bootstrap with bootswatch theme.
 
 ``` {.sourceCode .bash}
-cd ./frontend
+cd ./web-app
 npm install
 npm start
 ```
@@ -66,7 +66,7 @@ make db tests run
 
 ### Frontend: Desktop App
 
-Electron running the stack of the Frontend React App
+Electron + TypeScript - just a basic "hello world" for now. The goal is to run the same code as the React Web App.
 
 ``` {.sourceCode .bash}
 cd ./desktop-app
