@@ -29,20 +29,21 @@ export default class TermDetailCard extends Component<
         const termName = term.term;
         return (
             <React.Fragment>
-                <Title>Term: "{termName}"</Title>
                 <Content>
                     {Object.keys(pydictionary.meaning).map(
                         (key: string, index: number) => {
                             const values: string[] = pydictionary.meaning[key];
                             return (
-                                <Card key={`${index}`}>
+                                <React.Fragment>
                                     <Title>{key}</Title>
                                     {values.map((description, index) => (
-                                        <CardItem key={`${index}`}>
-                                            <Text>{description}</Text>
-                                        </CardItem>
+                                        <Card key={`card-${index}`}>
+                                            <CardItem key={`carditem-${index}`}>
+                                                <Text>{description}</Text>
+                                            </CardItem>
+                                        </Card>
                                     ))}
-                                </Card>
+                                </React.Fragment>
                             );
                         }
                     )}

@@ -39,7 +39,13 @@ const AppContainer = connect<AppProps>(
     <NavigationContainer>
         <Stack.Navigator initialRouteName="Lexicon">
             <Stack.Screen name="Lexicon" component={Home} />
-            <Stack.Screen name="WordDefinition" component={WordDefinition} />
+            <Stack.Screen
+                name="WordDefinition"
+                component={WordDefinition}
+                options={({ route }) => ({
+                    title: `Term: "${route.params.termName}"`
+                })}
+            />
         </Stack.Navigator>
     </NavigationContainer>
 ));
