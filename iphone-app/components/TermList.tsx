@@ -6,18 +6,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { StackRouteProp } from "@react-navigation/stack";
 
 import { AuthPropTypes } from "../domain/auth";
-import { Title } from "native-base";
 import ErrorView from "./ErrorView";
-import {
-    List,
-    ListItem,
-    Content,
-    Button,
-    Icon,
-    Text,
-    Card,
-    CardItem
-} from "native-base";
+import { List, ListItem, Text, Form, Item, Input, Label } from "native-base";
 
 import { RootStackParamList } from "../domain/navigation";
 
@@ -57,6 +47,9 @@ class TermList extends Component<TermListProps, TermListState> {
         super(props);
         const { addError } = props;
         this.api = new DictionaryAPIClient(addError);
+        this.state = {
+            searchTerm: ""
+        };
     }
 
     public fetchDefinitions = () => {
@@ -64,36 +57,65 @@ class TermList extends Component<TermListProps, TermListState> {
 
         this.api.listDefinitions(addTerms);
     };
+    public search = ({ searchTerm }: TermListState) => {
+        const { addTerms, navigation }: TermListProps = this.props;
+
+        this.api.searchDefinition(searchTerm, (term: TermProps) => {
+            addTerms([term]);
+            this.setState({ searchTerm: "" });
+            navigation.goBack();
+        });
+    };
 
     componentDidMount() { }
     render() {
         const { terms, navigation }: TermListProps = this.props;
         const { by_term } = terms;
-        const { fetchDefinitions } = this;
-        const all: TermProps[] = Object.values(by_term);
+
+        const all: TermProps[] = Object.values(by_term).filter(
+            (item: TermProps, index) => {
+                if (this.state.searchTerm.length > 0) {
+                    return item.term.includes(this.state.searchTerm);
+                }
+                return true;
+            }
+        );
         if (all.length === 0) {
-            return <Error error={"No definitions found, try refreshing"} />;
+            return <ErrorView error={"No definitions found, try refreshing"} />;
         }
         return (
-            <List>
-                {all.map((term: TermProps, index: number) => {
-                    const termName = term.term;
+            <React.Fragment>
+                <Form>
+                    <Item>
+                        <Input
+                            onChangeText={text =>
+                                this.setState({ searchTerm: text })
+                            }
+                            onEndEditing={event => this.search(this.state)}
+                        />
+                    </Item>
+                </Form>
 
-                    return (
-                        <ListItem key={`${index}`}>
-                            <Text
-                                onPress={() => {
-                                    navigation.push("WordDefinition", {
-                                        termName
-                                    });
-                                }}
-                            >
-                                {termName}
-                            </Text>
-                        </ListItem>
-                    );
-                })}
-            </List>
+                <List>
+                    {all.map((term: TermProps, index: number) => {
+                        const termName = term.term;
+
+                        return (
+                            <ListItem key={`${index}`}>
+                                <Text
+                                    onPress={() => {
+                                        navigation.push("WordDefinition", {
+                                            termName
+                                        });
+                                    }}
+                                >
+                                    {termName}
+                                </Text>
+                            </ListItem>
+                        );
+                    })}
+                </List>
+            </React.Fragment>
         );
     }
 }

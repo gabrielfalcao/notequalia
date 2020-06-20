@@ -2,14 +2,16 @@ import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { DictionaryAPIClient } from "../networking";
 
 import { Fab, Icon, Button } from "native-base";
 import { RootStackParamList } from "../domain/navigation";
 
 const MainMenuPropTypes = {
-    error: PropTypes.string
+    error: PropTypes.string,
+    addTerms: PropTypes.func
 };
-
+// https://flatuicolors.com/palette/defo
 type MainMenuProps =
     | (InferProps<typeof MainMenuPropTypes> & {
         navigation: StackNavigationProp<RootStackParamList>;
@@ -20,13 +22,21 @@ type MainMenuState = {
 };
 
 class MainMenu extends Component<MainMenuProps, MainMenuState> {
+    private api: DictionaryAPIClient;
     static propTypes = MainMenuPropTypes;
     constructor(props: MainMenuProps) {
         super(props);
+        const { addError } = props;
         this.state = {
             active: false
         };
+        this.api = new DictionaryAPIClient(addError);
     }
+    public fetchDefinitions = () => {
+        const { addTerms }: MainMenuProps = this.props;
+        this.setState({ active: false });
+        this.api.listDefinitions(addTerms);
+    };
 
     render() {
         const { navigation }: MainMenuProps = this.props;
@@ -48,6 +58,7 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
                     disabled={navigation === undefined}
                     style={{ backgroundColor: "#d35400" }}
                     onPress={() => {
+                        this.setState({ active: false });
                         navigation.navigate("SearchDefinition");
                     }}
                 >
@@ -58,16 +69,29 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
                 </Button>
                 <Button
                     style={{
-                        backgroundColor: "#2980b9"
+                        backgroundColor: "#27ae60"
+                    }}
+                    onPress={() => {
+                        this.fetchDefinitions();
                     }}
                 >
-                    <Icon type="MaterialCommunityIcons" name="note-multiple" />
+                    <Icon type="MaterialCommunityIcons" name="reload" />
                 </Button>
             </Fab>
         );
     }
 }
 
-export default connect<MainMenuProps>((state: MainMenuState) => {
-    return { ...state };
-}, {})(MainMenu);
+export default connect<MainMenuProps>(
+    (state: MainMenuState) => {
+        return { ...state };
+    },
+    {
+        addTerms: function(terms: TermListState[]) {
+            return {
+                type: "ADD_TERMS",
+                terms
+            };
+        }
+    }
+)(MainMenu);

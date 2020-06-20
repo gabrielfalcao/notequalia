@@ -8,7 +8,7 @@ import { RootStackParamList } from "./domain/navigation";
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { Button, Icon, Fab } from "native-base";
+import { Container } from "native-base";
 
 import { AuthPropTypes } from "./domain/auth";
 
@@ -38,7 +38,7 @@ class AppLayout extends React.Component<AppProps, AppState> {
 
     render() {
         return (
-            <React.Fragment>
+            <Container>
                 <Stack.Navigator initialRouteName="Lexicon">
                     <Stack.Screen name="Lexicon" component={Home} />
                     <Stack.Screen
@@ -53,7 +53,7 @@ class AppLayout extends React.Component<AppProps, AppState> {
                         component={SearchDefinition}
                     />
                 </Stack.Navigator>
-            </React.Fragment>
+            </Container>
         );
     }
 }
