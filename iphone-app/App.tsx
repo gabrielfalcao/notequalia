@@ -1,137 +1,30 @@
-import React, { Component } from "react";
-import { StyleSheet, Alert, View } from "react-native";
+import React from "react";
 import { connect } from "react-redux";
 import PropTypes, { InferProps } from "prop-types";
-import Constants from "expo-constants";
 import { Provider } from "react-redux";
-import store from "./store";
-import {
-    Container,
-    Header,
-    Title,
-    Content,
-    Footer,
-    FooterTab,
-    Button,
-    Left,
-    Right,
-    Body,
-    Icon,
-    Text
-} from "native-base";
-import { AuthPropTypes } from "./domain/auth";
-import { TermsReducerState, TermListState } from "./reducers/types";
-import { TermPropTypes, TermProps } from "./domain/terms";
-import { DictionaryAPIClient } from "./networking";
 
-import TermList from "./components/TermList";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+
+import { AuthPropTypes } from "./domain/auth";
+
+import store from "./store";
+import Home from "./screens/Home";
 
 const AppPropTypes = {
     auth: AuthPropTypes,
-    addError: PropTypes.func,
-    addTerms: PropTypes.func
+    addError: PropTypes.func
 };
 
-type AppProps =
-    | (InferProps<typeof AppPropTypes> & { terms: TermsReducerState })
-    | any;
+type AppProps = InferProps<typeof AppPropTypes> | any;
 
-class App extends Component<AppProps, TermListState> {
-    private api: DictionaryAPIClient;
-    static propTypes = {
-        auth: AuthPropTypes,
-        terms: TermPropTypes
-    };
-    constructor(props: AppProps) {
-        super(props);
-        const { addError } = props;
-        this.api = new DictionaryAPIClient(addError);
-    }
-    public fetchDefinitions = () => {
-        const { addTerms }: TermListProps = this.props;
+const Stack = createStackNavigator();
 
-        this.api.listDefinitions(addTerms);
-    };
-
-    render() {
-        const { terms }: TermListProps = this.props;
-        const { by_term } = terms;
-        const { fetchDefinitions } = this;
-        const all: TermProps[] = Object.values(by_term);
-
-        return (
-            <Container>
-                <Header>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => {
-                                Alert.alert("Menu not yet implemented");
-                            }}
-                        >
-                            <Icon name="menu" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>Lexicon</Title>
-                    </Body>
-                    <Right />
-                </Header>
-                <Content>
-                    <TermList />
-                </Content>
-                <Footer>
-                    <FooterTab>
-                        <Button
-                            full
-                            onPress={() => {
-                                fetchDefinitions();
-                            }}
-                        >
-                            <Text>Refresh</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer>
-            </Container>
-        );
-    }
-}
-
-function Separator() {
-    return <View style={styles.separator} />;
-}
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: Constants.statusBarHeight,
-        marginHorizontal: 16
-    },
-    title: {
-        textAlign: "center",
-        marginVertical: 8
-    },
-    fixToText: {
-        flexDirection: "row",
-        justifyContent: "space-between"
-    },
-    separator: {
-        marginVertical: 8,
-        borderBottomColor: "#737373",
-        borderBottomWidth: StyleSheet.hairlineWidth
-    }
-});
-
-const ConnectedApp = connect<AppProps>(
-    (state: TermListState) => {
+const Navigation = connect<AppProps>(
+    (state: any) => {
         return { ...state };
     },
     {
-        addTerms: function(terms: TermListState[]) {
-            return {
-                type: "ADD_TERMS",
-                terms
-            };
-        },
         addError: function(error: Error) {
             return {
                 type: "ADD_ERROR",
@@ -139,12 +32,19 @@ const ConnectedApp = connect<AppProps>(
             };
         }
     }
-)(App);
+)(({ }) => (
+    <Home />
+    // <NavigationContainer>
+    //     <Stack.Navigator>
+    //         <Stack.Screen name="Home" component={Home} />
+    //     </Stack.Navigator>
+    // </NavigationContainer>
+));
 
-const FinalApp = () => (
+const App = () => (
     <Provider store={store}>
-        <ConnectedApp />
+        <Navigation />
     </Provider>
 );
 
-export default FinalApp;
+export default App;
