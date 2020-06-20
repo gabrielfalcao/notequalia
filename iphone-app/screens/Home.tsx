@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
+import { RouteProp } from "@react-navigation/native";
+import { StackRouteProp } from "@react-navigation/stack";
 
 import { StyleSheet, Alert, View } from "react-native";
 import { connect } from "react-redux";
@@ -8,24 +10,28 @@ import Constants from "expo-constants";
 
 import {
     //    Container,
-    Header,
-    Title,
     Content,
-    Footer,
-    FooterTab,
     Button,
-    Left,
-    Right,
     Body,
     Icon,
-    Text
+    Text,
+    Card,
+    CardItem
 } from "native-base";
+
 import { AuthPropTypes } from "../domain/auth";
 import { TermsReducerState, TermListState } from "../reducers/types";
 import { TermPropTypes, TermProps } from "../domain/terms";
 import { DictionaryAPIClient } from "../networking";
+import { RootStackParamList } from "../domain/navigation";
 
-import TermList from "../components/TermList";
+import TermList, { TermListProps } from "../components/TermList";
+
+export type HomeNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    "Home"
+>;
+export type HomeRouteProp = StackRouteProp<RootStackParamList, "Home">;
 
 const HomePropTypes = {
     auth: AuthPropTypes,
@@ -34,7 +40,11 @@ const HomePropTypes = {
 };
 
 type HomeProps =
-    | (InferProps<typeof HomePropTypes> & { terms: TermsReducerState })
+    | (InferProps<typeof HomePropTypes> & {
+        terms: TermsReducerState;
+        navigation: HomeNavigationProp;
+        route: HomeRouteProp;
+    })
     | any;
 
 class Home extends Component<HomeProps, TermListState> {
@@ -54,29 +64,36 @@ class Home extends Component<HomeProps, TermListState> {
         this.api.listDefinitions(addTerms);
     };
 
+    componentDidMount() { }
     render() {
-        const { terms }: TermListProps = this.props;
+        const { terms, navigation, route }: TermListProps = this.props;
         const { by_term } = terms;
         const { fetchDefinitions } = this;
         const all: TermProps[] = Object.values(by_term);
+        const termCount = all.length;
 
         return (
             <React.Fragment>
                 <Content>
-                    <TermList />
+                    {termCount > 0 ? (
+                        <TermList navigation={navigation} route={route} />
+                    ) : (
+                            <Card>
+                                <CardItem header>
+                                    <Text>No definitions found</Text>
+                                </CardItem>
+                                <CardItem>
+                                    <Button
+                                        onPress={() => {
+                                            fetchDefinitions();
+                                        }}
+                                    >
+                                        <Text>Load Definitions</Text>
+                                    </Button>
+                                </CardItem>
+                            </Card>
+                        )}
                 </Content>
-                <Footer>
-                    <FooterTab>
-                        <Button
-                            full
-                            onPress={() => {
-                                fetchDefinitions();
-                            }}
-                        >
-                            <Text>Refresh</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer>
             </React.Fragment>
         );
     }
