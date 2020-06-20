@@ -2,8 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes, { InferProps } from "prop-types";
 import { Provider } from "react-redux";
+import { enableScreens } from "react-native-screens";
 
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { AuthPropTypes } from "./domain/auth";
@@ -18,9 +19,10 @@ const AppPropTypes = {
 
 type AppProps = InferProps<typeof AppPropTypes> | any;
 
-const Stack = createStackNavigator();
+enableScreens();
+const Stack = createNativeStackNavigator();
 
-const Navigation = connect<AppProps>(
+const AppContainer = connect<AppProps>(
     (state: any) => {
         return { ...state };
     },
@@ -33,17 +35,16 @@ const Navigation = connect<AppProps>(
         }
     }
 )(({ }) => (
-    <Home />
-    // <NavigationContainer>
-    //     <Stack.Navigator>
-    //         <Stack.Screen name="Home" component={Home} />
-    //     </Stack.Navigator>
-    // </NavigationContainer>
+    <NavigationContainer>
+        <Stack.Navigator initialRouteName="Lexicon">
+            <Stack.Screen name="Lexicon" component={Home} />
+        </Stack.Navigator>
+    </NavigationContainer>
 ));
 
 const App = () => (
     <Provider store={store}>
-        <Navigation />
+        <AppContainer />
     </Provider>
 );
 

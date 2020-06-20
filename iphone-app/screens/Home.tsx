@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import Constants from "expo-constants";
 
 import {
-    Container,
+    //    Container,
     Header,
     Title,
     Content,
@@ -61,23 +61,7 @@ class Home extends Component<HomeProps, TermListState> {
         const all: TermProps[] = Object.values(by_term);
 
         return (
-            <Container>
-                <Header>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress={() => {
-                                Alert.alert("Menu not yet implemented");
-                            }}
-                        >
-                            <Icon name="menu" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>Lexicon</Title>
-                    </Body>
-                    <Right />
-                </Header>
+            <React.Fragment>
                 <Content>
                     <TermList />
                 </Content>
@@ -93,7 +77,7 @@ class Home extends Component<HomeProps, TermListState> {
                         </Button>
                     </FooterTab>
                 </Footer>
-            </Container>
+            </React.Fragment>
         );
     }
 }
