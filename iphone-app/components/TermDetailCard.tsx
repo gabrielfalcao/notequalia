@@ -34,7 +34,7 @@ export default class TermDetailCard extends Component<
                         (key: string, index: number) => {
                             const values: string[] = pydictionary.meaning[key];
                             return (
-                                <React.Fragment>
+                                <React.Fragment key={`${key}-${index}`}>
                                     <Title>{key}</Title>
                                     {values.map((description, index) => (
                                         <Card key={`card-${index}`}>

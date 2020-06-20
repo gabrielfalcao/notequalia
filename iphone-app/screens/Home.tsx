@@ -26,6 +26,7 @@ import { DictionaryAPIClient } from "../networking";
 import { RootStackParamList } from "../domain/navigation";
 
 import TermList, { TermListProps } from "../components/TermList";
+import MainMenu from "../components/MainMenu";
 
 export type HomeNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -94,6 +95,7 @@ class Home extends Component<HomeProps, TermListState> {
                             </Card>
                         )}
                 </Content>
+                <MainMenu navigation={navigation} />
             </React.Fragment>
         );
     }
