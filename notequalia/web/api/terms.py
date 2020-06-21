@@ -51,7 +51,7 @@ def validate_term(term: str) -> str:
     if not found:
         return ""
 
-    return found.group(0)
+    return found.group(0).strip()
 
 @term_ns.route("/definitions")
 @term_ns.expect(parser)
@@ -61,6 +61,9 @@ class DefinitionsEndpoint(Resource):
         term = validate_term((api.payload.get("term") or "").strip())
         if not term:
             return json_response({"error": "term is required"}, 400)
+
+        if len(term) > 50:
+            return json_response({"error": f"term cannot have more than 50 characters"}, 400)
 
         model, created = define_new_term(term)
         return json_response(model.to_dict(), created and 201 or 200)
