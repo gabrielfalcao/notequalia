@@ -60,10 +60,7 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
                         navigation.navigate("SearchDefinition");
                     }}
                 >
-                    <Icon
-                        type="MaterialCommunityIcons"
-                        name="textbox-password"
-                    />
+                    <Icon type="FontAwesome5" name="search" />
                 </Button>
                 <Button
                     style={{

@@ -74,11 +74,12 @@ class AppLayout extends React.Component<AppProps, AppState> {
             const { router }: any = this.refs;
             deleteTerm(term.term);
             this.refs.confirmDeletion.close();
-            // if (router.canGoBack()) {
-            //     router.goBack();
-            // } else {
-            router.navigate("Home");
-            // }
+            if (router.canGoBack()) {
+                router.goBack();
+            } else {
+                router.reset();
+            }
+            this.setState({ termName: "" });
         });
     };
     public fetchDefinitions = () => {

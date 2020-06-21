@@ -182,13 +182,7 @@ class TermList extends Component<TermListProps, TermListState> {
                                         {termName ? termName : "[unnamed]"}
                                     </Text>
                                 </Left>
-                                <Body
-                                    onPress={() => {
-                                        navigation.push("WordDefinition", {
-                                            termName
-                                        });
-                                    }}
-                                >
+                                <Body>
                                     {meaning ? (
                                         Object.keys(meaning).map(
                                             (key, index) => (
@@ -196,6 +190,14 @@ class TermList extends Component<TermListProps, TermListState> {
                                                     key={`${key}-${index}`}
                                                 >
                                                     <Text
+                                                        onPress={() => {
+                                                            navigation.push(
+                                                                "WordDefinition",
+                                                                {
+                                                                    termName
+                                                                }
+                                                            );
+                                                        }}
                                                         note
                                                         style={{ fontSize: 18 }}
                                                     >{`${key}`}</Text>
@@ -222,7 +224,7 @@ class TermList extends Component<TermListProps, TermListState> {
                                     <Icon
                                         style={{
                                             fontSize: 36,
-                                            color: "#e74c3c"
+                                            color: "#bdc3c7"
                                         }}
                                         onPress={() =>
                                             this.confirmDeletion({ termName })

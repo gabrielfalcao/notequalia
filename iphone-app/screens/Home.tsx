@@ -37,7 +37,11 @@ export type HomeNavigationProp = StackNavigationProp<
 export type HomeRouteProp = StackRouteProp<RootStackParamList, "Home">;
 export const styles = StyleSheet.create({
     text: {
-        fontSize: 15
+        fontSize: 15,
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        position: "absolute"
     },
     confirmDeletionModal: {
         justifyContent: "center",
@@ -100,9 +104,14 @@ class Home extends Component<HomeProps, TermListState> {
                     {termCount > 0 ? (
                         <TermList navigation={navigation} route={route} />
                     ) : (
-                            <View>
+                            <View
+                                style={{
+                                    justifyContent: "center",
+                                    flex: 1
+                                }}
+                            >
                                 <Spinner color="black" />
-                                <Text style={[styles.text, { color: "white" }]}>
+                                <Text style={[styles.text, { color: "black" }]}>
                                     Loading
 							</Text>
                             </View>

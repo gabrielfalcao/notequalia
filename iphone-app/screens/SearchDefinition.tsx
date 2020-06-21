@@ -82,9 +82,10 @@ class SearchDefinition extends Component<
         return (
             <Container>
                 <Form>
-                    <Item stackedLabel>
+                    <Item>
                         <Label>Term:</Label>
                         <Input
+                            style={{ fontSize: 24 }}
                             onChangeText={text =>
                                 this.setState({ termName: text })
                             }
