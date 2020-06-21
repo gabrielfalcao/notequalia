@@ -73,3 +73,9 @@ cd ./desktop-app
 npm install
 npm start
 ```
+
+
+## Useful links
+
+
+- https://www.one-tab.com/page/Tcq6NeuiROWejOQEk4W-3g
