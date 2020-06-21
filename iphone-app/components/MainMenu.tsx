@@ -53,15 +53,17 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
                 <Button disabled style={{ backgroundColor: "#8e44ad" }}>
                     <Icon type="MaterialCommunityIcons" name="graphql" />
                 </Button>
-                <Button
-                    disabled={navigation === undefined}
-                    style={{ backgroundColor: "#d35400" }}
-                    onPress={() => {
-                        navigation.navigate("SearchDefinition");
-                    }}
-                >
-                    <Icon type="FontAwesome5" name="search" />
-                </Button>
+                {false ? (
+                    <Button
+                        disabled={navigation === undefined}
+                        style={{ backgroundColor: "#d35400" }}
+                        onPress={() => {
+                            navigation.navigate("SearchDefinition");
+                        }}
+                    >
+                        <Icon type="FontAwesome5" name="search" />
+                    </Button>
+                ) : null}
                 <Button
                     style={{
                         backgroundColor: "#27ae60"

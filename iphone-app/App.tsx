@@ -16,7 +16,7 @@ import { Container, Button, Text, Icon } from "native-base";
 import { AuthPropTypes } from "./domain/auth";
 import { TermProps } from "./domain/terms";
 import { DictionaryAPIClient } from "./networking";
-
+import { capitalize } from "./utils";
 import store from "./store";
 
 import Home from "./screens/Home";
@@ -65,7 +65,6 @@ class AppLayout extends React.Component<AppProps, AppState> {
     confirmDeletion = ({ termName }: AppState) => {
         this.setState({ termName });
         this.refs.confirmDeletion.open();
-        console.log(Stack);
     };
     deleteTerm = ({ termName }: AppState) => {
         const { deleteTerm }: AppProps = this.props;
@@ -112,7 +111,9 @@ class AppLayout extends React.Component<AppProps, AppState> {
                             name="WordDefinition"
                             component={WordDefinition}
                             options={({ route }: any) => ({
-                                title: `Term: "${route.params.termName}"`,
+                                title: `Term: "${capitalize(
+                                    route.params.termName
+                                )}"`,
                                 headerRight: () => (
                                     <Icon
                                         onPress={() =>

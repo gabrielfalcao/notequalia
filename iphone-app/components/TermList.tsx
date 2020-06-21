@@ -31,6 +31,7 @@ import { RootStackParamList } from "../domain/navigation";
 import { TermPropTypes, TermProps } from "../domain/terms";
 import { TermsReducerState, TermListState } from "../reducers/types";
 import { DictionaryAPIClient } from "../networking";
+import { capitalize } from "../utils";
 
 export const TermListPropTypes = {
     auth: AuthPropTypes,
@@ -104,9 +105,25 @@ class TermList extends Component<TermListProps, TermListState> {
 
         this.api.listDefinitions(addTerms);
     };
+    public search = ({ searchTerm }: TermListState) => {
+        const { addTerms, navigation }: TermListProps = this.props;
+
+        this.api.searchDefinition(searchTerm, (term: TermProps) => {
+            addTerms([term]);
+            this.setState({ termName: "", searchTerm: "" });
+            navigation.push("WordDefinition", {
+                termName: searchTerm
+            });
+        });
+    };
 
     render() {
-        const { deleteTerm, fetchDefinitions, props }: TermListProps = this;
+        const {
+            deleteTerm,
+            fetchDefinitions,
+            props,
+            search
+        }: TermListProps = this;
         const { terms, navigation }: TermListProps = props;
         const { by_term } = terms;
 
@@ -141,9 +158,14 @@ class TermList extends Component<TermListProps, TermListState> {
                                 marginRight: 15
                             }}
                             placeholder="type here to filter"
-                            onChangeText={text =>
-                                this.setState({ searchTerm: text })
-                            }
+                            onChangeText={text => {
+                                this.setState({ searchTerm: text });
+                            }}
+                            onEndEditing={() => {
+                                if (filtered.length === 0) {
+                                    search(this.state);
+                                }
+                            }}
                         />
                     </Item>
                 </Form>
@@ -179,7 +201,9 @@ class TermList extends Component<TermListProps, TermListState> {
                                             });
                                         }}
                                     >
-                                        {termName ? termName : "[unnamed]"}
+                                        {termName
+                                            ? capitalize(termName)
+                                            : "[unnamed]"}
                                     </Text>
                                 </Left>
                                 <Body>

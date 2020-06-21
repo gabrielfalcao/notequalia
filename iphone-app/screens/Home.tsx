@@ -40,8 +40,7 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         justifyContent: "center",
         alignItems: "center",
-        textAlign: "center",
-        position: "absolute"
+        textAlign: "center"
     },
     confirmDeletionModal: {
         justifyContent: "center",
@@ -106,13 +105,21 @@ class Home extends Component<HomeProps, TermListState> {
                     ) : (
                             <View
                                 style={{
+                                    alignItems: "center",
+                                    marginTop: 240,
                                     justifyContent: "center",
                                     flex: 1
                                 }}
                             >
-                                <Spinner color="black" />
-                                <Text style={[styles.text, { color: "black" }]}>
-                                    Loading
+                                <Spinner
+                                    style={{
+                                        flex: 1,
+                                        alignSelf: "center"
+                                    }}
+                                    color="black"
+                                />
+                                <Text style={[styles.text, { marginTop: 30 }]}>
+                                    Loading lexicon
 							</Text>
                             </View>
                         )}
