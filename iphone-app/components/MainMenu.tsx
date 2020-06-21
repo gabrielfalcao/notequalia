@@ -34,13 +34,12 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
     }
     public fetchDefinitions = () => {
         const { addTerms }: MainMenuProps = this.props;
-        this.setState({ active: false });
         this.api.listDefinitions(addTerms);
     };
 
     render() {
         const { navigation }: MainMenuProps = this.props;
-        console.log("MainMenu", Object.keys(this.props));
+        // console.log("MainMenu", Object.keys(this.props));
         return (
             <Fab
                 active={this.state.active}
@@ -58,7 +57,6 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
                     disabled={navigation === undefined}
                     style={{ backgroundColor: "#d35400" }}
                     onPress={() => {
-                        this.setState({ active: false });
                         navigation.navigate("SearchDefinition");
                     }}
                 >

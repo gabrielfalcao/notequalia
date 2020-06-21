@@ -63,7 +63,9 @@ class SearchDefinition extends Component<
         this.api.searchDefinition(termName, (term: TermProps) => {
             addTerms([term]);
             this.setState({ termName: "" });
-            navigation.goBack();
+            navigation.push("WordDefinition", {
+                termName
+            });
         });
     };
 

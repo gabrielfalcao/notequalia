@@ -3,11 +3,27 @@ import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { StackRouteProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/stack";
+import { StyleSheet } from "react-native";
+import Modal from "react-native-modalbox";
+import { Dimensions } from "react-native";
 
 import { AuthPropTypes } from "../domain/auth";
+import Constants from "expo-constants";
 import ErrorView from "./ErrorView";
-import { List, ListItem, Text, Form, Item, Input, Label } from "native-base";
+import {
+    List,
+    ListItem,
+    Text,
+    Form,
+    Item,
+    Input,
+    Icon,
+    Button,
+    Left,
+    Right,
+    Body
+} from "native-base";
 
 import { RootStackParamList } from "../domain/navigation";
 
@@ -24,10 +40,7 @@ export type TermListNavigationProp = StackNavigationProp<
     RootStackParamList,
     "WordDefinition"
 >;
-export type TermListRouteProp = StackRouteProp<
-    RootStackParamList,
-    "WordDefinition"
->;
+export type TermListRouteProp = RouteProp<RootStackParamList, "WordDefinition">;
 
 export type TermListProps =
     | (InferProps<typeof TermListPropTypes> & {
@@ -36,6 +49,19 @@ export type TermListProps =
         route: TermListRouteProp;
     })
     | any;
+
+export const styles = StyleSheet.create({
+    text: {
+        fontSize: 15
+    },
+    confirmDeletionModal: {
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        height: 150,
+        backgroundColor: "#2c3e50"
+    }
+});
 
 class TermList extends Component<TermListProps, TermListState> {
     private api: DictionaryAPIClient;
@@ -48,73 +74,149 @@ class TermList extends Component<TermListProps, TermListState> {
         const { addError } = props;
         this.api = new DictionaryAPIClient(addError);
         this.state = {
-            searchTerm: ""
+            searchTerm: "",
+            termName: ""
         };
     }
+    confirmDeletion = ({ termName }: TermListState) => {
+        this.setState({ termName });
+        this.refs.confirmDeletion.open();
+    };
+    deleteTerm = ({ termName }: TermListState) => {
+        const { deleteTerm, navigation }: TermListProps = this.props;
+
+        this.api.deleteDefinition(termName, (term: TermProps) => {
+            deleteTerm(term.term);
+            this.refs.confirmDeletion.close();
+        });
+    };
 
     public fetchDefinitions = () => {
         const { addTerms }: TermListProps = this.props;
 
         this.api.listDefinitions(addTerms);
     };
-    public search = ({ searchTerm }: TermListState) => {
-        const { addTerms, navigation }: TermListProps = this.props;
 
-        this.api.searchDefinition(searchTerm, (term: TermProps) => {
-            addTerms([term]);
-            this.setState({ searchTerm: "" });
-            navigation.goBack();
-        });
-    };
-
-    componentDidMount() { }
     render() {
-        const { terms, navigation }: TermListProps = this.props;
+        const { deleteTerm, fetchDefinitions, props }: TermListProps = this;
+        const { terms, navigation }: TermListProps = props;
         const { by_term } = terms;
 
-        const all: TermProps[] = Object.values(by_term).filter(
-            (item: TermProps, index) => {
-                if (this.state.searchTerm.length > 0) {
-                    return item.term.includes(this.state.searchTerm);
-                }
-                return true;
+        const all: TermProps[] = Object.values(by_term);
+        const filtered = all.filter((item: TermProps, index) => {
+            if (this.state.searchTerm.length > 0) {
+                return item.term.includes(this.state.searchTerm);
             }
-        );
+            return true;
+        });
         if (all.length === 0) {
+            this.fetchDefinitions();
             return <ErrorView error={"No definitions found, try refreshing"} />;
         }
         return (
             <React.Fragment>
                 <Form>
-                    <Item>
+                    <Item stackedLabel>
                         <Input
+                            style={{
+                                marginRight: 15
+                            }}
+                            placeholder="type here to filter"
                             onChangeText={text =>
                                 this.setState({ searchTerm: text })
                             }
-                            onEndEditing={event => this.search(this.state)}
                         />
                     </Item>
                 </Form>
 
                 <List>
-                    {all.map((term: TermProps, index: number) => {
-                        const termName = term.term;
-
+                    {filtered.map((term: TermProps, index: number) => {
+                        const termName = term.term || "";
+                        const meta = term.content
+                            ? JSON.parse(term.content)
+                            : { pydictionary: { meaning: {} } };
+                        const { pydictionary }: any = meta;
+                        const { meaning } = pydictionary;
                         return (
                             <ListItem key={`${index}`}>
-                                <Text
+                                <Left>
+                                    <Text
+                                        onPress={() => {
+                                            navigation.push("WordDefinition", {
+                                                termName
+                                            });
+                                        }}
+                                    >
+                                        {termName ? termName : "[unnamed]"}
+                                    </Text>
+                                </Left>
+                                <Body
                                     onPress={() => {
                                         navigation.push("WordDefinition", {
                                             termName
                                         });
                                     }}
                                 >
-                                    {termName}
-                                </Text>
+                                    {meaning ? (
+                                        Object.keys(meaning).map(
+                                            (key, index) => (
+                                                <React.Fragment
+                                                    key={`${key}-${index}`}
+                                                >
+                                                    <Text note>{`${key}`}</Text>
+                                                    {false
+                                                        ? Object.values(
+                                                            meaning[key]
+                                                        ).map((item, i) => (
+                                                            <Text
+                                                                note
+                                                                key={`${key}-${index}-${i}`}
+                                                            >
+                                                                {`${item}`}
+                                                            </Text>
+                                                        ))
+                                                        : null}
+                                                </React.Fragment>
+                                            )
+                                        )
+                                    ) : (
+                                            <Text>{termName}</Text>
+                                        )}
+                                </Body>
+                                <Right>
+                                    <Icon
+                                        onPress={() =>
+                                            this.confirmDeletion({ termName })
+                                        }
+                                        type="MaterialCommunityIcons"
+                                        color="#e74c3c"
+                                        name="delete"
+                                    />
+                                </Right>
                             </ListItem>
                         );
                     })}
                 </List>
+                <Modal
+                    style={styles.confirmDeletionModal}
+                    backdrop={true}
+                    coverScreen={true}
+                    position={"center"}
+                    entry={"top"}
+                    ref={"confirmDeletion"}
+                >
+                    <Text style={[styles.text, { color: "white" }]}>
+                        {`Are you sure you want to delete the term definition "${this.state.termName}" ?`}
+                    </Text>
+                    <Button
+                        danger
+                        onPress={() => {
+                            deleteTerm(this.state);
+                        }}
+                    >
+                        <Text>Delete</Text>
+                    </Button>
+                </Modal>
             </React.Fragment>
         );
     }
@@ -131,6 +233,13 @@ export default connect<TermListProps>(
                 terms
             };
         },
+        deleteTerm: function(term: string) {
+            return {
+                type: "DELETE_TERM",
+                term
+            };
+        },
+
         addError: function(error: Error) {
             return {
                 type: "ADD_ERROR",

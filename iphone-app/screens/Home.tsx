@@ -81,16 +81,9 @@ class Home extends Component<HomeProps, TermListState> {
                     ) : (
                             <Card>
                                 <CardItem header>
-                                    <Text>No definitions found</Text>
-                                </CardItem>
-                                <CardItem>
-                                    <Button
-                                        onPress={() => {
-                                            fetchDefinitions();
-                                        }}
-                                    >
-                                        <Text>Load Definitions</Text>
-                                    </Button>
+                                    <Text>
+                                        No definitions found, please load via menu
+								</Text>
                                 </CardItem>
                             </Card>
                         )}

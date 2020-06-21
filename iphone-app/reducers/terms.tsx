@@ -33,6 +33,12 @@ export const terms = (
                 by_term: { ...state.by_term, ...new_by_term },
                 terms: terms
             };
+        case "DELETE_TERM":
+            delete state.by_term[action.term];
+            return {
+                ...state,
+                terms: Object.values(state.by_term)
+            };
 
         case "LOADING_TERMS":
             return { ...state, loaded: false, current: null };

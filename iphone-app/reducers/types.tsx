@@ -29,5 +29,8 @@ export type TermsAction =
     | any;
 export type TermListState = {
     terms: TermProps[];
+    term: TermProps;
     searchTerm: string;
+    deleteTerm: string;
+    termName: string;
 };

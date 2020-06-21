@@ -4,17 +4,21 @@ import PropTypes, { InferProps } from "prop-types";
 import { Provider } from "react-redux";
 import { enableScreens } from "react-native-screens";
 
-import { RootStackParamList } from "./domain/navigation";
+// import { RootStackParamList } from "./domain/navigation";
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
+import Modal from "react-native-modalbox";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { Container } from "native-base";
+import { Container, Button, Text, Icon } from "native-base";
 
 import { AuthPropTypes } from "./domain/auth";
+import { TermProps } from "./domain/terms";
+import { DictionaryAPIClient } from "./networking";
 
 import store from "./store";
+
 import Home from "./screens/Home";
-import MainMenu from "./components/MainMenu";
 import WordDefinition from "./screens/WordDefinition";
 import SearchDefinition from "./screens/SearchDefinition";
 
@@ -22,38 +26,113 @@ enableScreens();
 
 const AppPropTypes = {
     auth: AuthPropTypes,
+    refs: PropTypes.object,
     addError: PropTypes.func
 };
 
 type AppProps = (InferProps<typeof AppPropTypes> & {}) | any;
-type AppState = {};
+type AppState = {
+    termName: string;
+    deleteTerm: string;
+};
 
 const Stack = createNativeStackNavigator();
+export const styles = StyleSheet.create({
+    text: {
+        fontSize: 15
+    },
+    confirmDeletionModal: {
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        height: 150,
+        backgroundColor: "#2c3e50"
+    }
+});
 
 class AppLayout extends React.Component<AppProps, AppState> {
+    private api: DictionaryAPIClient;
     constructor(props: AppProps) {
         super(props);
-        this.state = {};
+        const { addError } = props;
+        this.api = new DictionaryAPIClient(addError);
+        this.state = {
+            termName: "",
+            deleteTerm: ""
+        };
     }
+    confirmDeletion = ({ termName }: AppState) => {
+        this.setState({ termName });
+        this.refs.confirmDeletion.open();
+        console.log(Stack);
+    };
+    deleteTerm = ({ termName }: AppState) => {
+        const { deleteTerm }: AppProps = this.props;
+
+        this.api.deleteDefinition(termName, (term: TermProps) => {
+            const { router }: any = this.refs;
+            deleteTerm(term.term);
+            this.refs.confirmDeletion.close();
+            if (router.canGoBack()) {
+                router.goBack();
+            } else {
+                router.navigate("Home");
+            }
+        });
+    };
 
     render() {
+        const { deleteTerm } = this;
         return (
-            <Container>
-                <Stack.Navigator initialRouteName="Lexicon">
-                    <Stack.Screen name="Lexicon" component={Home} />
-                    <Stack.Screen
-                        name="WordDefinition"
-                        component={WordDefinition}
-                        options={({ route }: any) => ({
-                            title: `Term: "${route.params.termName}"`
-                        })}
-                    />
-                    <Stack.Screen
-                        name="SearchDefinition"
-                        component={SearchDefinition}
-                    />
-                </Stack.Navigator>
-            </Container>
+            <NavigationContainer ref={"router"}>
+                <Container>
+                    <Stack.Navigator initialRouteName="Lexicon">
+                        <Stack.Screen name="Lexicon" component={Home} />
+                        <Stack.Screen
+                            name="WordDefinition"
+                            component={WordDefinition}
+                            options={({ route }: any) => ({
+                                title: `Term: "${route.params.termName}"`,
+                                headerRight: () => (
+                                    <Icon
+                                        onPress={() =>
+                                            this.confirmDeletion(route.params)
+                                        }
+                                        type="MaterialCommunityIcons"
+                                        color="#e74c3c"
+                                        name="delete-circle"
+                                    />
+                                )
+                            })}
+                        />
+                        <Stack.Screen
+                            name="SearchDefinition"
+                            component={SearchDefinition}
+                            options={{}}
+                        />
+                    </Stack.Navigator>
+                    <Modal
+                        style={styles.confirmDeletionModal}
+                        backdrop={true}
+                        coverScreen={true}
+                        position={"center"}
+                        entry={"top"}
+                        ref={"confirmDeletion"}
+                    >
+                        <Text style={[styles.text, { color: "white" }]}>
+                            {`Are you sure you want to delete the term definition "${this.state.termName}" ?`}
+                        </Text>
+                        <Button
+                            danger
+                            onPress={() => {
+                                deleteTerm(this.state);
+                            }}
+                        >
+                            <Text>Delete</Text>
+                        </Button>
+                    </Modal>
+                </Container>
+            </NavigationContainer>
         );
     }
 }
@@ -62,6 +141,12 @@ const AppContainer = connect<AppProps>(
         return { ...state };
     },
     {
+        deleteTerm: function(term: string) {
+            return {
+                type: "DELETE_TERM",
+                term
+            };
+        },
         addError: function(error: Error) {
             return {
                 type: "ADD_ERROR",
@@ -73,9 +158,7 @@ const AppContainer = connect<AppProps>(
 
 const App = () => (
     <Provider store={store}>
-        <NavigationContainer>
-            <AppContainer />
-        </NavigationContainer>
+        <AppContainer />
     </Provider>
 );
 
