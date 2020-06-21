@@ -13,6 +13,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "description": ""
+      "splash": {
+  "image": "./assets/splash.png"
+      },
+      "description": ""
   }
 }
