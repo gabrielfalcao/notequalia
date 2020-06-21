@@ -32,7 +32,7 @@ def read_version():
 
 
 setup(
-    name="notequalia-io",
+    name="notequalia",
     version=read_version(),
     description="\n".join(
         [
@@ -41,7 +41,6 @@ setup(
             "a command-line tool to help put everything together"
         ]
     ),
-    long_description=local_file("README.rst"),
     entry_points={"console_scripts": ["notequalia-io = notequalia.cli:main"]},
     url="https://github.com/gabrielfalcao/kube-python-app-example",
     packages=find_packages(exclude=["*tests*"]),
