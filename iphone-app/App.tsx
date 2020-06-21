@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes, { InferProps } from "prop-types";
 import { Provider } from "react-redux";
 import { enableScreens } from "react-native-screens";
+import * as SplashScreen from "expo-splash-screen";
 
 // import { RootStackParamList } from "./domain/navigation";
 
@@ -80,7 +81,11 @@ class AppLayout extends React.Component<AppProps, AppState> {
             }
         });
     };
-
+    componentDidMount() {
+        SplashScreen.hideAsync().then(() => {
+            console.log("hiding splash screen");
+        });
+    }
     render() {
         const { deleteTerm } = this;
         return (

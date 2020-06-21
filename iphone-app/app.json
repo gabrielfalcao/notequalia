@@ -1,21 +1,16 @@
 {
-  "name": "lexicon",
-  "displayName": "lexicon",
-  "expo": {
-    "name": "lexicon",
-    "slug": "lexicon",
-    "version": "1.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-      "splash": {
-  "image": "./assets/splash.png"
-      },
-      "description": ""
-  }
+	"name": "lexicon",
+	"displayName": "lexicon",
+	"expo": {
+		"name": "lexicon",
+		"slug": "lexicon",
+		"version": "1.0.0",
+		"platforms": ["ios", "android", "web"],
+		"assetBundlePatterns": ["**/*"],
+		"splash": {
+			"image": "./assets/splash.png",
+			"backgroundColor": "#ecf0f1"
+		},
+		"description": ""
+	}
 }
