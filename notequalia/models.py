@@ -11,6 +11,15 @@ from chemist import Model, db, metadata
 logger = logging.getLogger(__name__)
 
 
+class NoteBook(Model):
+    table = db.Table(
+        "notebook",
+        metadata,
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("name", db.Unicode(255), nullable=True, index=True),
+    )
+
+
 class Note(Model):
     table = db.Table(
         "note",
@@ -22,6 +31,12 @@ class Note(Model):
             "parent_id",
             db.Integer,
             db.ForeignKey("note.id", ondelete="RESTRICT"),
+            nullable=True,
+        ),
+        db.Column(
+            "notebook_id",
+            db.Integer,
+            db.ForeignKey("notebook.id", ondelete="RESTRICT"),
             nullable=True,
         ),
     )
