@@ -74,18 +74,32 @@ class AppLayout extends React.Component<AppProps, AppState> {
             const { router }: any = this.refs;
             deleteTerm(term.term);
             this.refs.confirmDeletion.close();
-            if (router.canGoBack()) {
-                router.goBack();
-            } else {
-                router.navigate("Home");
-            }
+            // if (router.canGoBack()) {
+            //     router.goBack();
+            // } else {
+            router.navigate("Home");
+            // }
         });
     };
-    componentDidMount() {
-        SplashScreen.hideAsync().then(() => {
-            console.log("hiding splash screen");
-        });
+    public fetchDefinitions = () => {
+        const { addTerms }: AppProps = this.props;
+
+        this.api.listDefinitions(addTerms);
+    };
+
+    async componentDidMount() {
+        // Prevent native splash screen from autohiding
+        try {
+            await SplashScreen.preventAutoHideAsync();
+        } catch (e) {
+            console.warn(e);
+        }
+        this.prepareResources();
     }
+    prepareResources = async () => {
+        this.fetchDefinitions();
+        await SplashScreen.hideAsync();
+    };
     render() {
         const { deleteTerm } = this;
         return (
@@ -152,6 +166,13 @@ const AppContainer = connect<AppProps>(
                 term
             };
         },
+        addTerms: function(terms: TermListState[]) {
+            return {
+                type: "ADD_TERMS",
+                terms
+            };
+        },
+
         addError: function(error: Error) {
             return {
                 type: "ADD_ERROR",

@@ -6,10 +6,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import Modal from "react-native-modalbox";
-import { Dimensions } from "react-native";
+// import { Dimensions } from "react-native";
+// import Constants from "expo-constants";
 
 import { AuthPropTypes } from "../domain/auth";
-import Constants from "expo-constants";
 import ErrorView from "./ErrorView";
 import {
     List,
@@ -20,6 +20,7 @@ import {
     Input,
     Icon,
     Button,
+    Spinner,
     Left,
     Right,
     Body
@@ -60,6 +61,13 @@ export const styles = StyleSheet.create({
         position: "absolute",
         height: 150,
         backgroundColor: "#2c3e50"
+    },
+    loadingModal: {
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        height: 150,
+        backgroundColor: "#ecf0f1"
     }
 });
 
@@ -111,7 +119,18 @@ class TermList extends Component<TermListProps, TermListState> {
         });
         if (all.length === 0) {
             this.fetchDefinitions();
-            return <ErrorView error={"No definitions found, try refreshing"} />;
+            return;
+            <Modal
+                style={styles.confirmDeletionModal}
+                backdrop={true}
+                coverScreen={true}
+                position={"center"}
+                entry={"top"}
+                ref={"confirmDeletion"}
+            >
+                <Spinner color="blue" />
+                <Text style={[styles.text, { color: "white" }]}>Loading</Text>
+            </Modal>;
         }
         return (
             <React.Fragment>
@@ -129,7 +148,19 @@ class TermList extends Component<TermListProps, TermListState> {
                     </Item>
                 </Form>
 
-                <List>
+                <List
+                    leftOpenValue={75}
+                    rightOpenValue={-75}
+                    renderRightHiddenRow={(data, secId, rowId, rowMap) => (
+                        <Button
+                            full
+                            danger
+                            onPress={_ => this.confirmDeletion({ termName })}
+                        >
+                            <Icon active name="trash" />
+                        </Button>
+                    )}
+                >
                     {filtered.map((term: TermProps, index: number) => {
                         const termName = term.term || "";
                         const meta = term.content
@@ -141,6 +172,7 @@ class TermList extends Component<TermListProps, TermListState> {
                             <ListItem key={`${index}`}>
                                 <Left>
                                     <Text
+                                        style={{ fontSize: 24 }}
                                         onPress={() => {
                                             navigation.push("WordDefinition", {
                                                 termName
@@ -163,7 +195,10 @@ class TermList extends Component<TermListProps, TermListState> {
                                                 <React.Fragment
                                                     key={`${key}-${index}`}
                                                 >
-                                                    <Text note>{`${key}`}</Text>
+                                                    <Text
+                                                        note
+                                                        style={{ fontSize: 18 }}
+                                                    >{`${key}`}</Text>
                                                     {false
                                                         ? Object.values(
                                                             meaning[key]
@@ -185,6 +220,10 @@ class TermList extends Component<TermListProps, TermListState> {
                                 </Body>
                                 <Right>
                                     <Icon
+                                        style={{
+                                            fontSize: 36,
+                                            color: "#e74c3c"
+                                        }}
                                         onPress={() =>
                                             this.confirmDeletion({ termName })
                                         }

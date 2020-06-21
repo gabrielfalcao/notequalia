@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { RouteProp } from "@react-navigation/native";
-import { StackRouteProp } from "@react-navigation/stack";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import Modal from "react-native-modalbox";
 
 import { StyleSheet, Alert, View } from "react-native";
 import { connect } from "react-redux";
@@ -12,8 +14,8 @@ import {
     //    Container,
     Content,
     Button,
-    Body,
     Icon,
+    Spinner,
     Text,
     Card,
     CardItem
@@ -33,6 +35,25 @@ export type HomeNavigationProp = StackNavigationProp<
     "Home"
 >;
 export type HomeRouteProp = StackRouteProp<RootStackParamList, "Home">;
+export const styles = StyleSheet.create({
+    text: {
+        fontSize: 15
+    },
+    confirmDeletionModal: {
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        height: 150,
+        backgroundColor: "#2c3e50"
+    },
+    loadingModal: {
+        justifyContent: "center",
+        alignItems: "center",
+        position: "absolute",
+        height: 150,
+        backgroundColor: "#ecf0f1"
+    }
+});
 
 const HomePropTypes = {
     auth: AuthPropTypes,
@@ -79,13 +100,12 @@ class Home extends Component<HomeProps, TermListState> {
                     {termCount > 0 ? (
                         <TermList navigation={navigation} route={route} />
                     ) : (
-                            <Card>
-                                <CardItem header>
-                                    <Text>
-                                        No definitions found, please load via menu
-								</Text>
-                                </CardItem>
-                            </Card>
+                            <View>
+                                <Spinner color="black" />
+                                <Text style={[styles.text, { color: "white" }]}>
+                                    Loading
+							</Text>
+                            </View>
                         )}
                 </Content>
                 <MainMenu navigation={navigation} />
@@ -93,30 +113,6 @@ class Home extends Component<HomeProps, TermListState> {
         );
     }
 }
-
-function Separator() {
-    return <View style={styles.separator} />;
-}
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: Constants.statusBarHeight,
-        marginHorizontal: 16
-    },
-    title: {
-        textAlign: "center",
-        marginVertical: 8
-    },
-    fixToText: {
-        flexDirection: "row",
-        justifyContent: "space-between"
-    },
-    separator: {
-        marginVertical: 8,
-        borderBottomColor: "#737373",
-        borderBottomWidth: StyleSheet.hairlineWidth
-    }
-});
 
 export default connect<HomeProps>(
     (state: TermListState) => {
