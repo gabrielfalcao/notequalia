@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #
+import re
 import json
 import logging
 from typing import Tuple
@@ -45,12 +46,19 @@ def define_new_term(term: str) -> Tuple[Term, bool]:
     return model, created
 
 
+def validate_term(term: str) -> str:
+    found = re.search(r'^\s*[\w\s]+\s*$', term)
+    if not found:
+        return ""
+
+    return found.group(0)
+
 @term_ns.route("/definitions")
 @term_ns.expect(parser)
 class DefinitionsEndpoint(Resource):
     @term_ns.expect(definition_json)
     def post(self):
-        term = (api.payload.get("term") or "").strip()
+        term = validate_term((api.payload.get("term") or "").strip())
         if not term:
             return json_response({"error": "term is required"}, 400)
 
