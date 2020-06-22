@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Col from "react-bootstrap/Col";
-import "bootswatch/dist/journal/bootstrap.min.css";
+
 import { Markdown } from "../markdown";
 
 interface Props {

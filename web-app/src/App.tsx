@@ -19,6 +19,7 @@ import Login from "./pages/login";
 import MindMapView from "./views/MindMapView";
 import Logout from "./pages/logout";
 import Dashboard from "./pages/Dashboard";
+import Evergreen from "./pages/Evergreen";
 import NotFound from "./pages/NotFound";
 import { ComponentWithStore } from "./ui";
 import TopNav from "./components/TopNav";
@@ -92,14 +93,14 @@ class App extends Component<AppProps, AppState> {
                         <Logout />
                     </Route>
                     <Route exact path="/">
-                        <Redirect to="/dashboard" />
+                        <Redirect to="/notes" />
                     </Route>
 
                     <AuthenticatedRoute exact path="/dashboard">
                         <Dashboard utilities />
                     </AuthenticatedRoute>
                     <Route exact path="/notes">
-                        <Dashboard />
+                        <Evergreen />
                     </Route>
                     <AuthenticatedRoute path="/notes/new">
                         <NewNote />
