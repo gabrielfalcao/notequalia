@@ -3,6 +3,19 @@ import PropTypes, { InferProps } from "prop-types";
 
 import MediumEditor from "medium-editor";
 
+const ReferenceButton = MediumEditor.Extension.extend({
+    name: "reference",
+    init: function() {
+        this.button = this.document.createElement("button");
+        this.button.classList.add("medium-editor-action");
+        this.button.innerHTML = "<b>Ref</b>";
+    },
+
+    getButton: function() {
+        return this.button;
+    }
+});
+
 const ReactMediumEditorPropTypes = {
     onChange: PropTypes.func,
     options: PropTypes.any,
@@ -44,7 +57,23 @@ export default class ReactMediumEditor extends Component<
     componentDidMount() {
         const { setUpdated, editor } = this;
 
-        this.medium = new MediumEditor(editor.current, this.props.options);
+        this.medium = new MediumEditor(editor.current, {
+            ...this.props.options,
+            toolbar: {
+                buttons: [
+                    "bold",
+                    "italic",
+                    "underline",
+                    "anchor",
+                    "h2",
+                    "h3",
+                    "reference"
+                ]
+            },
+            extensions: {
+                reference: new ReferenceButton()
+            }
+        });
         this.medium.subscribe("editableInput", (e: Event) => {
             setUpdated(true);
             this.change(editor.current.innerHTML);
