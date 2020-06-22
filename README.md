@@ -20,7 +20,7 @@ Components in this repo by folder
 
 -   `web-app` - React App hosted at <https://cognod.es>
 -   `desktop-app` - Electron App (just a boilerplate for now, the goal is to run the same code as web-app app here)
--   `iphone-app` - React-Native App
+-   `mobile-app` - React-Native App for iPhone
 -   `notequalia` - Python Restful API for finding word definitions and
     store notes.
 -   `operations` - Full infrastructure-as-code that deploys the project
@@ -47,7 +47,7 @@ Then open your browser at http://localhost:3000 to browse the live app - changes
 TypeScript + React + Redux + [NativeBase Components](https://docs.nativebase.io/Components.html#Components)
 
 ``` {.sourceCode .bash}
-cd ./iphone-app
+cd ./mobile-app
 npm install
 npm run web
 ```
