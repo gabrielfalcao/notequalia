@@ -27,7 +27,9 @@ class EvergreenTopBar extends Component<EvergreenTopBarProps, any> {
             <Navbar bg="light" expand="lg" sticky="top" className="mb-3">
                 <LinkContainer to="/">
                     <Navbar.Brand>
-                        Notebook: <strong>Note-taking App</strong>
+                        {false
+                            ? "Notebook: <strong>Note-taking App</strong>"
+                            : "Evergreen Notes"}
                     </Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls="cognodes-navbar-nav" />

@@ -12,7 +12,8 @@ const DEFAULT_BUTTONS = [
     "h2",
     "h3",
     "h4",
-    "reference"
+    "reference",
+    "removeFormat"
 ];
 
 const ReferenceButton = MediumEditor.Extension.extend({

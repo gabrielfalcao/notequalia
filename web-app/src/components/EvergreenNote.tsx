@@ -68,7 +68,12 @@ class EvergreenNote extends Component<EvergreenNoteProps, EvergreenNoteState> {
         const { title } = this.state;
         return (
             <Col md={5} lg={4}>
-                <HotKeys keyMap={this.keyMap} handlers={this.keyBindings}>
+                <HotKeys
+                    keyMap={this.keyMap}
+                    handlers={this.keyBindings}
+                    className="mt-3 border-right"
+                    style={{ height: "100%", position: "relative" }}
+                >
                     <h1
                         contentEditable
                         onKeyDown={this.onEditTitle}
@@ -77,8 +82,6 @@ class EvergreenNote extends Component<EvergreenNoteProps, EvergreenNoteState> {
                     />
 
                     <ReactMediumEditor
-                        className="mt-3 border-right"
-                        style={{ height: "100%", position: "relative" }}
                         tag="article"
                         text={this.state.text}
                         onChange={this.onEditNote}
