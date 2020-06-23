@@ -80,6 +80,8 @@ declare namespace MediumEditor {
             toString(): string;
         };
         Extension: any;
+        util: any;
+        selection: any;
     }
 
     export interface CoreOptions {

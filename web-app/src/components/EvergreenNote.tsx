@@ -8,7 +8,7 @@ import Toast from "react-bootstrap/Toast";
 import ReactMediumEditor from "./ReactMediumEditor";
 import { MediumEditor } from "medium-editor";
 import "medium-editor/dist/css/medium-editor.css";
-import "medium-editor/dist/css/themes/default.css";
+import "medium-editor/dist/css/themes/bootstrap.css";
 
 const EvergreenNotePropTypes = {
     title: PropTypes.string,
@@ -73,9 +73,9 @@ class EvergreenNote extends Component<EvergreenNoteProps, EvergreenNoteState> {
                         contentEditable
                         onKeyDown={this.onEditTitle}
                         ref={this.titleRef}
-                    >
-                        {title}
-                    </h1>
+                        dangerouslySetInnerHTML={{ __html: title }}
+                    />
+
                     <ReactMediumEditor
                         className="mt-3 border-right"
                         style={{ height: "100%", position: "relative" }}

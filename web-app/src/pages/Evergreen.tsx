@@ -48,11 +48,17 @@ class Evergreen extends Component<EvergreenProps> {
                 <Row className="mt-3" style={{ minHeight: "100vh" }}>
                     <EvergreenNote
                         title={"Notes should be linkable"}
-                        text={`<p>...</p>`}
+                        text={`<p>${lorem.generateParagraphs(
+                            1
+                        )}</p><p>${lorem.generateParagraphs(
+                            1
+                        )}</p><p>${lorem.generateParagraphs(1)}</p>`}
                     />
                     <EvergreenNote
                         title={"Second-level note"}
-                        text={`<p>${lorem.generateParagraphs(1)}</p>`}
+                        text={`<p>${lorem.generateParagraphs(
+                            1
+                        )}</p><p>${lorem.generateParagraphs(1)}</p>`}
                     />
                 </Row>
             </Container>

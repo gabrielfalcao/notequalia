@@ -5,6 +5,7 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 
 import "bootswatch/dist/litera/bootstrap.min.css";
+import "font-awesome/css/font-awesome.css";
 //import "bootswatch/dist/minty/bootstrap.min.css";
 //import "bootswatch/dist/journal/bootstrap.min.css";
 //import "bootswatch/dist/cosmo/bootstrap.min.css";
