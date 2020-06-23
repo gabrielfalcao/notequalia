@@ -68,6 +68,23 @@ class EvergreenNote extends Component<EvergreenNoteProps, EvergreenNoteState> {
         const { title } = this.state;
         return (
             <Col md={5} lg={4}>
+                <Toast
+                    style={{ position: "absolute", zIndex: 10000000 }}
+                    show={this.state.showToastSaveNote}
+                    delay={2000}
+                    onClose={() => {
+                        this.setState({ showToastSaveNote: false });
+                    }}
+                    autohide
+                >
+                    <Toast.Header>
+                        <strong className="mr-auto">Saving {title}</strong>
+                        <small>saving note</small>
+                    </Toast.Header>
+                    <Toast.Body
+                        dangerouslySetInnerHTML={{ __html: this.state.text }}
+                    />
+                </Toast>
                 <HotKeys
                     keyMap={this.keyMap}
                     handlers={this.keyBindings}
@@ -87,22 +104,6 @@ class EvergreenNote extends Component<EvergreenNoteProps, EvergreenNoteState> {
                         onChange={this.onEditNote}
                     />
                 </HotKeys>
-                <Toast
-                    show={this.state.showToastSaveNote}
-                    delay={2000}
-                    onClose={() => {
-                        this.setState({ showToastSaveNote: false });
-                    }}
-                    autohide
-                >
-                    <Toast.Header>
-                        <strong className="mr-auto">Saving {title}</strong>
-                        <small>saving note</small>
-                    </Toast.Header>
-                    <Toast.Body
-                        dangerouslySetInnerHTML={{ __html: this.state.text }}
-                    />
-                </Toast>
             </Col>
         );
     }
