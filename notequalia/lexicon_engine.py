@@ -7,6 +7,8 @@ from collections import defaultdict
 
 from PyDictionary import PyDictionary
 
+# https://dictionaryapi.com/api/v3/references/collegiate/json/test?key=234297ff-eb8d-49e5-94d6-66aec4c4b7e0
+# https://dictionaryapi.com/api/v3/references/thesaurus/json/test?key=eb37bf1c-0f2a-4399-86b8-ba444a0a9fbb
 
 class LexiconEngine(object):
     def __init__(self):

@@ -3,7 +3,10 @@
 import re
 import json
 import logging
+
+
 from typing import Tuple
+from datetime import datetime
 from flask_restplus import Resource
 from flask_restplus import fields
 from flask_restplus import reqparse
@@ -12,7 +15,7 @@ from flask_restplus import inputs
 from notequalia.models import Term
 from notequalia.lexicon_engine import LexiconEngine
 from notequalia.utils import json_response
-from .base import api
+from .base import api, application
 
 logger = logging.getLogger(__name__)
 
@@ -90,3 +93,27 @@ class TermEndpoint(Resource):
             return json_response({"error": f"term {term!r} does not exist"}, 404)
 
         return json_response(found.to_dict(), 200)
+
+
+@term_ns.route("/download")
+class Download(Resource):
+    def get(self):
+        return lexicon_backup_response()
+
+
+def lexicon_backup_response():
+    terms = sorted([t.to_dict() for t in Term.all()], key=lambda d: d.get('term'))
+    data = {
+        "terms": terms,
+        "count": len(terms),
+    }
+    now = datetime.utcnow().strftime('%Y-%m-%d')
+    headers = {
+        "Content-Disposition": f'attachment; filename="lexicon-backup-{now}.json"',
+    }
+    return json_response(data, 200, headers=headers)
+
+
+@application.route("/backup.json")
+def backup():
+    return lexicon_backup_response()

@@ -35,3 +35,19 @@ def test_create_note_without_authentication(context):
 
     # And check if the status was 201
     response.status_code.should.equal(201)
+
+
+@web_test
+def test_backup_lexicon(context):
+    ("GET on /api/v1/dict/download should return a json ")
+
+    # Given that I perform a GET /api/v1/dict/download
+    response = context.http.get(
+        "/api/v1/dict/download",
+        headers={"Content-Type": "application/json"},
+    )
+
+    # When I check the response
+    response.headers.should.have.key("Content-Type").being.equal("application/json")
+
+    # And check if the status was 200
