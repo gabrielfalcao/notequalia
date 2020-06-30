@@ -13,7 +13,9 @@ ENV UPLOAD_FOLDER /notequalia.io/file-uploads
 
 COPY . /app/
 
-RUN /venv/bin/pip install -U pip setuptools wheel
+RUN /venv/bin/pip install -U pip
+RUN /venv/bin/pip install -U setuptools
+RUN /venv/bin/pip install -U wheel
 RUN /venv/bin/pip install /app
 
 RUN make tests
