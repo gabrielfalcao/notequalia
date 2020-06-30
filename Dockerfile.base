@@ -21,6 +21,8 @@ WORKDIR /app
 
 COPY *.txt /app/
 
-RUN /venv/bin/pip install --cache-dir /pip/cache -U pip
-RUN /venv/bin/pip install --cache-dir /pip/cache -U setuptools wheel
-RUN /venv/bin/pip install --cache-dir /pip/cache -r development.txt
+ENV PIP_CACHE_DIR /pip/cache
+
+RUN /venv/bin/pip install -U pip
+RUN /venv/bin/pip install -U setuptools wheel
+RUN /venv/bin/pip install -r development.txt

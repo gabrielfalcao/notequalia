@@ -10,6 +10,7 @@ ENV VENV /venv/
 ENV PATH "/venv/bin:${PATH}"
 ENV PYTHONPATH /app/
 ENV UPLOAD_FOLDER /notequalia.io/file-uploads
+ENV PIP_CACHE_DIR /pip/cache
 
 COPY . /app/
 
@@ -30,4 +31,4 @@ EXPOSE 6969
 
 
 CMD notequalia-io web "--port=$NOTEQUALIA_IO_PORT"
-CMD /venv/bin/uwsgi --http ":$NOTEQUALIA_IO_PORT" --mount /=application.web:application
+#CMD /venv/bin/uwsgi --http ":$NOTEQUALIA_IO_PORT" --mount /=application.web:application
