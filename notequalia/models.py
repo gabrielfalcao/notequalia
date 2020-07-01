@@ -141,6 +141,8 @@ class Term(Model):
         db.Column("id", db.Integer, primary_key=True),
         db.Column("term", db.UnicodeText, nullable=True, index=True, unique=True),
         db.Column("content", db.UnicodeText, nullable=True),
+        db.Column("pydictionary_json", db.UnicodeText, nullable=True),
+        db.Column("merriamwebster_thesaurus_json", db.UnicodeText, nullable=True),
         db.Column(
             "parent_id",
             db.Integer,
