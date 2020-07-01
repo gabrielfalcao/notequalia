@@ -32,7 +32,9 @@ def test_create_definition(context):
 @vcr.use_cassette("ap1/v1/dict/definitions/POST:200.yaml")
 @web_test
 def test_get_or_create_definition(context):
-    ("POST on /api/v1/dict/definitions should return 200 when term already exists")
+    (
+        "POST on /api/v1/dict/definitions should return 200 when term already exists"
+    )
 
     # Given that a term exists in the database
     term, _ = define_new_term("rife")
@@ -54,7 +56,9 @@ def test_get_or_create_definition(context):
 @vcr.use_cassette("ap1/v1/dict/definitions/GET:200.yaml")
 @web_test
 def test_list_definitions(context):
-    ("GET /api/v1/dict/definitions should return 200 with a list of definitions")
+    (
+        "GET /api/v1/dict/definitions should return 200 with a list of definitions"
+    )
 
     # Given that there are 5 definitions in the database
     term, _ = define_new_term("ensue")
@@ -77,7 +81,9 @@ def test_list_definitions(context):
 @vcr.use_cassette("ap1/v1/dict/definitions/DELETE:200.yaml")
 @web_test
 def test_delete_definitions(context):
-    ("DELETE /api/v1/dict/definitions should return 200 with a list of definitions")
+    (
+        "DELETE /api/v1/dict/definitions should return 200 with a list of definitions"
+    )
 
     # Given that there are 5 definitions in the database
     term, _ = define_new_term("ensue")

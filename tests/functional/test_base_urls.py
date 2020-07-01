@@ -19,11 +19,11 @@ def test_backup_lexicon(context):
     ("GET on /backup.json should return a json ")
 
     # Given that I perform a GET /backup.json
-    response = context.http.get(
-        "/backup.json",
-    )
+    response = context.http.get("/backup.json")
 
     # When I check the response
-    response.headers.should.have.key("Content-Type").being.equal("application/json")
+    response.headers.should.have.key("Content-Type").being.equal(
+        "application/json"
+    )
 
     # And check if the status was 200

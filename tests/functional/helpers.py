@@ -9,7 +9,9 @@ from chemist import set_default_uri, metadata
 
 functional_tests_path = Path(__file__).parent.absolute()
 tests_path = functional_tests_path.parent
-vcr = VCR(cassette_library_dir=str(functional_tests_path.joinpath(".cassetes")))
+vcr = VCR(
+    cassette_library_dir=str(functional_tests_path.joinpath(".cassetes"))
+)
 
 
 def supports_postgres():

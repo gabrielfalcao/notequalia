@@ -1,7 +1,9 @@
 """data models for the `Merriam-Webster API <https://dictionaryapi.com/products/json>`_
 """
+import re
 from typing import List, Optional, Dict, Tuple, Any
 from uiclasses import Model, IterableCollection, ModelList, ModelSet
+from uiclasses.typing import Getter
 from uiclasses.collections import COLLECTION_TYPES
 
 Serializable = (Model,) + tuple(COLLECTION_TYPES.values())
@@ -31,6 +33,30 @@ class EntryMetadata(Model):
         return self.serialize(only_visible=True)
 
 
+class Sound(Model):
+    """represents `Sound <https://dictionaryapi.com/products/json#sec-2.prs>`_
+    """
+
+    subdirectory: str
+    filename: str
+
+    def to_dict(self):
+        return self.serialize(only_visible=True)
+
+    @property
+    def filename(self) -> str:
+        return self.get('audio') or ""
+
+    @property
+    def subdirectory(self) -> str:
+        if self.filename.startswith("bix"):
+            return "bix"
+        if self.filename.startswith("gg"):
+            return "gg"
+        if re.search(r'^\w', self.filename):
+            return self.filename[0]
+        return 'number'
+
 class Pronounciation(Model):
     """represents `Pronounciations <https://dictionaryapi.com/products/json#sec-2.prs>`_
     """
@@ -39,7 +65,13 @@ class Pronounciation(Model):
     label_before: str
     label_after: str
     punctuation: str
-    sound: Dict[str, str]
+    audio_url: Optional[str]
+    sound: Getter[Sound]
+
+    @property
+    def sound(self) -> Sound:
+        params = self.get("sound") or {}
+        return Sound(**params)
 
     @property
     def default(self) -> str:
@@ -57,9 +89,19 @@ class Pronounciation(Model):
     def punctuation(self) -> str:
         return self.get("pun") or ""
 
-    def audio_url(self) -> str:
-        return "https://media.merriam-webster.com/audio/prons/{language_code}/{country_code}/{format}/{subdirectory}/{base_filename}.{format}".format(
-            **self.sound
+    @property
+    def audio_url(self) -> Optional[str]:
+        if not self.sound.filename:
+            return
+
+        params = {
+            'language_code': 'en',
+            'country_code': 'US',
+            'format': 'wav',
+        }
+        params.update(self.sound.to_dict())
+        return "https://media.merriam-webster.com/audio/prons/{language_code}/{country_code}/{format}/{subdirectory}/{filename}.{format}".format(
+            **params
         )
 
     def to_html(self):
@@ -124,6 +166,7 @@ class Definition(Model):
     homograph: int
     headword: str
     variants: Variant.List
+    pronounciations: Pronounciation.List
 
     @property
     def functional_label(self) -> str:

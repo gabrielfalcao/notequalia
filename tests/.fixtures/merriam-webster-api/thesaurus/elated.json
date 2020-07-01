@@ -1,0 +1,643 @@
+[
+  {
+    "def": [
+      {
+        "sseq": [
+          [
+            [
+              "sense",
+              {
+                "ant_list": [
+                  [
+                    {
+                      "wd": "depressed"
+                    }
+                  ]
+                ],
+                "dt": [
+                  [
+                    "text",
+                    "experiencing or marked by overwhelming usually pleasurable emotion "
+                  ],
+                  [
+                    "vis",
+                    [
+                      {
+                        "t": "she was {it}elated{/it} upon learning that she had been accepted by her first-choice college"
+                      }
+                    ]
+                  ]
+                ],
+                "near_list": [
+                  [
+                    {
+                      "wd": "blue"
+                    },
+                    {
+                      "wd": "brokenhearted"
+                    },
+                    {
+                      "wd": "crestfallen"
+                    },
+                    {
+                      "wd": "dejected"
+                    },
+                    {
+                      "wd": "despondent"
+                    },
+                    {
+                      "wd": "disconsolate"
+                    },
+                    {
+                      "wd": "disheartened"
+                    },
+                    {
+                      "wd": "doleful"
+                    },
+                    {
+                      "wd": "down"
+                    },
+                    {
+                      "wd": "downcast"
+                    },
+                    {
+                      "wd": "downhearted"
+                    },
+                    {
+                      "wd": "forlorn"
+                    },
+                    {
+                      "wd": "gloomy"
+                    },
+                    {
+                      "wd": "glum"
+                    },
+                    {
+                      "wd": "hangdog"
+                    },
+                    {
+                      "wd": "heartbroken"
+                    },
+                    {
+                      "wd": "heartsick"
+                    },
+                    {
+                      "wd": "heartsore"
+                    },
+                    {
+                      "wd": "inconsolable"
+                    },
+                    {
+                      "wd": "joyless"
+                    },
+                    {
+                      "wd": "low"
+                    },
+                    {
+                      "wd": "low-spirited"
+                    },
+                    {
+                      "wd": "melancholy"
+                    },
+                    {
+                      "wd": "miserable"
+                    },
+                    {
+                      "wd": "mournful"
+                    },
+                    {
+                      "wd": "sad"
+                    },
+                    {
+                      "wd": "saddened"
+                    },
+                    {
+                      "wd": "sorrowful"
+                    },
+                    {
+                      "wd": "sorry"
+                    },
+                    {
+                      "wd": "unhappy"
+                    },
+                    {
+                      "wd": "woebegone"
+                    },
+                    {
+                      "wd": "woeful"
+                    },
+                    {
+                      "wd": "wretched"
+                    }
+                  ]
+                ],
+                "phrase_list": [
+                  [
+                    {
+                      "wd": "on cloud nine"
+                    },
+                    {
+                      "wd": "over the moon"
+                    }
+                  ]
+                ],
+                "rel_list": [
+                  [
+                    {
+                      "wd": "enchanted"
+                    },
+                    {
+                      "wd": "exultant"
+                    },
+                    {
+                      "wd": "glorying"
+                    },
+                    {
+                      "wd": "jubilant"
+                    },
+                    {
+                      "wd": "rejoicing"
+                    },
+                    {
+                      "wd": "triumphant"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "enthusiastic"
+                    },
+                    {
+                      "wd": "excited"
+                    },
+                    {
+                      "wd": "gung ho"
+                    },
+                    {
+                      "wd": "thrilled"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "blissed-out"
+                    },
+                    {
+                      "wd": "blissful"
+                    },
+                    {
+                      "wd": "delighted"
+                    },
+                    {
+                      "wd": "glad"
+                    },
+                    {
+                      "wd": "gratified"
+                    },
+                    {
+                      "wd": "happy"
+                    },
+                    {
+                      "wd": "joyful"
+                    },
+                    {
+                      "wd": "joyous"
+                    },
+                    {
+                      "wd": "pleased"
+                    },
+                    {
+                      "wd": "satisfied"
+                    },
+                    {
+                      "wd": "tickled"
+                    }
+                  ]
+                ],
+                "syn_list": [
+                  [
+                    {
+                      "wd": "ecstatic"
+                    },
+                    {
+                      "wd": "elevated"
+                    },
+                    {
+                      "wd": "enrapt"
+                    },
+                    {
+                      "wd": "enraptured"
+                    },
+                    {
+                      "wd": "entranced"
+                    },
+                    {
+                      "wd": "euphoric"
+                    },
+                    {
+                      "wd": "exhilarated"
+                    },
+                    {
+                      "wd": "giddy"
+                    },
+                    {
+                      "wd": "heady"
+                    },
+                    {
+                      "wd": "intoxicated"
+                    },
+                    {
+                      "wd": "rapt"
+                    },
+                    {
+                      "wd": "rapturous"
+                    },
+                    {
+                      "wd": "rhapsodic",
+                      "wvrs": [
+                        {
+                          "wva": "rhapsodical",
+                          "wvl": "also"
+                        }
+                      ]
+                    }
+                  ]
+                ]
+              }
+            ]
+          ]
+        ]
+      }
+    ],
+    "fl": "adjective",
+    "hwi": {
+      "hw": "elated"
+    },
+    "meta": {
+      "ants": [
+        [
+          "depressed"
+        ]
+      ],
+      "id": "elated",
+      "offensive": false,
+      "section": "alpha",
+      "src": "coll_thes",
+      "stems": [
+        "elated",
+        "elatedly",
+        "elatedness",
+        "elatednesses"
+      ],
+      "syns": [
+        [
+          "ecstatic",
+          "elevated",
+          "enrapt",
+          "enraptured",
+          "entranced",
+          "euphoric",
+          "exhilarated",
+          "giddy",
+          "heady",
+          "intoxicated",
+          "rapt",
+          "rapturous",
+          "rhapsodic"
+        ]
+      ],
+      "target": {
+        "tsrc": "collegiate",
+        "tuuid": "3a67e4db-ee8f-4f56-aabc-21ea50ab89f1"
+      },
+      "uuid": "183b63d1-a1df-44e3-8555-a49a45bda930"
+    },
+    "shortdef": [
+      "experiencing or marked by overwhelming usually pleasurable emotion"
+    ]
+  },
+  {
+    "def": [
+      {
+        "sseq": [
+          [
+            [
+              "sense",
+              {
+                "ant_list": [
+                  [
+                    {
+                      "wd": "depressed"
+                    }
+                  ]
+                ],
+                "dt": [
+                  [
+                    "text",
+                    "to fill with great joy "
+                  ],
+                  [
+                    "vis",
+                    [
+                      {
+                        "t": "the winning of the state basketball championship {it}elated{/it} the whole town"
+                      }
+                    ]
+                  ]
+                ],
+                "near_list": [
+                  [
+                    {
+                      "wd": "demoralized"
+                    },
+                    {
+                      "wd": "discouraged"
+                    },
+                    {
+                      "wd": "disheartened"
+                    },
+                    {
+                      "wd": "dispirited"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "distressed"
+                    },
+                    {
+                      "wd": "oppressed"
+                    },
+                    {
+                      "wd": "saddened"
+                    }
+                  ]
+                ],
+                "rel_list": [
+                  [
+                    {
+                      "wd": "commoved"
+                    },
+                    {
+                      "wd": "excited"
+                    },
+                    {
+                      "wd": "inspired"
+                    },
+                    {
+                      "wd": "stimulated"
+                    },
+                    {
+                      "wd": "uplifted"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "contented"
+                    },
+                    {
+                      "wd": "delighted"
+                    },
+                    {
+                      "wd": "gladdened"
+                    },
+                    {
+                      "wd": "gratified"
+                    },
+                    {
+                      "wd": "pleased"
+                    },
+                    {
+                      "wd": "rejoiced"
+                    },
+                    {
+                      "wd": "satisfied"
+                    },
+                    {
+                      "wd": "warmed"
+                    }
+                  ]
+                ],
+                "syn_list": [
+                  [
+                    {
+                      "wd": "elevated"
+                    },
+                    {
+                      "wd": "enraptured"
+                    },
+                    {
+                      "wd": "exhilarated"
+                    },
+                    {
+                      "wd": "intoxicated"
+                    },
+                    {
+                      "wd": "transported"
+                    }
+                  ]
+                ]
+              }
+            ]
+          ]
+        ]
+      }
+    ],
+    "fl": "verb",
+    "hwi": {
+      "hw": "elated"
+    },
+    "meta": {
+      "ants": [
+        [
+          "depressed"
+        ]
+      ],
+      "id": "elated",
+      "offensive": false,
+      "section": "alpha",
+      "src": "coll_thes",
+      "stems": [
+        "elated"
+      ],
+      "syns": [
+        [
+          "elevated",
+          "enraptured",
+          "exhilarated",
+          "intoxicated",
+          "transported"
+        ]
+      ],
+      "uuid": "c6edf743-915d-4a38-963b-fe953dbcf2b3"
+    },
+    "shortdef": [
+      "to fill with great joy"
+    ],
+    "sls": [
+      "past tense of {d_link|elate|elate}"
+    ]
+  },
+  {
+    "def": [
+      {
+        "sseq": [
+          [
+            [
+              "sense",
+              {
+                "ant_list": [
+                  [
+                    {
+                      "wd": "depress"
+                    }
+                  ]
+                ],
+                "dt": [
+                  [
+                    "text",
+                    "to fill with great joy "
+                  ],
+                  [
+                    "vis",
+                    [
+                      {
+                        "t": "the winning of the state basketball championship {it}elated{/it} the whole town"
+                      }
+                    ]
+                  ]
+                ],
+                "near_list": [
+                  [
+                    {
+                      "wd": "demoralize"
+                    },
+                    {
+                      "wd": "discourage"
+                    },
+                    {
+                      "wd": "dishearten"
+                    },
+                    {
+                      "wd": "dispirit"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "distress"
+                    },
+                    {
+                      "wd": "oppress"
+                    },
+                    {
+                      "wd": "sadden"
+                    }
+                  ]
+                ],
+                "rel_list": [
+                  [
+                    {
+                      "wd": "commove"
+                    },
+                    {
+                      "wd": "excite"
+                    },
+                    {
+                      "wd": "inspire"
+                    },
+                    {
+                      "wd": "stimulate"
+                    },
+                    {
+                      "wd": "uplift"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "content"
+                    },
+                    {
+                      "wd": "delight"
+                    },
+                    {
+                      "wd": "gladden"
+                    },
+                    {
+                      "wd": "gratify"
+                    },
+                    {
+                      "wd": "please"
+                    },
+                    {
+                      "wd": "rejoice"
+                    },
+                    {
+                      "wd": "satisfy"
+                    },
+                    {
+                      "wd": "warm"
+                    }
+                  ]
+                ],
+                "syn_list": [
+                  [
+                    {
+                      "wd": "elevate"
+                    },
+                    {
+                      "wd": "enrapture"
+                    },
+                    {
+                      "wd": "exhilarate"
+                    },
+                    {
+                      "wd": "intoxicate"
+                    },
+                    {
+                      "wd": "transport"
+                    }
+                  ]
+                ]
+              }
+            ]
+          ]
+        ]
+      }
+    ],
+    "fl": "verb",
+    "hwi": {
+      "hw": "elate"
+    },
+    "meta": {
+      "ants": [
+        [
+          "depress"
+        ]
+      ],
+      "id": "elate",
+      "offensive": false,
+      "section": "alpha",
+      "src": "coll_thes",
+      "stems": [
+        "elate",
+        "elated",
+        "elates",
+        "elating"
+      ],
+      "syns": [
+        [
+          "elevate",
+          "enrapture",
+          "exhilarate",
+          "intoxicate",
+          "transport"
+        ]
+      ],
+      "target": {
+        "tsrc": "collegiate",
+        "tuuid": "37bc473e-f395-4f5b-b446-1009d8833e4e"
+      },
+      "uuid": "539d785c-3664-48a9-9960-05ebdd23d1af"
+    },
+    "shortdef": [
+      "to fill with great joy"
+    ]
+  }
+]

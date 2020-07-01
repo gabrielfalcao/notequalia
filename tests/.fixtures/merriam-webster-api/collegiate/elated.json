@@ -1,0 +1,168 @@
+[
+  {
+    "date": "circa 1619",
+    "def": [
+      {
+        "sseq": [
+          [
+            [
+              "sense",
+              {
+                "dt": [
+                  [
+                    "text",
+                    "{bc}marked by high spirits {bc}{sx|exultant||}"
+                  ]
+                ]
+              }
+            ]
+          ]
+        ]
+      }
+    ],
+    "fl": "adjective",
+    "hwi": {
+      "hw": "elat*ed",
+      "prs": [
+        {
+          "mw": "i-ˈlā-təd",
+          "sound": {
+            "audio": "elate01m",
+            "ref": "m",
+            "stat": "1"
+          }
+        }
+      ]
+    },
+    "meta": {
+      "id": "elated",
+      "offensive": false,
+      "section": "alpha",
+      "sort": "050058600",
+      "src": "collegiate",
+      "stems": [
+        "elated",
+        "elatedly",
+        "elatedness",
+        "elatednesses"
+      ],
+      "uuid": "3a67e4db-ee8f-4f56-aabc-21ea50ab89f1"
+    },
+    "quotes": [
+      {
+        "aq": {
+          "aqdate": "1869",
+          "auth": "Louisa May Alcott",
+          "source": "{it}Little Women{/it}"
+        },
+        "t": "Much {qword}elated{/qword} with her success, Jo did \"tell on,\" all about their plays and plans, their hopes and fears for Father, and the most interesting events of the little world in which the sisters lived."
+      },
+      {
+        "aq": {
+          "aqdate": "(1941) 2002",
+          "auth": "Walter Farley",
+          "source": "{it}The Black Stallion{/it}"
+        },
+        "t": "Alec felt {qword}elated{/qword}—it was the first time that the stallion hadn't drawn back into the stall at the sight of him."
+      },
+      {
+        "aq": {
+          "aqdate": "14 Nov. 2002",
+          "auth": "Tom Petty",
+          "source": "quoted in {it}Rolling Stone{/it}"
+        },
+        "t": "But I was {qword}elated{/qword} when my song was banned. I mean, nothing could have complimented me more than to hear they just banned it at such-and-such a station …"
+      },
+      {
+        "aq": {
+          "aqdate": "25 Dec. 2000",
+          "auth": "Yossi Klein Halevi",
+          "source": "{it}New Republic{/it}"
+        },
+        "t": "Inside the … hall, the combination of national crisis and imminent electoral victory creates an atmosphere at once pensive and {qword}elated{/qword}."
+      }
+    ],
+    "shortdef": [
+      "marked by high spirits : exultant"
+    ],
+    "uros": [
+      {
+        "fl": "adverb",
+        "ure": "elat*ed*ly"
+      },
+      {
+        "fl": "noun",
+        "ure": "elat*ed*ness"
+      }
+    ]
+  },
+  {
+    "date": "circa 1619",
+    "def": [
+      {
+        "sseq": [
+          [
+            [
+              "sense",
+              {
+                "dt": [
+                  [
+                    "text",
+                    "{bc}to fill with joy or pride"
+                  ]
+                ]
+              }
+            ]
+          ]
+        ],
+        "vd": "transitive verb"
+      }
+    ],
+    "et": [
+      [
+        "text",
+        "Latin {it}elatus{/it} (past participle of {it}efferre{/it} to carry out, elevate), from {it}e-{/it} + {it}latus{/it}, past participle of {it}ferre{/it} to carry {ma}{mat|tolerate|}, {mat|bear|}{/ma}"
+      ]
+    ],
+    "fl": "verb",
+    "hom": 1,
+    "hwi": {
+      "hw": "elate",
+      "prs": [
+        {
+          "mw": "i-ˈlāt",
+          "sound": {
+            "audio": "elate001",
+            "ref": "c",
+            "stat": "1"
+          }
+        }
+      ]
+    },
+    "ins": [
+      {
+        "if": "elat*ed"
+      },
+      {
+        "if": "elat*ing"
+      }
+    ],
+    "meta": {
+      "id": "elate:1",
+      "offensive": false,
+      "section": "alpha",
+      "sort": "050058400",
+      "src": "collegiate",
+      "stems": [
+        "elate",
+        "elated",
+        "elates",
+        "elating"
+      ],
+      "uuid": "37bc473e-f395-4f5b-b446-1009d8833e4e"
+    },
+    "shortdef": [
+      "to fill with joy or pride"
+    ]
+  }
+]

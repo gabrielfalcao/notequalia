@@ -9,7 +9,7 @@ from tests.functional.helpers import web_test, vcr
 def test_thesaurus_term_verb_encumber():
     ("define_new_term('encumber') should define a verb via thesaurus")
 
-    term, created = define_new_term('encumber')
+    term, created = define_new_term("encumber")
 
     definitions = term.get_thesaurus_definitions()
     definitions.should.have.length_of(1)

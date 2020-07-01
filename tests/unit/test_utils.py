@@ -3,7 +3,9 @@ from notequalia.utils import json_response
 
 
 def test_json_response_returns_flask_response():
-    ("json_response() should set the proper header and serialize the data as json")
+    (
+        "json_response() should set the proper header and serialize the data as json"
+    )
 
     # Given a dictionary with data
     data = {"foo": "bar"}
