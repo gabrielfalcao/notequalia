@@ -73,19 +73,19 @@ class Pronounciation(Model):
 
     @property
     def default(self) -> str:
-        return self.get("mw") or ""
+        return self.get("mw")
 
     @property
     def label_before(self) -> str:
-        return self.get("l") or ""
+        return self.get("l")
 
     @property
     def label_after(self) -> str:
-        return self.get("l2") or ""
+        return self.get("l2")
 
     @property
     def punctuation(self) -> str:
-        return self.get("pun") or ""
+        return self.get("pun")
 
     @property
     def audio_url(self) -> Optional[str]:
@@ -104,6 +104,37 @@ class Pronounciation(Model):
         return f"<em>{this.label_after}</em>"
 
 
+class Inflection(Model):
+    """represents `Pronounciations <https://dictionaryapi.com/products/json#sec-2.ins>`
+    """
+
+    default: str
+    cutback: str
+    label: str
+    pronounciations: Pronounciation.List
+    sense_specific_label: str
+
+    @property
+    def sense_specific_label(self) -> str:
+        # https://dictionaryapi.com/products/json#sec-2.spl
+        return self.get("spl")
+
+    @property
+    def pronounciations(self) -> Pronounciation.List:
+        return self.get("prs")
+
+    @property
+    def default(self) -> str:
+        return self.get("if")
+
+    @property
+    def cutback(self) -> str:
+        return self.get("ifc")
+
+    @property
+    def label(self) -> str:
+        return self.get("il")
+
 
 class HeadwordInformation(Model):
     """represents `Homographs <https://dictionaryapi.com/products/json#sec-2.hwi>`_
@@ -118,7 +149,7 @@ class HeadwordInformation(Model):
 
     @property
     def pronounciations(self) -> Pronounciation.List:
-        return Pronounciation.List(self.get("prs") or [])
+        return self.get("prs")
 
 
 
@@ -128,20 +159,20 @@ class Variant(Model):
 
     name: str
     pronounciations: Pronounciation.List
-    sense_specific_inflection_plural_label: str
+    sense_specific_label: str
 
     @property
     def name(self) -> str:
         return self.get("va")
 
     @property
-    def sense_specific_inflection_plural_label(self) -> str:
+    def sense_specific_label(self) -> str:
         # https://dictionaryapi.com/products/json#sec-2.spl
         return self.get("spl")
 
     @property
     def pronounciations(self) -> Pronounciation.List:
-        return Pronounciation.List(self.get("prs") or [])
+        return self.get("prs")
 
 
 
@@ -152,10 +183,31 @@ class Definition(Model):
     functional_label: str
     offensive: bool
     stems: List[str]
+    short: List[str]
     homograph: int
     headword: str
     variants: Variant.List
     pronounciations: Pronounciation.List
+    inflections: Inflection.List
+
+    labels: List[str]
+    status_labels: List[str]
+
+    @property
+    def short(self) -> List[str]:
+        return self.get("shortdef")
+
+    @property
+    def labels(self) -> List[str]:
+        return self.get("lbs")
+
+    @property
+    def status_labels(self) -> List[str]:
+        return self.get("sls")
+
+    @property
+    def regional_label(self) -> str:
+        return self.get("psl")
 
     @property
     def functional_label(self) -> str:
@@ -173,7 +225,7 @@ class Definition(Model):
 
     @property
     def variants(self) -> Variant.List:
-        return self.get("vrs") or []
+        return self.get("vrs")
 
     @property
     def homograph(self) -> int:
@@ -186,6 +238,10 @@ class Definition(Model):
     @property
     def pronounciations(self) -> Pronounciation.List:
         return self.hwi.pronounciations
+
+    @property
+    def inflections(self) -> Inflection.List:
+        return self.hwi.inflections
 
     @property
     def offensive(self) -> bool:
@@ -203,15 +259,3 @@ class ThesaurusDefinition(Definition):
     """responsible for modeling a `Definition within the Thesaurus Dictionary <https://dictionaryapi.com/products/json#sec-3>`_
     of the `Merriam-Webster API <https://dictionaryapi.com/products/json>`_
     """
-
-
-def to_human_dict(model) -> Dict[str, Any]:
-    data = {}
-    for col in model.get_table_columns():
-        value = getattr(model, col, None)
-        if is_serializable(value):
-            data[col] = value.to_dict()
-        else:
-            data[col] = value
-
-    return data
