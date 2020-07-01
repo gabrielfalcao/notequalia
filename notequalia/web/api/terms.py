@@ -141,7 +141,7 @@ def backup():
 def reprocess():
     items = Term.all()
     total = len(items)
-    for i, term in items:
+    for i, term in enumerate(items):
         logger.info(f'reprocessing term {i}/{total}: {term.term}')
         model, created = define_new_term(term.term)
         logger.info(f'updated term {i}/{total}: {term.term}')
