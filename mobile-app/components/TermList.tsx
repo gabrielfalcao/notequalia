@@ -185,9 +185,7 @@ class TermList extends Component<TermListProps, TermListState> {
                 >
                     {filtered.map((term: TermProps, index: number) => {
                         const termName = term.term || "";
-                        const meta = term.content
-                            ? JSON.parse(term.content)
-                            : { pydictionary: { meaning: {} } };
+                        const meta = term.content;
                         const { pydictionary }: any = meta;
                         const { meaning } = pydictionary;
                         return (
