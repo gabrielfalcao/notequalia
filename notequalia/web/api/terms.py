@@ -107,7 +107,7 @@ class TermEndpoint(Resource):
             return json_response({"error": f"term {term!r} does not exist"}, 404)
 
         found.delete()
-        return json_response(None, 204)
+        return json_response(found.to_dict(), 200)
 
     def get(self, term):
         found = Term.find_one_by(term=term)

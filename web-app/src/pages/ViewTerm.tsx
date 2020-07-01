@@ -61,11 +61,11 @@ class ViewTerm extends Component<ViewTermProps, any> {
         if (!term) {
             return <Redirect to="/" />;
         }
-        const meta: any = JSON.parse(term.content);
+        const meta: any = term.content;
 
-        const { pydictionary } = meta;
+        const { pydictionary, collegiate, thesaurus } = meta;
 
-        if (!pydictionary) {
+        if (!pydictionary && !collegiate && !thesaurus) {
             return null;
         }
 
@@ -101,7 +101,7 @@ class ViewTerm extends Component<ViewTermProps, any> {
                                                                 {values.map(
                                                                     (
                                                                         description,
-                                                                        index
+                                                                        index: number
                                                                     ) => (
                                                                             <ListGroup.Item
                                                                                 key={`${index}`}
@@ -121,11 +121,88 @@ class ViewTerm extends Component<ViewTermProps, any> {
                                             </ListGroup>
                                         ) : null}
                                     </React.Fragment>
-                                ) : (
-                                        <React.Fragment>
-                                            <Alert>UNDEFINED</Alert>
-                                        </React.Fragment>
-                                    )}
+                                ) : null}
+
+                                {thesaurus ? (
+                                    <ListGroup variant="flush">
+                                        {thesaurus.map(
+                                            (
+                                                definition: any,
+                                                index: number
+                                            ) => {
+                                                const short_definitions: any =
+                                                    definition.short;
+                                                return (
+                                                    <ListGroup.Item
+                                                        key={`${index}`}
+                                                    >
+                                                        <h4>
+                                                            {
+                                                                definition.functional_label
+                                                            }
+                                                        </h4>
+                                                        {short_definitions.map(
+                                                            (
+                                                                description: any,
+                                                                index: number
+                                                            ) => (
+                                                                    <ListGroup.Item
+                                                                        key={`${index}`}
+                                                                    >
+                                                                        <h5>
+                                                                            {
+                                                                                description
+                                                                            }
+                                                                        </h5>
+                                                                    </ListGroup.Item>
+                                                                )
+                                                        )}
+                                                    </ListGroup.Item>
+                                                );
+                                            }
+                                        )}
+                                    </ListGroup>
+                                ) : null}
+                                {collegiate ? (
+                                    <ListGroup variant="flush">
+                                        {collegiate.map(
+                                            (
+                                                definition: any,
+                                                index: number
+                                            ) => {
+                                                const short_definitions: any =
+                                                    definition.short;
+                                                return (
+                                                    <ListGroup.Item
+                                                        key={`${index}`}
+                                                    >
+                                                        <h4>
+                                                            {
+                                                                definition.functional_label
+                                                            }
+                                                        </h4>
+                                                        {short_definitions.map(
+                                                            (
+                                                                description: any,
+                                                                index: number
+                                                            ) => (
+                                                                    <ListGroup.Item
+                                                                        key={`${index}`}
+                                                                    >
+                                                                        <h5>
+                                                                            {
+                                                                                description
+                                                                            }
+                                                                        </h5>
+                                                                    </ListGroup.Item>
+                                                                )
+                                                        )}
+                                                    </ListGroup.Item>
+                                                );
+                                            }
+                                        )}
+                                    </ListGroup>
+                                ) : null}
                             </Modal.Body>
 
                             <Modal.Footer>

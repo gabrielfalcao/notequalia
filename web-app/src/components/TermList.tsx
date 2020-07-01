@@ -69,10 +69,14 @@ class TermList extends Component<TermListProps, TermListState> {
                     </thead>
                     <tbody>
                         {all.map((term: TermProps, index: number) => {
-                            const meta: any = JSON.parse(term.content);
-                            const { pydictionary } = meta;
+                            const meta: any = term.content;
+                            const {
+                                pydictionary,
+                                collegiate,
+                                thesaurus
+                            } = meta;
 
-                            if (!pydictionary) {
+                            if (!pydictionary && !collegiate && !thesaurus) {
                                 return null;
                             }
                             return (
@@ -83,33 +87,118 @@ class TermList extends Component<TermListProps, TermListState> {
                                     {pydictionary ? (
                                         <React.Fragment>
                                             <td>
-                                                {pydictionary.meaning ? (
+                                                {pydictionary ? (
+                                                    <React.Fragment>
+                                                        {pydictionary.meaning ? (
+                                                            <ListGroup variant="flush">
+                                                                {Object.keys(
+                                                                    pydictionary.meaning
+                                                                ).map(
+                                                                    (
+                                                                        key: string,
+                                                                        index: number
+                                                                    ) => {
+                                                                        const values: string[] =
+                                                                            pydictionary
+                                                                                .meaning[
+                                                                            key
+                                                                            ];
+                                                                        return (
+                                                                            <ListGroup.Item
+                                                                                key={`${index}`}
+                                                                            >
+                                                                                <h4>
+                                                                                    {
+                                                                                        key
+                                                                                    }
+                                                                                </h4>
+                                                                                {values.map(
+                                                                                    (
+                                                                                        description,
+                                                                                        index: number
+                                                                                    ) => (
+                                                                                            <ListGroup.Item
+                                                                                                key={`${index}`}
+                                                                                            >
+                                                                                                <h5>
+                                                                                                    {
+                                                                                                        description
+                                                                                                    }
+                                                                                                </h5>
+                                                                                            </ListGroup.Item>
+                                                                                        )
+                                                                                )}
+                                                                            </ListGroup.Item>
+                                                                        );
+                                                                    }
+                                                                )}
+                                                            </ListGroup>
+                                                        ) : null}
+                                                    </React.Fragment>
+                                                ) : null}
+
+                                                {thesaurus ? (
                                                     <ListGroup variant="flush">
-                                                        {Object.keys(
-                                                            pydictionary.meaning
-                                                        ).map(
+                                                        {thesaurus.map(
                                                             (
-                                                                key: string,
+                                                                definition: any,
                                                                 index: number
                                                             ) => {
-                                                                const values: string[] =
-                                                                    pydictionary
-                                                                        .meaning[
-                                                                    key
-                                                                    ];
+                                                                const short_definitions: any =
+                                                                    definition.short;
                                                                 return (
                                                                     <ListGroup.Item
                                                                         key={`${index}`}
                                                                     >
                                                                         <h4>
                                                                             {
-                                                                                key
+                                                                                definition.functional_label
                                                                             }
                                                                         </h4>
-                                                                        {values.map(
+                                                                        {short_definitions.map(
                                                                             (
-                                                                                description,
-                                                                                index
+                                                                                description: any,
+                                                                                index: number
+                                                                            ) => (
+                                                                                    <ListGroup.Item
+                                                                                        key={`${index}`}
+                                                                                    >
+                                                                                        <h5>
+                                                                                            {
+                                                                                                description
+                                                                                            }
+                                                                                        </h5>
+                                                                                    </ListGroup.Item>
+                                                                                )
+                                                                        )}
+                                                                    </ListGroup.Item>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </ListGroup>
+                                                ) : null}
+                                                {collegiate ? (
+                                                    <ListGroup variant="flush">
+                                                        {collegiate.map(
+                                                            (
+                                                                definition: any,
+                                                                index: number
+                                                            ) => {
+                                                                const short_definitions: any =
+                                                                    definition.short;
+                                                                return (
+                                                                    <ListGroup.Item
+                                                                        key={`${index}`}
+                                                                    >
+                                                                        <h4>
+                                                                            {
+                                                                                definition.functional_label
+                                                                            }
+                                                                        </h4>
+                                                                        {short_definitions.map(
+                                                                            (
+                                                                                description: any,
+                                                                                index: number
                                                                             ) => (
                                                                                     <ListGroup.Item
                                                                                         key={`${index}`}
