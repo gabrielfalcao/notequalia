@@ -12,6 +12,7 @@ notequalia:
     enabled: true
     keys: # https://dictionaryapi.com/account/my-keys
       thesaurus: '--set-by-makefile--'
+      dictionary: '--set-by-makefile--'
 
   mailserver:
     enabled: true

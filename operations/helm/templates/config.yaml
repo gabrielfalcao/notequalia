@@ -50,4 +50,5 @@ data:
 # Authentication
 {{- if .Values.notequalia.merriam_webster_api.enabled }}
   MERRIAM_WEBSTER_THESAURUS_API_KEY: {{ .Values.notequalia.merriam_webster_api.keys.thesaurus | quote }}
+  MERRIAM_WEBSTER_DICTIONARY_API_KEY: {{ .Values.notequalia.merriam_webster_api.keys.dictionary | quote }}
 {{- end }}

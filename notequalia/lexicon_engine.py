@@ -15,7 +15,7 @@ from PyDictionary import PyDictionary
 
 class MerriamWebsterAPIClient(object):
     def __init__(self, key: str = None):
-        self.key = key or config.MERRIAM_WEBSTER_THESAURUS_API_KEY
+        self.thesaurus_key = key or config.MERRIAM_WEBSTER_THESAURUS_API_KEY
         self.http = requests.Session()
         self.http.params = {"key": str(self.key)}
         self.thesaurus_url = (
@@ -25,9 +25,8 @@ class MerriamWebsterAPIClient(object):
     def get_thesaurus_definitions(self, term: str) -> List[dict]:
         response = self.http.get(self.thesaurus_url.format(term=term))
         if response.status_code != 200:
-            import ipdb
-
-            ipdb.set_trace()
+            logger.warning(f'failed request {response.request}: {response}')
+            return []
 
         data = response.json()
         return data

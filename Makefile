@@ -16,6 +16,8 @@ export OAUTH2_CLIENT_SECRET	:= da341d0c-eaa4-460b-af6b-dac5de6443b5
 export OAUTH2_DOMAIN		:= id.t.newstore.net
 export OAUTH2_CLIENT_AUDIENCE	:= https://api.visualcu.es/
 export SECRET_KEY		:= $(shell 2>/dev/null dd bs=128 count=1 if=/dev/urandom | base64 | head -1)
+export MERRIAM_WEBSTER_DICTIONARY_API_KEY	:= 234297ff-eb8d-49e5-94d6-66aec4c4b7e0
+export MERRIAM_WEBSTER_THESAURUS_API_KEY	:= eb37bf1c-0f2a-4399-86b8-ba444a0a9fbb
 
 DEPLOY_TIMEOUT		:= 300
 # NOTE: the sha must be the long version to match the ${{ github.sha
@@ -27,7 +29,7 @@ PROD_TAG		?= $(shell git log --pretty="format:%H" -n1 . | tail -1)
 DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= notequalia-io-base
 PROD_IMAGE		:= k8s-notequalia-io
-HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE) --set oauth2.client_id=$(OAUTH2_CLIENT_ID) --set oauth2.client_secret=$(OAUTH2_CLIENT_SECRET) --set flask.secret_key=$(SECRET_KEY)-$(PROD_TAG) --set notequalia.merriam_webster_api.keys.thesaurus="eb37bf1c-0f2a-4399-86b8-ba444a0a9fbb"
+HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE) --set oauth2.client_id=$(OAUTH2_CLIENT_ID) --set oauth2.client_secret=$(OAUTH2_CLIENT_SECRET) --set flask.secret_key=$(SECRET_KEY)-$(PROD_TAG) --set notequalia.merriam_webster_api.keys.thesaurus=$(MERRIAM_WEBSTER_THESAURUS_API_KEY) --set notequalia.merriam_webster_api.keys.dictionary=$(MERRIAM_WEBSTER_DICTIONARY_API_KEY)
 NAMESPACE		:= notequalia-k8sns
 HELM_RELEASE		:= $(NAMESPACE)-v0
 FIGLET			:= $(shell which figlet)
