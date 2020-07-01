@@ -39,16 +39,22 @@ def define_new_term(term: str) -> Tuple[Term, bool]:
     term = term.lower().strip()
     pydictionary = PyDictionaryClient().define_term(term)
     thesaurus = MerriamWebsterAPIClient().get_thesaurus_definitions(term)
+    collegiate = MerriamWebsterAPIClient().get_collegiate_definitions(term)
 
+    # content has all the human-readable data for react apps
     content = json.dumps(
-        {"pydictionary": pydictionary, "thesaurus": thesaurus}, default=str
+        {"pydictionary": pydictionary,
+         "thesaurus": thesaurus.to_dict(only_visible=True),
+         "collegiate": collegiate.to_dict(only_visible=True),
+        }, default=str
     )
     model = Term.find_one_by(term=term)
     created = False
 
     params = dict(
         content=content,
-        merriamwebster_thesaurus_json=json.dumps(thesaurus, default=str),
+        merriamwebster_thesaurus_json=json.dumps(thesaurus.to_dict(), default=str),
+        merriamwebster_collegiate_json=json.dumps(collegiate.to_dict(), default=str),
         pydictionary_json=json.dumps(pydictionary, default=str),
     )
     if not model:
@@ -118,7 +124,7 @@ class Download(Resource):
 
 
 def lexicon_backup_response():
-    terms = sorted([t.to_dict() for t in Term.all()], key=lambda d: d.get("term"))
+    terms = sorted([t.to_dict() for t in reprocess()], key=lambda d: d.get("term"))
     data = {"terms": terms, "count": len(terms)}
     now = datetime.utcnow().strftime("%Y-%m-%d")
     headers = {
@@ -130,3 +136,9 @@ def lexicon_backup_response():
 @application.route("/backup.json")
 def backup():
     return lexicon_backup_response()
+
+
+def reprocess():
+    for term in Term.all():
+        model, created = define_new_term(term.term)
+        yield model

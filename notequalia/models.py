@@ -5,7 +5,7 @@ from typing import Optional, List, Dict
 
 # from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
-from notequalia.lexicon.merriam_webster.models import ThesaurusDefinition
+from notequalia.lexicon.merriam_webster.models import Definition
 
 # from notequalia.utils import parse_jwt_token
 
@@ -145,6 +145,7 @@ class Term(Model):
         db.Column("content", db.UnicodeText, nullable=True),
         db.Column("pydictionary_json", db.UnicodeText, nullable=True),
         db.Column("merriamwebster_thesaurus_json", db.UnicodeText, nullable=True),
+        db.Column("merriamwebster_collegiate_json", db.UnicodeText, nullable=True),
         db.Column(
             "parent_id",
             db.Integer,
@@ -160,6 +161,7 @@ class Term(Model):
         data["pydictionary"] = self.pydictionary
         data["content"] = self.content
         data["thesaurus"] = self.thesaurus
+        data["collegiate"] = self.collegiate
         if self.parent:
             data["parent"] = self.parent.to_dict()
 
@@ -198,5 +200,12 @@ class Term(Model):
     def thesaurus(self) -> List[dict]:
         return self.get_parsed_json_property("merriamwebster_thesaurus_json")
 
-    def get_thesaurus_definitions(self) -> ThesaurusDefinition.List:
-        return ThesaurusDefinition.List(self.thesaurus)
+    def get_thesaurus_definitions(self) -> Definition.List:
+        return Definition.List(self.thesaurus)
+
+    @property
+    def collegiate(self) -> List[dict]:
+        return self.get_parsed_json_property("merriamwebster_collegiate_json")
+
+    def get_collegiate_definitions(self) -> Definition.List:
+        return Definition.List(self.collegiate)

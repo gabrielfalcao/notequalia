@@ -8,28 +8,20 @@ from typing import Dict, Union, List
 from collections import defaultdict
 from notequalia import config
 from PyDictionary import PyDictionary
-
-# https://dictionaryapi.com/api/v3/references/thesaurus/json/eluded?key=eb37bf1c-0f2a-4399-86b8-ba444a0a9fbb
-# might be too technical - https://dictionaryapi.com/api/v3/references/collegiate/json/eluded?key=234297ff-eb8d-49e5-94d6-66aec4c4b7e0
+from notequalia.lexicon.merriam_webster.models import Definition
+from notequalia.lexicon.merriam_webster.clients import CollegiateClient, ThesaurusClient
 
 
 class MerriamWebsterAPIClient(object):
-    def __init__(self, key: str = None):
-        self.thesaurus_key = key or config.MERRIAM_WEBSTER_THESAURUS_API_KEY
-        self.http = requests.Session()
-        self.http.params = {"key": str(self.key)}
-        self.thesaurus_url = (
-            "https://dictionaryapi.com/api/v3/references/thesaurus/json/{term}"
-        )
+    def __init__(self):
+        self.thesaurus = ThesaurusClient()
+        self.collegiate = CollegiateClient()
 
     def get_thesaurus_definitions(self, term: str) -> List[dict]:
-        response = self.http.get(self.thesaurus_url.format(term=term))
-        if response.status_code != 200:
-            logger.warning(f'failed request {response.request}: {response}')
-            return []
+        return self.thesaurus.get_definitions(term)
 
-        data = response.json()
-        return data
+    def get_collegiate_definitions(self, term: str) -> List[dict]:
+        return self.collegiate.get_definitions(term)
 
 
 class PyDictionaryClient(object):
