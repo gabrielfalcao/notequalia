@@ -57,7 +57,7 @@ class WordDefinition extends Component<WordDefinitionProps, TermsReducerState> {
             return <ErrorView error={"Term not found: ${termName}"} />;
         }
 
-        const meta: any = JSON.parse(term.content);
+        const meta: any = term.content;
         if (!meta) {
             return (
                 <ErrorView error={"The term ${termName} has no definitions"} />

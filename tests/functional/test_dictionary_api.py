@@ -98,5 +98,5 @@ def test_delete_definitions(context):
     # # And I perform a DELETE one definition via body
     # response = context.http.delete("/api/v1/dict/definitions", data=json.dumps({"term": "substrate"}))
 
-    # Then the response should be 204
-    response.status_code.should.equal(204)
+    # Then the response should be 200
+    response.status_code.should.equal(200)
