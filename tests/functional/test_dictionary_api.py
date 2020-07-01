@@ -23,14 +23,10 @@ def test_create_definition(context):
     response.status_code.should.equal(201)
 
     # And it contains a definition
-    json.loads(response.data).should.equal(
-        {
-            "content": '{"pydictionary": {"googlemeaning": null, "meaning": {"Adverb": ["without knowledge or intention"]}, "synonym": null, "antonym": null}}',
-            "id": 1,
-            "parent_id": None,
-            "term": "inadvertently",
-        }
-    )
+    data = json.loads(response.data)
+    data.should.have.key("content").being.a(dict)
+    data.should.have.key("thesaurus").being.a(list)
+    data.should.have.key("pydictionary").being.a(dict)
 
 
 @vcr.use_cassette("ap1/v1/dict/definitions/POST:200.yaml")
@@ -80,7 +76,7 @@ def test_list_definitions(context):
 
 @vcr.use_cassette("ap1/v1/dict/definitions/DELETE:200.yaml")
 @web_test
-def test_list_definitions(context):
+def test_delete_definitions(context):
     ("DELETE /api/v1/dict/definitions should return 200 with a list of definitions")
 
     # Given that there are 5 definitions in the database
@@ -96,9 +92,5 @@ def test_list_definitions(context):
     # # And I perform a DELETE one definition via body
     # response = context.http.delete("/api/v1/dict/definitions", data=json.dumps({"term": "substrate"}))
 
-    # Then the response should be 200
-    response.status_code.should.equal(200)
-
-    # And it contains the 4 definitions
-    result = json.loads(response.data)
-    result.should.have.length_of(4)
+    # Then the response should be 204
+    response.status_code.should.equal(204)

@@ -48,14 +48,6 @@ data:
 {{- end }}
 
 # Authentication
-{{- if .Values.oauth2.enabled }}
-# see config.py for more information on these OAUTH2_* environment variables
-  OAUTH2_DOMAIN: {{ .Values.oauth2.domain |quote }}
-  OAUTH2_CALLBACK_URL: {{ .Values.oauth2.callback_url |quote }}
-  OAUTH2_CLIENT_ID: {{ .Values.oauth2.client_id |quote }}
-  OAUTH2_BASE_URL: {{ .Values.oauth2.base_url |quote }}
-  OAUTH2_ACCESS_TOKEN_URL: {{ .Values.oauth2.access_token_url |quote }}
-  OAUTH2_AUTHORIZE_URL: {{ .Values.oauth2.authorize_url |quote }}
-  OAUTH2_CLIENT_SCOPE: {{ .Values.oauth2.client_scope |quote }}
-  OAUTH2_CLIENT_AUDIENCE: {{ .Values.oauth2.audience | quote }}
+{{- if .Values.notequalia.merriam_webster_api.enabled }}
+  MERRIAM_WEBSTER_THESAURUS_API_KEY: {{ .Values.notequalia.merriam_webster_api.keys.thesaurus | quote }}
 {{- end }}

@@ -7,7 +7,11 @@ logger = logging.getLogger(__name__)
 
 
 def json_response(data, status=200, headers={}):
-    serialized = json.dumps(data, indent=2, default=str)
+    if data:
+        serialized = json.dumps(data, indent=2, default=str)
+    else:
+        serialized = ""  # for status 204 (no content)
+
     headers["Content-Type"] = "application/json"
 
     for key in headers.keys():

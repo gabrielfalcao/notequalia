@@ -1,7 +1,7 @@
 import json
 import logging
 
-# from typing import Optional
+from typing import Optional
 # from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
 
@@ -151,10 +151,22 @@ class Term(Model):
         ),
     )
 
+    def to_dict(self):
+        data = {}
+        data['id'] = self.id
+        data['term'] = self.term
+        data['pydictionary'] = self.pydictionary
+        data['content'] = self.content
+        data['thesaurus'] = self.thesaurus
+        if self.parent:
+            data['parent'] = self.parent.to_dict()
+
+        return data
+
     @property
     def parent(self):
         self._parent = getattr(self, "_parent", None)
-        if not self.parent:
+        if not self._parent:
             self._parent = self.get_parent()
 
         return self._parent
@@ -165,10 +177,21 @@ class Term(Model):
 
         return Note.find_one_by(id=self.parent_id)
 
+    def get_parsed_json_property(self, property_name: str) -> Optional[dict]:
+        try:
+            return json.loads(self.get(property_name, "null"))
+        except Exception:
+            logger.exception(f"{self}.{property_name} property")
+            return None
+
     @property
     def content(self):
-        try:
-            return json.loads(self.get("content", "null"), default=str)
-        except Exception:
-            logger.exception(f"{self}.content property")
-            return self.get("content")
+        return self.get_parsed_json_property("content")
+
+    @property
+    def pydictionary(self):
+        return self.get_parsed_json_property("pydictionary_json")
+
+    @property
+    def thesaurus(self):
+        return self.get_parsed_json_property("merriamwebster_thesaurus_json")

@@ -13,7 +13,7 @@ from flask_restplus import reqparse
 from flask_restplus import inputs
 
 from notequalia.models import Term
-from notequalia.lexicon_engine import LexiconEngine
+from notequalia.lexicon_engine import PyDictionaryClient, MerriamWebsterAPIClient
 from notequalia.utils import json_response
 from .base import api, application
 
@@ -36,25 +36,39 @@ term_ns = api.namespace(
 
 
 def define_new_term(term: str) -> Tuple[Term, bool]:
-    result = LexiconEngine().define_term(term)
-    content = json.dumps(result)
+    term = term.lower().strip()
+    pydictionary = PyDictionaryClient().define_term(term)
+    thesaurus = MerriamWebsterAPIClient().get_thesaurus_definitions(term)
+
+    content = json.dumps({
+        'pydictionary': pydictionary,
+        'thesaurus': thesaurus,
+    }, default=str)
     model = Term.find_one_by(term=term)
     created = False
+
+    params = dict(
+        content=content,
+        merriamwebster_thesaurus_json=json.dumps(thesaurus, default=str),
+        pydictionary_json=json.dumps(pydictionary, default=str),
+    )
     if not model:
         created = True
-        model =  Term.create(term=term, content=content)
+        model =  Term.create(term=term, **params)
     else:
-        model.set(content=content).save()
+        model.set(**params).save()
 
     return model, created
 
 
 def validate_term(term: str) -> str:
-    found = re.search(r'^\s*[\w\s]+\s*$', term)
+    '''ensures that we only process words without special characters other
+    than "dash"'''
+    found = re.search(r'^\s*[\w\s-]+\s*$', term)
     if not found:
         return ""
 
-    return found.group(0).strip()
+    return found.group(0).strip().lower()
 
 @term_ns.route("/definitions")
 @term_ns.expect(parser)
@@ -85,7 +99,7 @@ class TermEndpoint(Resource):
             return json_response({"error": f"term {term!r} does not exist"}, 404)
 
         found.delete()
-        return json_response(found.to_dict(), 200)
+        return json_response(None, 204)
 
     def get(self, term):
         found = Term.find_one_by(term=term)

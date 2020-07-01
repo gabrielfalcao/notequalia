@@ -8,6 +8,11 @@ notequalia_url: "https://api.visualcu.es/"
 # namespace: notequalia-k8sns
 
 notequalia:
+  merriam_webster_api:
+    enabled: true
+    keys: # https://dictionaryapi.com/account/my-keys
+      thesaurus: '--set-by-makefile--'
+
   mailserver:
     enabled: true
     port: 25
