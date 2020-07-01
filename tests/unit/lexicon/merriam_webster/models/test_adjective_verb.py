@@ -26,9 +26,41 @@ def test_adjective_verb_elated_collegiate_definition(
     verb.functional_label.should.equal("verb")
 
     adjective.to_dict().should.equal(
-        {'functional_label': 'adjective', 'headword': 'elat*ed', 'offensive': False, 'pronounciations': [{'default': 'i-ˈlā-təd', 'label_after': '', 'label_before': '', 'punctuation': ''}], 'stems': ['elated', 'elatedly', 'elatedness', 'elatednesses'], 'variants': []}
+        {
+            "functional_label": "adjective",
+            "headword": "elat*ed",
+            "offensive": False,
+            "pronounciations": [
+                {
+                    "default": "i-ˈlā-təd",
+                    "label_after": "",
+                    "label_before": "",
+                    "punctuation": "",
+                    "audio_url": "https://media.merriam-webster.com/audio/prons/en/US/wav/e/elate01m.wav",
+                }
+            ],
+            "stems": ["elated", "elatedly", "elatedness", "elatednesses"],
+            "variants": [],
+        }
     )
-    verb.to_dict().should.equal({'functional_label': 'verb', 'headword': 'elate', 'homograph': 1, 'offensive': False, 'pronounciations': [{'default': 'i-ˈlāt', 'label_after': '', 'label_before': '', 'punctuation': ''}], 'stems': ['elate', 'elated', 'elates', 'elating'], 'variants': []}
+    verb.to_dict().should.equal(
+        {
+            "functional_label": "verb",
+            "headword": "elate",
+            "homograph": 1,
+            "offensive": False,
+            "pronounciations": [
+                {
+                    "default": "i-ˈlāt",
+                    "label_after": "",
+                    "label_before": "",
+                    "punctuation": "",
+                    "audio_url": "https://media.merriam-webster.com/audio/prons/en/US/wav/e/elate001.wav",
+                }
+            ],
+            "stems": ["elate", "elated", "elates", "elating"],
+            "variants": [],
+        }
     )
 
 

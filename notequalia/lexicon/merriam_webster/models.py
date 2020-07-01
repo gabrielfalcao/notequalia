@@ -29,23 +29,20 @@ class EntryMetadata(Model):
     stems: List[str]
     offensive: bool
 
-    def to_dict(self):
-        return self.serialize(only_visible=True)
 
 
 class Sound(Model):
     """represents `Sound <https://dictionaryapi.com/products/json#sec-2.prs>`_
     """
 
-    subdirectory: str
     filename: str
+    subdirectory: str
 
-    def to_dict(self):
-        return self.serialize(only_visible=True)
+
 
     @property
     def filename(self) -> str:
-        return self.get('audio') or ""
+        return self.get("audio") or ""
 
     @property
     def subdirectory(self) -> str:
@@ -53,9 +50,10 @@ class Sound(Model):
             return "bix"
         if self.filename.startswith("gg"):
             return "gg"
-        if re.search(r'^\w', self.filename):
+        if re.search(r"^\w", self.filename):
             return self.filename[0]
-        return 'number'
+        return "number"
+
 
 class Pronounciation(Model):
     """represents `Pronounciations <https://dictionaryapi.com/products/json#sec-2.prs>`_
@@ -65,7 +63,7 @@ class Pronounciation(Model):
     label_before: str
     label_after: str
     punctuation: str
-    audio_url: Optional[str]
+    audio_url: str
     sound: Getter[Sound]
 
     @property
@@ -94,22 +92,17 @@ class Pronounciation(Model):
         if not self.sound.filename:
             return
 
-        params = {
-            'language_code': 'en',
-            'country_code': 'US',
-            'format': 'wav',
-        }
+        params = {"language_code": "en", "country_code": "US", "format": "wav"}
         params.update(self.sound.to_dict())
-        return "https://media.merriam-webster.com/audio/prons/{language_code}/{country_code}/{format}/{subdirectory}/{filename}.{format}".format(
+        url = "https://media.merriam-webster.com/audio/prons/{language_code}/{country_code}/{format}/{subdirectory}/{filename}.{format}".format(
             **params
         )
+        return url
 
     def to_html(self):
         # check recommendations for format in https://dictionaryapi.com/products/json#sec-2.prs
         return f"<em>{this.label_after}</em>"
 
-    def to_dict(self):
-        return self.serialize(only_visible=True)
 
 
 class HeadwordInformation(Model):
@@ -127,8 +120,6 @@ class HeadwordInformation(Model):
     def pronounciations(self) -> Pronounciation.List:
         return Pronounciation.List(self.get("prs") or [])
 
-    def to_dict(self):
-        return self.serialize(only_visible=True)
 
 
 class Variant(Model):
@@ -152,8 +143,6 @@ class Variant(Model):
     def pronounciations(self) -> Pronounciation.List:
         return Pronounciation.List(self.get("prs") or [])
 
-    def to_dict(self):
-        return self.serialize(only_visible=True)
 
 
 class Definition(Model):
@@ -206,7 +195,7 @@ class Definition(Model):
     def stems(self) -> List[str]:
         return self.meta.stems
 
-    def to_dict(self):
+    def to_dict(self, **kw):
         return self.serialize(only_visible=True)
 
 
