@@ -123,12 +123,19 @@ class Download(Resource):
         return lexicon_backup_response()
 
 
-def lexicon_backup_response():
-    terms = sorted([t.to_dict() for t in reprocess()], key=lambda d: d.get("term"))
+def lexicon_backup_response(should_reprocess=False):
+    if should_reprocess:
+        items = reprocess()
+        name = 'backup-reprocessed'
+    else:
+        name = 'backup'
+        items = Term.all()
+
+    terms = sorted([t.to_dict() for t in items], key=lambda d: d.get("term"))
     data = {"terms": terms, "count": len(terms)}
     now = datetime.utcnow().strftime("%Y-%m-%d")
     headers = {
-        "Content-Disposition": f'attachment; filename="lexicon-backup-{now}.json"'
+        "Content-Disposition": f'attachment; filename="lexicon-{name}-{now}.json"'
     }
     return json_response(data, 200, headers=headers)
 
@@ -136,6 +143,10 @@ def lexicon_backup_response():
 @application.route("/backup.json")
 def backup():
     return lexicon_backup_response()
+
+@application.route("/reprocess", methods=["POST"])
+def backup_reprocess():
+    return lexicon_backup_response(should_reprocess=True)
 
 
 def reprocess():
