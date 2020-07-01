@@ -1,0 +1,185 @@
+"""data models for the `Merriam-Webster API <https://dictionaryapi.com/products/json>`_
+"""
+from typing import List, Optional, Dict, Tuple, Any
+from uiclasses import Model, IterableCollection, ModelList, ModelSet
+from uiclasses.collections import COLLECTION_TYPES
+
+Serializable = (Model,) + tuple(COLLECTION_TYPES.values())
+
+
+def is_serializable(value) -> bool:
+    if not isinstance(value, type):
+        return False
+    if not issubclass(value, Serializable):
+        return False
+
+    return isinstance(value, Serializable)
+
+
+class EntryMetadata(Model):
+    """represents `Entry Metadata <https://dictionaryapi.com/products/json#sec-2.meta>`_
+    """
+
+    id: str
+    uuid: str
+    section: str
+    sort: str
+    stems: List[str]
+    offensive: bool
+
+    def to_dict(self):
+        return self.serialize(only_visible=True)
+
+
+class Pronounciation(Model):
+    """represents `Pronounciations <https://dictionaryapi.com/products/json#sec-2.prs>`_
+    """
+
+    default: str
+    label_before: str
+    label_after: str
+    punctuation: str
+    sound: Dict[str, str]
+
+    @property
+    def default(self) -> str:
+        return self.get("mw") or ""
+
+    @property
+    def label_before(self) -> str:
+        return self.get("l") or ""
+
+    @property
+    def label_after(self) -> str:
+        return self.get("l2") or ""
+
+    @property
+    def punctuation(self) -> str:
+        return self.get("pun") or ""
+
+    def audio_url(self) -> str:
+        return "https://media.merriam-webster.com/audio/prons/{language_code}/{country_code}/{format}/{subdirectory}/{base_filename}.{format}".format(
+            **self.sound
+        )
+
+    def to_html(self):
+        # check recommendations for format in https://dictionaryapi.com/products/json#sec-2.prs
+        return f"<em>{this.label_after}</em>"
+
+    def to_dict(self):
+        return self.serialize(only_visible=True)
+
+
+class HeadwordInformation(Model):
+    """represents `Homographs <https://dictionaryapi.com/products/json#sec-2.hwi>`_
+    """
+
+    headword: str
+    pronounciations: Pronounciation.List
+
+    @property
+    def headword(self) -> str:
+        return self.get("hw")
+
+    @property
+    def pronounciations(self) -> Pronounciation.List:
+        return Pronounciation.List(self.get("prs") or [])
+
+    def to_dict(self):
+        return self.serialize(only_visible=True)
+
+
+class Variant(Model):
+    """represents `Variants <https://dictionaryapi.com/products/json#sec-2.vrs>`_
+    """
+
+    name: str
+    pronounciations: Pronounciation.List
+    sense_specific_inflection_plural_label: str
+
+    @property
+    def name(self) -> str:
+        return self.get("va")
+
+    @property
+    def sense_specific_inflection_plural_label(self) -> str:
+        # https://dictionaryapi.com/products/json#sec-2.spl
+        return self.get("spl")
+
+    @property
+    def pronounciations(self) -> Pronounciation.List:
+        return Pronounciation.List(self.get("prs") or [])
+
+    def to_dict(self):
+        return self.serialize(only_visible=True)
+
+
+class Definition(Model):
+    """represents `Definition <https://dictionaryapi.com/products/json#sec-2>`_
+    """
+
+    functional_label: str
+    offensive: bool
+    stems: List[str]
+    homograph: int
+    headword: str
+    variants: Variant.List
+
+    @property
+    def functional_label(self) -> str:
+        return self.get("fl")
+
+    @property
+    def meta(self) -> EntryMetadata:
+        params = self.get("meta") or {}
+        return EntryMetadata(**params)
+
+    @property
+    def hwi(self) -> HeadwordInformation:
+        params = self.get("hwi") or {}
+        return HeadwordInformation(**params)
+
+    @property
+    def variants(self) -> Variant.List:
+        return self.get("vrs") or []
+
+    @property
+    def homograph(self) -> int:
+        return self.get("hom")
+
+    @property
+    def headword(self) -> str:
+        return self.hwi.headword
+
+    @property
+    def pronounciations(self) -> Pronounciation.List:
+        return self.hwi.pronounciations
+
+    @property
+    def offensive(self) -> bool:
+        return self.meta.offensive
+
+    @property
+    def stems(self) -> List[str]:
+        return self.meta.stems
+
+    def to_dict(self):
+        return self.serialize(only_visible=True)
+
+
+class ThesaurusDefinition(Definition):
+    """responsible for modeling a `Definition within the Thesaurus Dictionary <https://dictionaryapi.com/products/json#sec-3>`_
+    of the `Merriam-Webster API <https://dictionaryapi.com/products/json>`_
+    """
+
+
+def to_human_dict(model) -> Dict[str, Any]:
+    data = {}
+    for col in model.get_table_columns():
+        value = getattr(model, col, None)
+        if is_serializable(value):
+            data[col] = value.to_dict()
+        else:
+            data[col] = value
+
+    return data

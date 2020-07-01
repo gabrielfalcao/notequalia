@@ -1,9 +1,11 @@
 import json
 import logging
 
-from typing import Optional
+from typing import Optional, List, Dict
+
 # from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
+from notequalia.lexicon.merriam_webster.models import ThesaurusDefinition
 
 # from notequalia.utils import parse_jwt_token
 
@@ -153,13 +155,13 @@ class Term(Model):
 
     def to_dict(self):
         data = {}
-        data['id'] = self.id
-        data['term'] = self.term
-        data['pydictionary'] = self.pydictionary
-        data['content'] = self.content
-        data['thesaurus'] = self.thesaurus
+        data["id"] = self.id
+        data["term"] = self.term
+        data["pydictionary"] = self.pydictionary
+        data["content"] = self.content
+        data["thesaurus"] = self.thesaurus
         if self.parent:
-            data['parent'] = self.parent.to_dict()
+            data["parent"] = self.parent.to_dict()
 
         return data
 
@@ -185,13 +187,16 @@ class Term(Model):
             return None
 
     @property
-    def content(self):
+    def content(self) -> List[dict]:
         return self.get_parsed_json_property("content")
 
     @property
-    def pydictionary(self):
+    def pydictionary(self) -> List[dict]:
         return self.get_parsed_json_property("pydictionary_json")
 
     @property
-    def thesaurus(self):
+    def thesaurus(self) -> List[dict]:
         return self.get_parsed_json_property("merriamwebster_thesaurus_json")
+
+    def get_thesaurus_definitions(self) -> ThesaurusDefinition.List:
+        return ThesaurusDefinition.List(self.thesaurus)

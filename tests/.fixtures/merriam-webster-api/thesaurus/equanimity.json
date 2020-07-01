@@ -1,0 +1,277 @@
+[
+  {
+    "def": [
+      {
+        "sseq": [
+          [
+            [
+              "sense",
+              {
+                "ant_list": [
+                  [
+                    {
+                      "wd": "agitation"
+                    },
+                    {
+                      "wd": "discomposure"
+                    },
+                    {
+                      "wd": "perturbation"
+                    }
+                  ]
+                ],
+                "dt": [
+                  [
+                    "text",
+                    "evenness of emotions or temper "
+                  ],
+                  [
+                    "vis",
+                    [
+                      {
+                        "t": "an Olympic diver who always displays remarkable {it}equanimity{/it} on the platform"
+                      }
+                    ]
+                  ]
+                ],
+                "near_list": [
+                  [
+                    {
+                      "wd": "alarm",
+                      "wvrs": [
+                        {
+                          "wva": "alarum",
+                          "wvl": "also"
+                        }
+                      ]
+                    },
+                    {
+                      "wd": "anxiety"
+                    },
+                    {
+                      "wd": "anxiousness"
+                    },
+                    {
+                      "wd": "apprehension"
+                    },
+                    {
+                      "wd": "apprehensiveness"
+                    },
+                    {
+                      "wd": "care"
+                    },
+                    {
+                      "wd": "concern"
+                    },
+                    {
+                      "wd": "disquiet"
+                    },
+                    {
+                      "wd": "solicitude"
+                    },
+                    {
+                      "wd": "uneasiness"
+                    },
+                    {
+                      "wd": "worry"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "excitability"
+                    },
+                    {
+                      "wd": "excitableness"
+                    },
+                    {
+                      "wd": "nervousness"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "disturbance"
+                    }
+                  ]
+                ],
+                "rel_list": [
+                  [
+                    {
+                      "wd": "assurance"
+                    },
+                    {
+                      "wd": "confidence"
+                    },
+                    {
+                      "wd": "poise"
+                    },
+                    {
+                      "wd": "self-assurance"
+                    },
+                    {
+                      "wd": "self-assuredness"
+                    },
+                    {
+                      "wd": "self-confidence"
+                    },
+                    {
+                      "wd": "self-trust"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "easygoingness"
+                    },
+                    {
+                      "wd": "laid-backness"
+                    }
+                  ],
+                  [
+                    {
+                      "wd": "apathy"
+                    },
+                    {
+                      "wd": "detachment"
+                    },
+                    {
+                      "wd": "impassivity"
+                    },
+                    {
+                      "wd": "indifference"
+                    },
+                    {
+                      "wd": "insensibility"
+                    },
+                    {
+                      "wd": "numbness"
+                    },
+                    {
+                      "wd": "phlegm"
+                    },
+                    {
+                      "wd": "unconcern"
+                    }
+                  ]
+                ],
+                "syn_list": [
+                  [
+                    {
+                      "wd": "aplomb"
+                    },
+                    {
+                      "wd": "calmness"
+                    },
+                    {
+                      "wd": "collectedness"
+                    },
+                    {
+                      "wd": "composedness"
+                    },
+                    {
+                      "wd": "composure"
+                    },
+                    {
+                      "wd": "cool"
+                    },
+                    {
+                      "wd": "coolness"
+                    },
+                    {
+                      "wd": "countenance"
+                    },
+                    {
+                      "wd": "equilibrium"
+                    },
+                    {
+                      "wd": "imperturbability"
+                    },
+                    {
+                      "wd": "placidity"
+                    },
+                    {
+                      "wd": "repose"
+                    },
+                    {
+                      "wd": "sangfroid"
+                    },
+                    {
+                      "wd": "self-composedness"
+                    },
+                    {
+                      "wd": "self-possession"
+                    },
+                    {
+                      "wd": "serenity"
+                    },
+                    {
+                      "wd": "tranquillity",
+                      "wvrs": [
+                        {
+                          "wva": "tranquility",
+                          "wvl": "or"
+                        }
+                      ]
+                    },
+                    {
+                      "wd": "tranquilness"
+                    }
+                  ]
+                ]
+              }
+            ]
+          ]
+        ]
+      }
+    ],
+    "fl": "noun",
+    "hwi": {
+      "hw": "equanimity"
+    },
+    "meta": {
+      "ants": [
+        [
+          "agitation",
+          "discomposure",
+          "perturbation"
+        ]
+      ],
+      "id": "equanimity",
+      "offensive": false,
+      "section": "alpha",
+      "src": "coll_thes",
+      "stems": [
+        "equanimity",
+        "equanimities"
+      ],
+      "syns": [
+        [
+          "aplomb",
+          "calmness",
+          "collectedness",
+          "composedness",
+          "composure",
+          "cool",
+          "coolness",
+          "countenance",
+          "equilibrium",
+          "imperturbability",
+          "placidity",
+          "repose",
+          "sangfroid",
+          "self-composedness",
+          "self-possession",
+          "serenity",
+          "tranquillity",
+          "tranquilness"
+        ]
+      ],
+      "target": {
+        "tsrc": "collegiate",
+        "tuuid": "bc25327c-f66f-4f4b-9814-a2b904910c45"
+      },
+      "uuid": "fd9cc2d4-4edb-424b-a34c-572334c8a563"
+    },
+    "shortdef": [
+      "evenness of emotions or temper"
+    ]
+  }
+]

@@ -40,10 +40,9 @@ def define_new_term(term: str) -> Tuple[Term, bool]:
     pydictionary = PyDictionaryClient().define_term(term)
     thesaurus = MerriamWebsterAPIClient().get_thesaurus_definitions(term)
 
-    content = json.dumps({
-        'pydictionary': pydictionary,
-        'thesaurus': thesaurus,
-    }, default=str)
+    content = json.dumps(
+        {"pydictionary": pydictionary, "thesaurus": thesaurus}, default=str
+    )
     model = Term.find_one_by(term=term)
     created = False
 
@@ -54,7 +53,7 @@ def define_new_term(term: str) -> Tuple[Term, bool]:
     )
     if not model:
         created = True
-        model =  Term.create(term=term, **params)
+        model = Term.create(term=term, **params)
     else:
         model.set(**params).save()
 
@@ -64,11 +63,12 @@ def define_new_term(term: str) -> Tuple[Term, bool]:
 def validate_term(term: str) -> str:
     '''ensures that we only process words without special characters other
     than "dash"'''
-    found = re.search(r'^\s*[\w\s-]+\s*$', term)
+    found = re.search(r"^\s*[\w\s-]+\s*$", term)
     if not found:
         return ""
 
     return found.group(0).strip().lower()
+
 
 @term_ns.route("/definitions")
 @term_ns.expect(parser)
@@ -80,13 +80,15 @@ class DefinitionsEndpoint(Resource):
             return json_response({"error": "term is required"}, 400)
 
         if len(term) > 50:
-            return json_response({"error": f"term cannot have more than 50 characters"}, 400)
+            return json_response(
+                {"error": f"term cannot have more than 50 characters"}, 400
+            )
 
         model, created = define_new_term(term)
         return json_response(model.to_dict(), created and 201 or 200)
 
     def get(self):
-        terms = sorted([t.to_dict() for t in Term.all()], key=lambda d: d.get('term'))
+        terms = sorted([t.to_dict() for t in Term.all()], key=lambda d: d.get("term"))
         return json_response(terms, 200)
 
 
@@ -116,14 +118,11 @@ class Download(Resource):
 
 
 def lexicon_backup_response():
-    terms = sorted([t.to_dict() for t in Term.all()], key=lambda d: d.get('term'))
-    data = {
-        "terms": terms,
-        "count": len(terms),
-    }
-    now = datetime.utcnow().strftime('%Y-%m-%d')
+    terms = sorted([t.to_dict() for t in Term.all()], key=lambda d: d.get("term"))
+    data = {"terms": terms, "count": len(terms)}
+    now = datetime.utcnow().strftime("%Y-%m-%d")
     headers = {
-        "Content-Disposition": f'attachment; filename="lexicon-backup-{now}.json"',
+        "Content-Disposition": f'attachment; filename="lexicon-backup-{now}.json"'
     }
     return json_response(data, 200, headers=headers)
 

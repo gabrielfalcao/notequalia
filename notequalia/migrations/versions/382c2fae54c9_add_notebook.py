@@ -10,8 +10,8 @@ import sqlalchemy as db
 
 
 # revision identifiers, used by Alembic.
-revision = '382c2fae54c9'
-down_revision = 'dcbcf1ea9c10'
+revision = "382c2fae54c9"
+down_revision = "dcbcf1ea9c10"
 branch_labels = None
 depends_on = None
 
@@ -22,7 +22,8 @@ def upgrade():
         db.Column("id", db.Integer, primary_key=True),
         db.Column("name", db.Unicode(255), nullable=True, index=True),
     )
-    op.add_column('note',
+    op.add_column(
+        "note",
         db.Column(
             "notebook_id",
             db.Integer,
@@ -31,6 +32,7 @@ def upgrade():
         ),
     )
 
+
 def downgrade():
-    op.drop_column('note', 'notebook_id')
+    op.drop_column("note", "notebook_id")
     op.drop_table("notebook")

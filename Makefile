@@ -71,6 +71,9 @@ functional:| $(VENV)/bin/nosetests  # runs functional tests
 tdd-functional:| $(VENV)/bin/nosetests  # runs functional tests
 	$(VENV)/bin/nosetests --with-watch tests/functional
 
+tdd-unit:| $(VENV)/bin/nosetests  # runs unit tests
+	$(VENV)/bin/nosetests --with-watch tests/unit
+
 # runs the server, exposing the routes to http://localhost:5000
 run: purge-sessions | $(VENV)/bin/python
 	$(VENV)/bin/notequalia-io web --port=5000
