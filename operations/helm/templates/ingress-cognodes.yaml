@@ -12,6 +12,9 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
     nginx.ingress.kubernetes.io/session-cookie-expires: "600"
     nginx.ingress.kubernetes.io/session-cookie-max-age: "600"
+    #nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "1200"
     # kubernetes.io/tls-acme: 'true'
     # https://docs.giantswarm.io/guides/advanced-ingress-configuration/#custom-max-body-size
 spec:
