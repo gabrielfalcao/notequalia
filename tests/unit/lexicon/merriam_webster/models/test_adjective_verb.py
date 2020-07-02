@@ -26,10 +26,10 @@ def test_adjective_verb_elated_collegiate_definition(
     verb.functional_label.should.equal("verb")
 
     adjective.to_dict().should.equal(
-        {'functional_label': 'adjective', 'headword': 'elat*ed', 'offensive': False, 'pronounciations': [{'audio_url': 'https://media.merriam-webster.com/audio/prons/en/US/wav/e/elate01m.wav', 'default': 'i-ˈlā-təd'}], 'short': ['marked by high spirits : exultant'], 'stems': ['elated', 'elatedly', 'elatedness', 'elatednesses']}
+        {'functional_label': 'adjective', 'headword': 'elat*ed', 'offensive': False, 'pronounciations': [{'audio_url': 'https://media.merriam-webster.com/audio/prons/en/US/wav/e/elate01m.mp3', 'default': 'i-ˈlā-təd'}], 'short': ['marked by high spirits : exultant'], 'stems': ['elated', 'elatedly', 'elatedness', 'elatednesses']}
     )
     verb.to_dict().should.equal(
-        {'functional_label': 'verb', 'headword': 'elate', 'homograph': 1, 'offensive': False, 'pronounciations': [{'audio_url': 'https://media.merriam-webster.com/audio/prons/en/US/wav/e/elate001.wav', 'default': 'i-ˈlāt'}], 'short': ['to fill with joy or pride'], 'stems': ['elate', 'elated', 'elates', 'elating']}
+        {'functional_label': 'verb', 'headword': 'elate', 'homograph': 1, 'offensive': False, 'pronounciations': [{'audio_url': 'https://media.merriam-webster.com/audio/prons/en/US/wav/e/elate001.mp3', 'default': 'i-ˈlāt'}], 'short': ['to fill with joy or pride'], 'stems': ['elate', 'elated', 'elates', 'elating']}
     )
 
 
@@ -306,7 +306,7 @@ def test_noun_verb_tassel_collegiate_definition(fixture: Union[dict, list]):
             "offensive": False,
             "pronounciations": [
                 {
-                    "audio_url": "https://media.merriam-webster.com/audio/prons/en/US/wav/t/tassel01.wav",
+                    "audio_url": "https://media.merriam-webster.com/audio/prons/en/US/wav/t/tassel01.mp3",
                     "default": "ˈta-səl",
                 },
                 {"default": "ˈtä-", "label_before": "usually of corn"},
