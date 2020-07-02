@@ -92,7 +92,7 @@ class Pronounciation(Model):
         if not self.sound.filename:
             return
 
-        params = {"language_code": "en", "country_code": "US", "format": "wav"}
+        params = {"language_code": "en", "country_code": "US", "format": "mp3"}
         params.update(self.sound.to_dict())
         url = "https://media.merriam-webster.com/audio/prons/{language_code}/{country_code}/{format}/{subdirectory}/{filename}.{format}".format(
             **params
