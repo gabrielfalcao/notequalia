@@ -9,6 +9,7 @@ import { RootStackParamList } from "../domain/navigation";
 
 const MainMenuPropTypes = {
     error: PropTypes.string,
+    purgeData: PropTypes.func,
     addTerms: PropTypes.func
 };
 // https://flatuicolors.com/palette/defo
@@ -35,6 +36,11 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
     public fetchDefinitions = () => {
         const { addTerms }: MainMenuProps = this.props;
         this.api.listDefinitions(addTerms);
+    };
+
+    public reload = () => {
+        const { purgeData }: MainMenuProps = this.props;
+        purgeData();
     };
 
     render() {
@@ -74,6 +80,16 @@ class MainMenu extends Component<MainMenuProps, MainMenuState> {
                 >
                     <Icon type="MaterialCommunityIcons" name="reload" />
                 </Button>
+                <Button
+                    style={{
+                        backgroundColor: "#e74c3c"
+                    }}
+                    onPress={() => {
+                        this.reload();
+                    }}
+                >
+                    <Icon type="MaterialCommunityIcons" name="delete-sweep" />
+                </Button>
             </Fab>
         );
     }
@@ -84,6 +100,11 @@ export default connect<MainMenuProps>(
         return { ...state };
     },
     {
+        purgeData: function(data: TermListState[]) {
+            return {
+                type: "PURGE_DATA"
+            };
+        },
         addTerms: function(terms: TermListState[]) {
             return {
                 type: "ADD_TERMS",

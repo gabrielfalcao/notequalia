@@ -92,7 +92,7 @@ class Home extends Component<HomeProps, TermListState> {
     componentDidMount() { }
     render() {
         const { terms, navigation, route }: TermListProps = this.props;
-        const { by_term } = terms;
+        const { by_term, loading } = terms;
         const { fetchDefinitions } = this;
         const all: TermProps[] = Object.values(by_term);
         const termCount = all.length;
@@ -139,6 +139,11 @@ export default connect<HomeProps>(
             return {
                 type: "ADD_TERMS",
                 terms
+            };
+        },
+        setLoading: function() {
+            return {
+                type: "SET_LOADING"
             };
         },
         addError: function(error: Error) {

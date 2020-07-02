@@ -1,9 +1,15 @@
-import { TermsReducerState, TermsAction, MapOfTermProps } from "./types";
+import {
+    TermsReducerState,
+    TermsAction,
+    MapOfTermProps,
+    TermListState
+} from "./types";
 import { TermProps } from "../domain/terms";
 
-const NewState = (): TermsReducerState => ({
+const NewState = (): TermsReducerState & TermListState => ({
     by_term: {},
     loaded: true,
+    loading: false,
     current: null
 });
 
@@ -31,17 +37,20 @@ export const terms = (
             return {
                 ...state,
                 by_term: { ...state.by_term, ...new_by_term },
-                terms: terms
+                terms: terms,
+                loading: false
             };
         case "DELETE_TERM":
             delete state.by_term[action.term];
             return {
                 ...state,
-                terms: Object.values(state.by_term)
+                terms: Object.values(state.by_term),
+                loading: false
             };
 
         case "LOADING_TERMS":
-            return { ...state, loaded: false, current: null };
+        case "SET_LOADING":
+            return { ...state, loaded: false, loading: true, current: null };
 
         default:
             return { ...state };

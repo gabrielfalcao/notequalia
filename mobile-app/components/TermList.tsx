@@ -108,9 +108,13 @@ class TermList extends Component<TermListProps, TermListState> {
     public search = ({ searchTerm }: TermListState) => {
         const { addTerms, navigation }: TermListProps = this.props;
 
+        if (!this.state.loading) {
+            this.setState({ loading: true });
+            return;
+        }
         this.api.searchDefinition(searchTerm, (term: TermProps) => {
             addTerms([term]);
-            this.setState({ termName: "", searchTerm: "" });
+            this.setState({ termName: "", searchTerm: "", loading: false });
             navigation.push("WordDefinition", {
                 termName: searchTerm
             });
@@ -126,6 +130,7 @@ class TermList extends Component<TermListProps, TermListState> {
         }: TermListProps = this;
         const { terms, navigation }: TermListProps = props;
         const { by_term } = terms;
+        const { loading } = this.state;
 
         const all: TermProps[] = Object.values(by_term);
         const filtered = all.filter((item: TermProps, index) => {
@@ -134,20 +139,23 @@ class TermList extends Component<TermListProps, TermListState> {
             }
             return true;
         });
-        if (all.length === 0) {
+        if (all.length === 0 || loading) {
             this.fetchDefinitions();
-            return;
-            <Modal
-                style={styles.confirmDeletionModal}
-                backdrop={true}
-                coverScreen={true}
-                position={"center"}
-                entry={"top"}
-                ref={"confirmDeletion"}
-            >
-                <Spinner color="blue" />
-                <Text style={[styles.text, { color: "white" }]}>Loading</Text>
-            </Modal>;
+            return (
+                <Modal
+                    style={styles.confirmDeletionModal}
+                    backdrop={true}
+                    coverScreen={true}
+                    position={"center"}
+                    entry={"top"}
+                    ref={"confirmDeletion"}
+                >
+                    <Spinner color="blue" />
+                    <Text style={[styles.text, { color: "white" }]}>
+                        {"Loading"}
+                    </Text>
+                </Modal>
+            );
         }
         return (
             <React.Fragment>
@@ -167,6 +175,16 @@ class TermList extends Component<TermListProps, TermListState> {
                                 }
                             }}
                         />
+                        {false ? (
+                            <Button
+                                onPress={_ => {
+                                    this.setState({ loading: true });
+                                    this.search(this.state);
+                                }}
+                            >
+                                <Icon active name="search" />
+                            </Button>
+                        ) : null}
                     </Item>
                 </Form>
 
@@ -302,7 +320,6 @@ export default connect<TermListProps>(
                 term
             };
         },
-
         addError: function(error: Error) {
             return {
                 type: "ADD_ERROR",

@@ -31,6 +31,7 @@ export type TermListState = {
     terms: TermProps[];
     term: TermProps;
     searchTerm: string;
+    loading: boolean;
     deleteTerm: string;
     termName: string;
 };

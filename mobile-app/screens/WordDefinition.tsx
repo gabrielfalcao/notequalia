@@ -88,6 +88,11 @@ export default connect<WordDefinitionProps>(
                 terms
             };
         },
+        setLoading: function() {
+            return {
+                type: "SET_LOADING"
+            };
+        },
         addError: function(error: Error) {
             return {
                 type: "ADD_ERROR",

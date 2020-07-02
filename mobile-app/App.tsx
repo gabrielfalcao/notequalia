@@ -4,7 +4,7 @@ import PropTypes, { InferProps } from "prop-types";
 import { Provider } from "react-redux";
 import { enableScreens } from "react-native-screens";
 import * as SplashScreen from "expo-splash-screen";
-
+import { Audio } from "expo-av";
 // import { RootStackParamList } from "./domain/navigation";
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack";

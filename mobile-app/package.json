@@ -30,7 +30,8 @@
     "redux": "^4.0.5",
     "expo-splash-screen": "^0.2.3",
     "react-native-webview": "8.1.1",
-    "expo-sharing": "~8.1.0"
+    "expo-sharing": "~8.1.0",
+    "expo-av": "~8.1.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
