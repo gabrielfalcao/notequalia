@@ -22,7 +22,9 @@ def upgrade():
     )
     op.add_column(
         "terms",
-        db.Column("merriamwebster_thesaurus_json", db.UnicodeText, nullable=True),
+        db.Column(
+            "merriamwebster_thesaurus_json", db.UnicodeText, nullable=True
+        ),
     )
 
 

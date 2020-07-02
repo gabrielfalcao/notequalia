@@ -13,7 +13,10 @@ from flask_restplus import reqparse
 from flask_restplus import inputs
 
 from notequalia.models import Term
-from notequalia.lexicon_engine import PyDictionaryClient, MerriamWebsterAPIClient
+from notequalia.lexicon_engine import (
+    PyDictionaryClient,
+    MerriamWebsterAPIClient,
+)
 from notequalia.utils import json_response
 from .base import api, application
 
@@ -22,7 +25,11 @@ logger = logging.getLogger(__name__)
 
 definition_json = api.model(
     "Definition",
-    {"term": fields.String(required=True, description="the term to be defined")},
+    {
+        "term": fields.String(
+            required=True, description="the term to be defined"
+        )
+    },
 )
 
 parser = reqparse.RequestParser()
@@ -43,18 +50,24 @@ def define_new_term(term: str) -> Tuple[Term, bool]:
 
     # content has all the human-readable data for react apps
     content = json.dumps(
-        {"pydictionary": pydictionary,
-         "thesaurus": thesaurus.to_dict(only_visible=True),
-         "collegiate": collegiate.to_dict(only_visible=True),
-        }, default=str
+        {
+            "pydictionary": pydictionary,
+            "thesaurus": thesaurus.to_dict(only_visible=True),
+            "collegiate": collegiate.to_dict(only_visible=True),
+        },
+        default=str,
     )
     model = Term.find_one_by(term=term)
     created = False
 
     params = dict(
         content=content,
-        merriamwebster_thesaurus_json=json.dumps(thesaurus.to_dict(), default=str),
-        merriamwebster_collegiate_json=json.dumps(collegiate.to_dict(), default=str),
+        merriamwebster_thesaurus_json=json.dumps(
+            thesaurus.to_dict(), default=str
+        ),
+        merriamwebster_collegiate_json=json.dumps(
+            collegiate.to_dict(), default=str
+        ),
         pydictionary_json=json.dumps(pydictionary, default=str),
     )
     if not model:
@@ -94,7 +107,9 @@ class DefinitionsEndpoint(Resource):
         return json_response(model.to_dict(), created and 201 or 200)
 
     def get(self):
-        terms = sorted([t.to_dict() for t in Term.all()], key=lambda d: d.get("term"))
+        terms = sorted(
+            [t.to_dict() for t in Term.all()], key=lambda d: d.get("term")
+        )
         return json_response(terms, 200)
 
 
@@ -104,7 +119,9 @@ class TermEndpoint(Resource):
     def delete(self, term):
         found = Term.find_one_by(term=term)
         if not found:
-            return json_response({"error": f"term {term!r} does not exist"}, 404)
+            return json_response(
+                {"error": f"term {term!r} does not exist"}, 404
+            )
 
         found.delete()
         return json_response(found.to_dict(), 200)
@@ -112,7 +129,9 @@ class TermEndpoint(Resource):
     def get(self, term):
         found = Term.find_one_by(term=term)
         if not found:
-            return json_response({"error": f"term {term!r} does not exist"}, 404)
+            return json_response(
+                {"error": f"term {term!r} does not exist"}, 404
+            )
 
         return json_response(found.to_dict(), 200)
 
@@ -126,9 +145,9 @@ class Download(Resource):
 def lexicon_backup_response(should_reprocess=False):
     if should_reprocess:
         items = reprocess()
-        name = 'backup-reprocessed'
+        name = "backup-reprocessed"
     else:
-        name = 'backup'
+        name = "backup"
         items = Term.all()
 
     terms = sorted([t.to_dict() for t in items], key=lambda d: d.get("term"))
@@ -144,6 +163,7 @@ def lexicon_backup_response(should_reprocess=False):
 def backup():
     return lexicon_backup_response()
 
+
 @application.route("/reprocess", methods=["POST"])
 def backup_reprocess():
     return lexicon_backup_response(should_reprocess=True)
@@ -153,7 +173,7 @@ def reprocess():
     items = Term.all()
     total = len(items)
     for i, term in enumerate(items):
-        logger.info(f'reprocessing term {i}/{total}: {term.term}')
+        logger.info(f"reprocessing term {i}/{total}: {term.term}")
         model, created = define_new_term(term.term)
-        logger.info(f'updated term {i}/{total}: {term.term}')
+        logger.info(f"updated term {i}/{total}: {term.term}")
         yield model

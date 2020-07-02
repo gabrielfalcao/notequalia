@@ -25,7 +25,8 @@ if config.HTTPS_API:
         return url_for(self.endpoint("specs"), _external=True, _scheme="https")
 
     logger.warning(
-        "monkey-patching swagger to support https " "(because HTTPS_API env var is set)"
+        "monkey-patching swagger to support https "
+        "(because HTTPS_API env var is set)"
     )
     Api.specs_url = specs_url
 

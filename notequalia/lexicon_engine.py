@@ -9,7 +9,10 @@ from collections import defaultdict
 from notequalia import config
 from PyDictionary import PyDictionary
 from notequalia.lexicon.merriam_webster.models import Definition
-from notequalia.lexicon.merriam_webster.clients import CollegiateClient, ThesaurusClient
+from notequalia.lexicon.merriam_webster.clients import (
+    CollegiateClient,
+    ThesaurusClient,
+)
 
 
 class MerriamWebsterAPIClient(object):

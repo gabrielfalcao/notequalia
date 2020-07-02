@@ -12,10 +12,10 @@ from .models import Definition
 
 logger = logging.getLogger(__name__)
 
+
 class BaseClient(object):
     base_url: str
     config_key: str = "MERRIAM_WEBSTER_DICTIONARY_API_KEY"
-
 
     def __init__(self, key: str = None):
         self.key = key or getattr(config, self.config_key, None)
@@ -25,7 +25,7 @@ class BaseClient(object):
     def get_definitions(self, term: str) -> Definition.List:
         response = self.http.get(self.base_url.format(term=term))
         if response.status_code != 200:
-            logger.warning(f'failed request {response.request}: {response}')
+            logger.warning(f"failed request {response.request}: {response}")
             return Definition.List([])
 
         try:
@@ -35,9 +35,13 @@ class BaseClient(object):
 
 
 class CollegiateClient(BaseClient):
-    base_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/{term}"
+    base_url = (
+        "https://dictionaryapi.com/api/v3/references/collegiate/json/{term}"
+    )
 
 
 class ThesaurusClient(BaseClient):
-    base_url = "https://dictionaryapi.com/api/v3/references/thesaurus/json/{term}"
+    base_url = (
+        "https://dictionaryapi.com/api/v3/references/thesaurus/json/{term}"
+    )
     config_key = "MERRIAM_WEBSTER_THESAURUS_API_KEY"

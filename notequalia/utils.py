@@ -30,7 +30,9 @@ def parse_jwt_token(token, verify=False, fallback=None, **kw):
     try:
         return jwt.decode(token, verify=verify, **kw)
     except Exception as e:
-        logger.exception(f"failed to decode JWT while verifying signature: {e}")
+        logger.exception(
+            f"failed to decode JWT while verifying signature: {e}"
+        )
         return parse_claims_cowboy_style(token)
 
 
@@ -44,7 +46,9 @@ def parse_claims_cowboy_style(token, fallback=None):
         raw = jwt.api_jws.base64url_decode(bjson)
         return json.loads(raw)
     except Exception as e:
-        logger.warning(f"could not parse JWT claims from {token!r} ({type(token)})")
+        logger.warning(
+            f"could not parse JWT claims from {token!r} ({type(token)})"
+        )
         if fallback is None:
             fallback = {"claim_parse_error": str(e), "token": token}
 

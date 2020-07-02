@@ -7,13 +7,17 @@ module_path = Path(__file__).parent
 current_working_path = Path(os.getcwd()).expanduser().absolute()
 
 DEFAULT_UPLOAD_PATH = current_working_path.joinpath("notequalia-io-uploads")
-APP_URL_EXTERNAL = os.getenv("APP_URL_EXTERNAL") or "https://pron-f1l3-serv3r.ngrok.io/"
+APP_URL_EXTERNAL = (
+    os.getenv("APP_URL_EXTERNAL") or "https://pron-f1l3-serv3r.ngrok.io/"
+)
 
 REDIS_HOST = os.getenv("REDIS_HOST")
 if REDIS_HOST:
     SESSION_TYPE = "redis"
     SESSION_REDIS = redis.Redis(
-        host=REDIS_HOST or "localhost", port=int(os.getenv("REDIS_PORT") or 6379), db=0
+        host=REDIS_HOST or "localhost",
+        port=int(os.getenv("REDIS_PORT") or 6379),
+        db=0,
     )
 else:
     SESSION_TYPE = "filesystem"
@@ -41,7 +45,8 @@ MERRIAM_WEBSTER_THESAURUS_API_KEY = (
 
 OAUTH2_DOMAIN = os.getenv("OAUTH2_DOMAIN") or "id.t.newstore.net"
 OAUTH2_CALLBACK_URL = (
-    os.getenv("OAUTH2_CALLBACK_URL") or "https://api.visualcu.es/callback/oauth2"
+    os.getenv("OAUTH2_CALLBACK_URL")
+    or "https://api.visualcu.es/callback/oauth2"
 )
 
 # https://id.t.newstore.net/admin/master/console/#/realms/gabriel-NA-43928/clients/c75308f7-99e9-4b18-aeca-6e742a0b361d/credentials
@@ -54,8 +59,12 @@ OAUTH2_BASE_URL = (
 OAUTH2_ACCESS_TOKEN_URL = (
     os.getenv("OAUTH2_ACCESS_TOKEN_URL") or f"{OAUTH2_BASE_URL}/token"
 )
-OAUTH2_AUTHORIZE_URL = os.getenv("OAUTH2_AUTHORIZE_URL") or "{OAUTH2_BASE_URL}/auth"
-OAUTH2_CLIENT_SCOPE = os.getenv("OAUTH2_CLIENT_SCOPE") or "openid profile email"
+OAUTH2_AUTHORIZE_URL = (
+    os.getenv("OAUTH2_AUTHORIZE_URL") or "{OAUTH2_BASE_URL}/auth"
+)
+OAUTH2_CLIENT_SCOPE = (
+    os.getenv("OAUTH2_CLIENT_SCOPE") or "openid profile email"
+)
 OAUTH2_CLIENT_AUDIENCE = (
     os.getenv("OAUTH2_CLIENT_AUDIENCE") or "https://api.visualcu.es/"
 )

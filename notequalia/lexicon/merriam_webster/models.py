@@ -30,15 +30,12 @@ class EntryMetadata(Model):
     offensive: bool
 
 
-
 class Sound(Model):
     """represents `Sound <https://dictionaryapi.com/products/json#sec-2.prs>`_
     """
 
     filename: str
     subdirectory: str
-
-
 
     @property
     def filename(self) -> str:
@@ -152,7 +149,6 @@ class HeadwordInformation(Model):
         return self.get("prs")
 
 
-
 class Variant(Model):
     """represents `Variants <https://dictionaryapi.com/products/json#sec-2.vrs>`_
     """
@@ -175,39 +171,127 @@ class Variant(Model):
         return self.get("prs")
 
 
-
-class Definition(Model):
-    """represents `Definition <https://dictionaryapi.com/products/json#sec-2>`_
+class CognateCrossReferenceTarget(Model):
+    """represents a `Cognate Cross-Reference Target <https://dictionaryapi.com/products/json#sec-2.cxs>`_
     """
 
-    functional_label: str
-    offensive: bool
-    stems: List[str]
-    short: List[str]
-    homograph: int
-    headword: str
-    variants: Variant.List
-    pronounciations: Pronounciation.List
-    inflections: Inflection.List
-
-    labels: List[str]
-    status_labels: List[str]
+    label: str
+    reference: str
+    hyperlink_text: str
+    sense_number: str
 
     @property
-    def short(self) -> List[str]:
-        return self.get("shortdef")
+    def label(self) -> str:
+        return self.get("cxl")
+
+    @property
+    def reference(self) -> str:
+        return self.get("cxr")
+
+    @property
+    def hyperlink_text(self) -> str:
+        return self.get("cxt")
+
+    @property
+    def sense_number(self) -> str:
+        return self.get("cxn")
+
+
+class CognateCrossReference(Model):
+    """represents `Cognate Cross-Reference <https://dictionaryapi.com/products/json#sec-2.cxs>`_
+    """
+
+    label: str
+    targets: CognateCrossReferenceTarget.List
+
+    @property
+    def label(self) -> str:
+        return self.get("cxl")
+
+    @property
+    def targets(self) -> CognateCrossReferenceTarget.List:
+        return CognateCrossReferenceTarget.List(self.get("cxtis") or [])
+
+
+class Sense(Model):
+    """represents a `Sense <https://dictionaryapi.com/products/json#sec-2.sense>`_
+    """
+
+    number: str
+
+    @property
+    def number(self) -> str:
+        return self.get("sn")
+
+    labels: List[str]
 
     @property
     def labels(self) -> List[str]:
         return self.get("lbs")
 
+    status_labels: List[str]
+
     @property
     def status_labels(self) -> List[str]:
         return self.get("sls")
 
+    variants: Variant.List
+
+    @property
+    def variants(self) -> Variant.List:
+        return self.get("vrs")
+
+    pronounciations: Pronounciation.List
+
+    @property
+    def pronounciations(self) -> Pronounciation.List:
+        return self.hwi.pronounciations
+
+    defining_text: List[str]
+    @property
+    def defining_text(self) -> List[str]:
+        return self.get("dt")
+
+    inflections: Inflection.List
+
+    @property
+    def inflections(self) -> Inflection.List:
+        return self.hwi.inflections
+
+
+class DefinitionSection(Model):
+    """represents a `Definition Section <https://dictionaryapi.com/products/json#sec-2.def>`_
+    """
+
+    verb_divider: str
+    sense_sequence: Sense.List
+
+    @property
+    def verb_divider(self) -> str:
+        return self.get("vd")
+
+    @property
+    def sense_sequence(self) -> Sense.List:
+        return CognateCrossReferenceTarget.List(self.get("sseq") or [])
+
+
+class Definition(Sense):
+    """represents `Definition <https://dictionaryapi.com/products/json#sec-2>`_
+    """
+
+    short: List[str]
+
+    @property
+    def short(self) -> List[str]:
+        return self.get("shortdef")
+
+    regional_label: str
+
     @property
     def regional_label(self) -> str:
         return self.get("psl")
+
+    functional_label: str
 
     @property
     def functional_label(self) -> str:
@@ -223,29 +307,25 @@ class Definition(Model):
         params = self.get("hwi") or {}
         return HeadwordInformation(**params)
 
-    @property
-    def variants(self) -> Variant.List:
-        return self.get("vrs")
+    homograph: int
 
     @property
     def homograph(self) -> int:
         return self.get("hom")
 
+    headword: str
+
     @property
     def headword(self) -> str:
         return self.hwi.headword
 
-    @property
-    def pronounciations(self) -> Pronounciation.List:
-        return self.hwi.pronounciations
-
-    @property
-    def inflections(self) -> Inflection.List:
-        return self.hwi.inflections
+    offensive: bool
 
     @property
     def offensive(self) -> bool:
         return self.meta.offensive
+
+    stems: List[str]
 
     @property
     def stems(self) -> List[str]:

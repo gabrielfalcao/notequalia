@@ -12,7 +12,9 @@ logger = logging.getLogger("server")
 
 class EchoClient(object):
     def __init__(self, zmq_uri=DEFAULT_ROUTER_ADDRESS):
-        self.sockets = SocketManager(zmq, context, polling_timeout=20000, timeout=30)
+        self.sockets = SocketManager(
+            zmq, context, polling_timeout=20000, timeout=30
+        )
         self.sockets.ensure_and_connect(
             "requester", zmq.REQ, zmq_uri, zmq.POLLIN | zmq.POLLOUT
         )
@@ -22,7 +24,9 @@ class EchoClient(object):
 
     def request(self, data):
         logger.info(f"request: {data}")
-        self.sockets.send_safe("requester", {"data": data, "request-id": str(uuid4())})
+        self.sockets.send_safe(
+            "requester", {"data": data, "request-id": str(uuid4())}
+        )
         response = self.sockets.recv_safe("requester")
         logger.info(f"response: {response}")
         return response

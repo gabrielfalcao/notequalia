@@ -140,7 +140,10 @@ def check():
     default=int(os.getenv("INBOX_PORT", 8825)),
 )
 @click.option(
-    "--host", "-H", help="HTTP HOST", default=os.getenv("INBOX_HOST") or "0.0.0.0"
+    "--host",
+    "-H",
+    help="HTTP HOST",
+    default=os.getenv("INBOX_HOST") or "0.0.0.0",
 )
 @click.option(
     "--debug",
@@ -168,7 +171,10 @@ def run_smtp(ctx, host, port, debug):
     default=int(os.getenv("FLASK_PORT", 5000)),
 )
 @click.option(
-    "--host", "-H", help="HTTP HOST", default=os.getenv("FLASK_HOST") or "0.0.0.0"
+    "--host",
+    "-H",
+    help="HTTP HOST",
+    default=os.getenv("FLASK_HOST") or "0.0.0.0",
 )
 @click.option(
     "--debug",
@@ -353,6 +359,10 @@ def close_server(ctx, address):
 def es_index(ctx, data):
     "tells the RPC server to kill itself"
 
-    doc = {"author": os.environ["USER"], "text": data, "timestamp": datetime.now()}
+    doc = {
+        "author": os.environ["USER"],
+        "text": data,
+        "timestamp": datetime.now(),
+    }
     res = es.index(index="random-index", doc_type="cli", id=1, body=doc)
     print(res)

@@ -26,10 +26,35 @@ def test_adjective_verb_elated_collegiate_definition(
     verb.functional_label.should.equal("verb")
 
     adjective.to_dict().should.equal(
-        {'functional_label': 'adjective', 'headword': 'elat*ed', 'offensive': False, 'pronounciations': [{'audio_url': 'https://media.merriam-webster.com/audio/prons/en/US/mp3/e/elate01m.mp3', 'default': 'i-ˈlā-təd'}], 'short': ['marked by high spirits : exultant'], 'stems': ['elated', 'elatedly', 'elatedness', 'elatednesses']}
+        {
+            "functional_label": "adjective",
+            "headword": "elat*ed",
+            "offensive": False,
+            "pronounciations": [
+                {
+                    "audio_url": "https://media.merriam-webster.com/audio/prons/en/US/mp3/e/elate01m.mp3",
+                    "default": "i-ˈlā-təd",
+                }
+            ],
+            "short": ["marked by high spirits : exultant"],
+            "stems": ["elated", "elatedly", "elatedness", "elatednesses"],
+        }
     )
     verb.to_dict().should.equal(
-        {'functional_label': 'verb', 'headword': 'elate', 'homograph': 1, 'offensive': False, 'pronounciations': [{'audio_url': 'https://media.merriam-webster.com/audio/prons/en/US/mp3/e/elate001.mp3', 'default': 'i-ˈlāt'}], 'short': ['to fill with joy or pride'], 'stems': ['elate', 'elated', 'elates', 'elating']}
+        {
+            "functional_label": "verb",
+            "headword": "elate",
+            "homograph": 1,
+            "offensive": False,
+            "pronounciations": [
+                {
+                    "audio_url": "https://media.merriam-webster.com/audio/prons/en/US/mp3/e/elate001.mp3",
+                    "default": "i-ˈlāt",
+                }
+            ],
+            "short": ["to fill with joy or pride"],
+            "stems": ["elate", "elated", "elates", "elating"],
+        }
     )
 
 
@@ -56,7 +81,9 @@ def test_adjective_verb_elated_thesaurus_definition(
             "functional_label": "adjective",
             "headword": "elated",
             "offensive": False,
-            'short': ['experiencing or marked by overwhelming usually pleasurable emotion'],
+            "short": [
+                "experiencing or marked by overwhelming usually pleasurable emotion"
+            ],
             "stems": ["elated", "elatedly", "elatedness", "elatednesses"],
         }
     )
@@ -67,7 +94,7 @@ def test_adjective_verb_elated_thesaurus_definition(
             "offensive": False,
             "stems": ["elated"],
             "status_labels": ["past tense of {d_link|elate|elate}"],
-            'short': ['to fill with great joy'],
+            "short": ["to fill with great joy"],
         }
     )
 
@@ -76,9 +103,8 @@ def test_adjective_verb_elated_thesaurus_definition(
             "functional_label": "verb",
             "headword": "elate",
             "offensive": False,
-
             "stems": ["elate", "elated", "elates", "elating"],
-            'short': ['to fill with great joy']
+            "short": ["to fill with great joy"],
         }
     )
 
@@ -113,7 +139,7 @@ def test_noun_equanimity_thesaurus_definition(fixture: Union[dict, list]):
             "offensive": False,
             "headword": "equanimity",
             "stems": ["equanimity", "equanimities"],
-            'short': ['evenness of emotions or temper']
+            "short": ["evenness of emotions or temper"],
         }
     )
 
@@ -277,7 +303,11 @@ def test_noun_kaballah_collegiate_definition(fixture: Union[dict, list]):
                 "kabbalah",
             ],
             "variants": [{"name": "cabbala"}, {"name": "cabbalah"}],
-            "short": ['a medieval and modern system of Jewish theosophy, mysticism, and thaumaturgy marked by belief in creation through emanation and a cipher method of interpreting Scripture', 'a traditional, esoteric, occult, or secret matter', 'esoteric doctrine or mysterious art']
+            "short": [
+                "a medieval and modern system of Jewish theosophy, mysticism, and thaumaturgy marked by belief in creation through emanation and a cipher method of interpreting Scripture",
+                "a traditional, esoteric, occult, or secret matter",
+                "esoteric doctrine or mysterious art",
+            ],
         }
     )
 
@@ -313,7 +343,10 @@ def test_noun_verb_tassel_collegiate_definition(fixture: Union[dict, list]):
                 {"default": "ˈtȯ-"},
             ],
             "stems": ["tassel", "tassels", "tiercel", "torsel"],
-            "short": ['a dangling ornament made by laying parallel a bunch of cords or threads of even length and fastening them at one end', 'something resembling a tassel; especially : the terminal male inflorescence of some plants and especially corn']
+            "short": [
+                "a dangling ornament made by laying parallel a bunch of cords or threads of even length and fastening them at one end",
+                "something resembling a tassel; especially : the terminal male inflorescence of some plants and especially corn",
+            ],
         }
     )
     verb.to_dict().should.equal(
@@ -330,6 +363,9 @@ def test_noun_verb_tassel_collegiate_definition(fixture: Union[dict, list]):
                 "tasselling",
                 "tassels",
             ],
-            'short': ['to adorn with tassels', 'to put forth tassel inflorescences']
+            "short": [
+                "to adorn with tassels",
+                "to put forth tassel inflorescences",
+            ],
         }
     )

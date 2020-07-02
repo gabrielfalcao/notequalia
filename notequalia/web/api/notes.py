@@ -29,7 +29,9 @@ parser = reqparse.RequestParser()
 
 # parser.add_argument('session', location='cookies', help='the session id containing the state of authentication')
 
-note_ns = api.namespace("Note API V1", description="Notes API", path="/api/v1/notes")
+note_ns = api.namespace(
+    "Note API V1", description="Notes API", path="/api/v1/notes"
+)
 
 
 @note_ns.route("/")
