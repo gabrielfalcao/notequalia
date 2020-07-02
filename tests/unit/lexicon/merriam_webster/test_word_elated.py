@@ -25,22 +25,7 @@ def test_adjective_verb_elated_collegiate_definition(
     adjective.to_dict().should.equal(
         {
             "definitions": [
-                {
-                    "sense_sequence": {
-                        "senses": [
-                            {
-                                "defining_text": {
-                                    "data": [
-                                        [
-                                            "text",
-                                            "{bc}marked by high spirits {bc}{sx|exultant||}",
-                                        ]
-                                    ]
-                                }
-                            }
-                        ]
-                    }
-                }
+                {"sense_sequence": {"senses": [{"defining_text": anything}]}}
             ],
             "functional_label": "adjective",
             "headword": "elat*ed",
@@ -60,18 +45,7 @@ def test_adjective_verb_elated_collegiate_definition(
             "definitions": [
                 {
                     "sense_sequence": {
-                        "senses": [
-                            {
-                                "defining_text": {
-                                    "data": [
-                                        [
-                                            "text",
-                                            "{bc}to fill with joy or pride",
-                                        ]
-                                    ]
-                                }
-                            }
-                        ]
+                        "senses": [{"defining_text": anything}]
                     },
                     "verb_divider": "transitive verb",
                 }
@@ -125,20 +99,12 @@ def test_adjective_verb_elated_thesaurus_definition(
                         "senses": [
                             {
                                 "defining_text": {
-                                    "data": [
-                                        [
-                                            "text",
-                                            "experiencing or marked by overwhelming usually pleasurable emotion ",
-                                        ],
-                                        [
-                                            "vis",
-                                            [
-                                                {
-                                                    "t": "she was {it}elated{/it} upon learning that she had been accepted by her first-choice college"
-                                                }
-                                            ],
-                                        ],
-                                    ]
+                                    "text": "experiencing or marked by overwhelming usually pleasurable emotion ",
+                                    "verbal_illustrations": [
+                                        {
+                                            "text": "she was {it}elated{/it} upon learning that she had been accepted by her first-choice college"
+                                        }
+                                    ],
                                 }
                             }
                         ]
@@ -162,17 +128,12 @@ def test_adjective_verb_elated_thesaurus_definition(
                         "senses": [
                             {
                                 "defining_text": {
-                                    "data": [
-                                        ["text", "to fill with great joy "],
-                                        [
-                                            "vis",
-                                            [
-                                                {
-                                                    "t": "the winning of the state basketball championship {it}elated{/it} the whole town"
-                                                }
-                                            ],
-                                        ],
-                                    ]
+                                    "text": "to fill with great joy ",
+                                    "verbal_illustrations": [
+                                        {
+                                            "text": "the winning of the state basketball championship {it}elated{/it} the whole town"
+                                        }
+                                    ],
                                 }
                             }
                         ]
@@ -196,17 +157,12 @@ def test_adjective_verb_elated_thesaurus_definition(
                         "senses": [
                             {
                                 "defining_text": {
-                                    "data": [
-                                        ["text", "to fill with great joy "],
-                                        [
-                                            "vis",
-                                            [
-                                                {
-                                                    "t": "the winning of the state basketball championship {it}elated{/it} the whole town"
-                                                }
-                                            ],
-                                        ],
-                                    ]
+                                    "text": "to fill with great joy ",
+                                    "verbal_illustrations": [
+                                        {
+                                            "text": "the winning of the state basketball championship {it}elated{/it} the whole town"
+                                        }
+                                    ],
                                 }
                             }
                         ]

@@ -13,12 +13,7 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
         "2.9 COGNATE CROSS-REFERENCES: CXS - https://dictionaryapi.com/products/json#sec-2.cxs"
     )
 
-    # Given 5 definitions of "baloney" from collegiate API
-    definitions = Definition.List(fixture)
-    definitions.should.have.length_of(5)
-
-    # Then it should taon
-    definitions.to_dict().should.equal(
+    Definition.List(fixture).to_dict().should.equal(
         [
             {
                 "pronounciations": [
@@ -41,13 +36,14 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
                             "senses": [
                                 {
                                     "defining_text": {
-                                        "data": [
-                                            [
-                                                "text",
-                                                "{bc}a large smoked sausage of beef, veal, and pork",
-                                            ]
-                                        ]
-                                    }
+                                        "text": "{bc}a large smoked sausage of beef, veal, and pork"
+                                    },
+                                    "divided_sense": {
+                                        "divider": "also",
+                                        "defining_text": {
+                                            "text": "{bc}a sausage made (as of turkey) to resemble bologna"
+                                        },
+                                    },
                                 }
                             ]
                         }
@@ -83,23 +79,8 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
                             "senses": [
                                 {
                                     "defining_text": {
-                                        "data": [
-                                            [
-                                                "text",
-                                                "{bc}pretentious nonsense {bc}{sx|bunkum||} ",
-                                            ],
-                                            [
-                                                "uns",
-                                                [
-                                                    [
-                                                        [
-                                                            "text",
-                                                            "often used as a generalized expression of disagreement",
-                                                        ]
-                                                    ]
-                                                ],
-                                            ],
-                                        ]
+                                        "text": "{bc}pretentious nonsense {bc}{sx|bunkum||} ",
+                                        "usage_notes": "often used as a generalized expression of disagreement",
                                     }
                                 }
                             ]
@@ -155,13 +136,14 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
                             "senses": [
                                 {
                                     "defining_text": {
-                                        "data": [
-                                            [
-                                                "text",
-                                                "{bc}a large smoked sausage of beef, veal, and pork",
-                                            ]
-                                        ]
-                                    }
+                                        "text": "{bc}a large smoked sausage of beef, veal, and pork"
+                                    },
+                                    "divided_sense": {
+                                        "divider": "also",
+                                        "defining_text": {
+                                            "text": "{bc}a sausage made (as of turkey) to resemble bologna"
+                                        },
+                                    },
                                 }
                             ]
                         }
@@ -182,23 +164,8 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
                             "senses": [
                                 {
                                     "defining_text": {
-                                        "data": [
-                                            [
-                                                "text",
-                                                "{bc}pretentious nonsense {bc}{sx|bunkum||} ",
-                                            ],
-                                            [
-                                                "uns",
-                                                [
-                                                    [
-                                                        [
-                                                            "text",
-                                                            "often used as a generalized expression of disagreement",
-                                                        ]
-                                                    ]
-                                                ],
-                                            ],
-                                        ]
+                                        "text": "{bc}pretentious nonsense {bc}{sx|bunkum||} ",
+                                        "usage_notes": "often used as a generalized expression of disagreement",
                                     }
                                 }
                             ]
@@ -225,7 +192,7 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
                             "senses": [
                                 {
                                     "defining_text": {
-                                        "data": [["text", "{bc}{sx|phony||e}"]]
+                                        "text": "{bc}{sx|phony||e}"
                                     }
                                 }
                             ]

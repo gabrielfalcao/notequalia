@@ -214,14 +214,128 @@ class CognateCrossReference(Model):
         return CognateCrossReferenceTarget.List(self.get("cxtis") or [])
 
 
+class UsageNotes(Model):
+    """represents a `Usage Notes <https://dictionaryapi.com/products/json#sec-2.uns>`_
+    """
+
+    text: List[str]  # https://dictionaryapi.com/products/json#sec-2.fmttokens
+
+    def __init__(self, __data__, *args, **kw):
+        if isinstance(__data__, str):
+            __data__ = {"text": __data__}
+        elif isinstance(__data__, list):
+            data = {}
+            for sequence in __data__:
+                for k, *v in sequence:
+                    try:
+                        data[k] = "\n".join(v)
+                    except TypeError as e:
+                        data[k] = VerbalIllustration.List(chain(*v))
+            __data__ = data
+
+        elif not isinstance(__data__, dict):
+            raise NotImplementedError(
+                "please write add a unit test and implement this"
+            )
+
+        super().__init__(__data__=__data__, *args, **kw)
+
+    def serialize(self, *args, **kw):
+        return self.text
+
+
+class SubSource(Model):
+    """represents an `Attribution Of Quote` <https://dictionaryapi.com/products/json#sec-2.aq>`_
+    """
+
+    source: str
+    publication_date: str
+
+    @property
+    def publication_date(self) -> str:
+        return self.get("aqdate")
+
+
+class AttributionOfQuote(Model):
+    """represents an `Attribution Of Quote` <https://dictionaryapi.com/products/json#sec-2.aq>`_
+    """
+
+    author: str
+
+    @property
+    def author(self) -> str:
+        meta = self.get("auth")
+
+    source: str
+    subsource: SubSource
+
+    author: str
+
+    @property
+    def author(self) -> str:
+        meta = self.get("auth")
+
+    publication_date: str
+
+    @property
+    def publication_date(self) -> str:
+        return self.get("aqdate")
+
+
+class VerbalIllustration(Model):
+    """represents `Verbal Illustrations <https://dictionaryapi.com/products/json#sec-2.vis>`_
+    """
+
+    text: str  # https://dictionaryapi.com/products/json#sec-2.fmttokens
+    attribution: AttributionOfQuote
+
+    @property
+    def text(self) -> str:
+        return self.get("t")
+
+    @property
+    def attribution(self) -> AttributionOfQuote:
+        attr = self.get("aq")
+        return attr
+
+
 class DefiningText(Model):
     """represents a `Defining Text <https://dictionaryapi.com/products/json#sec-2.dt>`_
     """
 
-    data: Any
+    text: str  # https://dictionaryapi.com/products/json#sec-2.fmttokens
 
-    def __init__(self, data):
-        super().__init__(data=data)
+    usage_notes: UsageNotes
+    verbal_illustrations: VerbalIllustration.List
+
+    @property
+    def usage_notes(self) -> UsageNotes:
+        return self.get("uns")
+
+    @property
+    def verbal_illustrations(self) -> VerbalIllustration.List:
+        return self.get("vis")
+
+    def __init__(self, __data__, *args, **kw):
+        # if isinstance(__data__, str):
+        #     __data__ = {"text": __data__}
+        if isinstance(__data__, list):
+            data = {}
+            for k, v in __data__:
+                if k in data:
+                    raise NotImplementedError(
+                        "please add unit tests and implement this"
+                    )
+                data[k] = v
+
+            __data__ = data
+
+        elif not isinstance(__data__, dict):
+            raise NotImplementedError(
+                "please add unit tests and implement this"
+            )
+
+        super().__init__(__data__=__data__, *args, **kw)
 
 
 class Etymology(Model):
@@ -233,13 +347,12 @@ class Etymology(Model):
 
     def serialize(self, *args, **kwargs):
         result = []
-        for item in self.get('elements'):
+        for item in self.get("elements"):
             kind, *lines = item
-            result.append({
-                kind: lines
-            })
+            result.append({kind: lines})
 
         return result
+
 
 class DividedSense(Model):
     """represents a `Divided Sense <https://dictionaryapi.com/products/json#sec-2.sdsense>`_
@@ -289,7 +402,12 @@ class Sense(Model):
     number: str
 
     def __init__(self, __data__, *args, **kw):
-        if isinstance(__data__, list) and len(__data__) == 2 and __data__[0] == "sense" and isinstance(__data__[1], dict):
+        if (
+            isinstance(__data__, list)
+            and len(__data__) == 2
+            and __data__[0] == "sense"
+            and isinstance(__data__[1], dict)
+        ):
             __data__ = __data__[1]
         elif not isinstance(__data__, (Model, dict)):
             __data__ = {str(__data__): __data__}
@@ -330,6 +448,12 @@ class Sense(Model):
     def defining_text(self) -> DefiningText:
         return self.get("dt")
 
+    divided_sense: DividedSense
+
+    @property
+    def divided_sense(self) -> DividedSense:
+        return self.get("sdsense")
+
     inflections: Inflection.List
 
     @property
@@ -341,6 +465,7 @@ class Sense(Model):
     @property
     def etymology(self) -> Etymology:
         return self.get("et")
+
 
 class SenseSequence(Model):
     """represents a `Sense Sequence <https://dictionaryapi.com/products/json#sec-2.sseq>`_
@@ -358,15 +483,22 @@ class DefinitionSection(Model):
     """
 
     verb_divider: str
-    sense_sequence: SenseSequence
 
     @property
     def verb_divider(self) -> str:
         return self.get("vd")
 
+    sense_sequence: SenseSequence
+
     @property
     def sense_sequence(self) -> Sense.List:
         return self.get("sseq")
+
+    status_labels: List[str]
+
+    @property
+    def status_labels(self) -> List[str]:
+        return self.get("sls")
 
 
 class Definition(Sense):
@@ -429,7 +561,7 @@ class Definition(Sense):
 
     @property
     def definitions(self) -> DefinitionSection.List:
-        return self.get('def')
+        return self.get("def")
 
     def to_dict(self, **kw):
         return self.serialize(only_visible=True)

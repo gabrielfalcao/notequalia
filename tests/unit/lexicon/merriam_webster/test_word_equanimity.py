@@ -36,20 +36,12 @@ def test_noun_equanimity_thesaurus_definition(fixture: Union[dict, list]):
                         "senses": [
                             {
                                 "defining_text": {
-                                    "data": [
-                                        [
-                                            "text",
-                                            "evenness of emotions or temper ",
-                                        ],
-                                        [
-                                            "vis",
-                                            [
-                                                {
-                                                    "t": "an Olympic diver who always displays remarkable {it}equanimity{/it} on the platform"
-                                                }
-                                            ],
-                                        ],
-                                    ]
+                                    "text": "evenness of emotions or temper ",
+                                    "verbal_illustrations": [
+                                        {
+                                            "text": "an Olympic diver who always displays remarkable {it}equanimity{/it} on the platform"
+                                        }
+                                    ],
                                 }
                             }
                         ]

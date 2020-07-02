@@ -161,11 +161,7 @@ rollback:
 	iterm2 color cyan
 	-helm delete --purge $(HELM_RELEASE)
 	-kubectl get pv -n $(NAMESPACE) -o yaml  | kubectl delete --timeout=50s -f -
-	#iterm2 color purple
 	iterm2 color green
-
-undeploy: rollback
-	#kubectl delete ns $(NAMESPACE)
 
 k9s:
 	iterm2 color k
@@ -212,3 +208,6 @@ react-app: web-app/build/index.html
 # https://cert-manager.io/docs/tutorials/backup/
 cert-manager-backup.yaml:
 	kubectl get -o yaml --all-namespaces issuer,clusterissuer,certificates,certificaterequests > cert-manager-backup.yaml
+
+black:
+	black -l 79 notequalia tests

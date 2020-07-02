@@ -38,12 +38,7 @@ def test_2_10_def_collegiate(fixture: Union[dict, list]):
                             "senses": [
                                 {
                                     "defining_text": {
-                                        "data": [
-                                            [
-                                                "text",
-                                                "{bc}a {a_link|backward} somersault especially in the air",
-                                            ]
-                                        ]
+                                        "text": "{bc}a {a_link|backward} somersault especially in the air"
                                     }
                                 }
                             ]
