@@ -22,6 +22,36 @@ def test_noun_verb_tassel_collegiate_definition(fixture: Union[dict, list]):
 
     noun.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}a dangling ornament made by laying parallel a bunch of cords or threads of even length and fastening them at one end",
+                                        ]
+                                    ]
+                                },
+                                "number": "1",
+                            },
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}something resembling a tassel",
+                                        ]
+                                    ]
+                                },
+                                "number": "2",
+                            },
+                        ]
+                    }
+                }
+            ],
             "etymology": [
                 {
                     "text": [
@@ -41,19 +71,59 @@ def test_noun_verb_tassel_collegiate_definition(fixture: Union[dict, list]):
                 {"default": "ˈtä-", "label_before": "usually of corn"},
                 {"default": "ˈtȯ-"},
             ],
-            "stems": ["tassel", "tassels", "tiercel", "torsel"],
             "short": [
                 "a dangling ornament made by laying parallel a bunch of cords or threads of even length and fastening them at one end",
                 "something resembling a tassel; especially : the terminal male inflorescence of some plants and especially corn",
             ],
+            "stems": ["tassel", "tassels", "tiercel", "torsel"],
         }
     )
     verb.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}to adorn with {a_link|tassels}",
+                                        ]
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "verb_divider": "transitive verb",
+                },
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}to put forth tassel inflorescences",
+                                        ]
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "verb_divider": "intransitive verb",
+                },
+            ],
             "functional_label": "verb",
             "headword": "tassel",
             "homograph": 2,
             "offensive": False,
+            "short": [
+                "to adorn with tassels",
+                "to put forth tassel inflorescences",
+            ],
             "stems": [
                 "tassel",
                 "tasseled",
@@ -61,10 +131,6 @@ def test_noun_verb_tassel_collegiate_definition(fixture: Union[dict, list]):
                 "tasselled",
                 "tasselling",
                 "tassels",
-            ],
-            "short": [
-                "to adorn with tassels",
-                "to put forth tassel inflorescences",
             ],
         }
     )

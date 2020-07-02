@@ -48,8 +48,54 @@ def test_noun_kaballah_collegiate_definition(fixture: Union[dict, list]):
 
     def2.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}a medieval and modern system of Jewish theosophy, mysticism, and thaumaturgy marked by belief in creation through emanation and a cipher method of interpreting Scripture",
+                                        ]
+                                    ]
+                                },
+                                "number": "1",
+                            },
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}a traditional, esoteric, occult, or secret matter",
+                                        ]
+                                    ]
+                                },
+                                "number": "2 a",
+                            },
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}esoteric doctrine or mysterious art",
+                                        ]
+                                    ]
+                                },
+                                "number": "b",
+                            },
+                        ]
+                    }
+                }
+            ],
             "headword": "ca*ba*la",
             "offensive": False,
+            "short": [
+                "a medieval and modern system of Jewish theosophy, mysticism, and thaumaturgy marked by belief in creation through emanation and a cipher method of interpreting Scripture",
+                "a traditional, esoteric, occult, or secret matter",
+                "esoteric doctrine or mysterious art",
+            ],
             "stems": [
                 "cabala",
                 "cabalas",
@@ -60,10 +106,5 @@ def test_noun_kaballah_collegiate_definition(fixture: Union[dict, list]):
                 "kabbalah",
             ],
             "variants": [{"name": "cabbala"}, {"name": "cabbalah"}],
-            "short": [
-                "a medieval and modern system of Jewish theosophy, mysticism, and thaumaturgy marked by belief in creation through emanation and a cipher method of interpreting Scripture",
-                "a traditional, esoteric, occult, or secret matter",
-                "esoteric doctrine or mysterious art",
-            ],
         }
     )

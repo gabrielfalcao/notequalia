@@ -24,6 +24,24 @@ def test_adjective_verb_elated_collegiate_definition(
 
     adjective.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}marked by high spirits {bc}{sx|exultant||}",
+                                        ]
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
             "functional_label": "adjective",
             "headword": "elat*ed",
             "offensive": False,
@@ -39,6 +57,25 @@ def test_adjective_verb_elated_collegiate_definition(
     )
     verb.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "{bc}to fill with joy or pride",
+                                        ]
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "verb_divider": "transitive verb",
+                }
+            ],
             "etymology": [
                 {
                     "text": [
@@ -82,6 +119,32 @@ def test_adjective_verb_elated_thesaurus_definition(
 
     adjective.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "experiencing or marked by overwhelming usually pleasurable emotion ",
+                                        ],
+                                        [
+                                            "vis",
+                                            [
+                                                {
+                                                    "t": "she was {it}elated{/it} upon learning that she had been accepted by her first-choice college"
+                                                }
+                                            ],
+                                        ],
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
             "functional_label": "adjective",
             "headword": "elated",
             "offensive": False,
@@ -93,21 +156,67 @@ def test_adjective_verb_elated_thesaurus_definition(
     )
     verb.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        ["text", "to fill with great joy "],
+                                        [
+                                            "vis",
+                                            [
+                                                {
+                                                    "t": "the winning of the state basketball championship {it}elated{/it} the whole town"
+                                                }
+                                            ],
+                                        ],
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
             "functional_label": "verb",
             "headword": "elated",
             "offensive": False,
-            "stems": ["elated"],
-            "status_labels": ["past tense of {d_link|elate|elate}"],
             "short": ["to fill with great joy"],
+            "status_labels": ["past tense of {d_link|elate|elate}"],
+            "stems": ["elated"],
         }
     )
 
     another.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        ["text", "to fill with great joy "],
+                                        [
+                                            "vis",
+                                            [
+                                                {
+                                                    "t": "the winning of the state basketball championship {it}elated{/it} the whole town"
+                                                }
+                                            ],
+                                        ],
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
             "functional_label": "verb",
             "headword": "elate",
             "offensive": False,
-            "stems": ["elate", "elated", "elates", "elating"],
             "short": ["to fill with great joy"],
+            "stems": ["elate", "elated", "elates", "elating"],
         }
     )

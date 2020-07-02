@@ -1,6 +1,7 @@
 """data models for the `Merriam-Webster API <https://dictionaryapi.com/products/json>`_
 """
 import re
+from itertools import chain
 from typing import List, Optional, Dict, Tuple, Any
 from uiclasses import Model, IterableCollection, ModelList, ModelSet
 from uiclasses.typing import Getter
@@ -287,6 +288,14 @@ class Sense(Model):
 
     number: str
 
+    def __init__(self, __data__, *args, **kw):
+        if isinstance(__data__, list) and len(__data__) == 2 and __data__[0] == "sense" and isinstance(__data__[1], dict):
+            __data__ = __data__[1]
+        elif not isinstance(__data__, (Model, dict)):
+            __data__ = {str(__data__): __data__}
+
+        super().__init__(__data__=__data__, *args, **kw)
+
     @property
     def number(self) -> str:
         return self.get("sn")
@@ -333,13 +342,23 @@ class Sense(Model):
     def etymology(self) -> Etymology:
         return self.get("et")
 
+class SenseSequence(Model):
+    """represents a `Sense Sequence <https://dictionaryapi.com/products/json#sec-2.sseq>`_
+    """
+
+    senses: Sense.List
+
+    def __init__(self, sequences):
+        senses = map(Sense, chain(*sequences))
+        super().__init__(senses=senses)
+
 
 class DefinitionSection(Model):
     """represents a `Definition Section <https://dictionaryapi.com/products/json#sec-2.def>`_
     """
 
     verb_divider: str
-    sense_sequence: Sense.List
+    sense_sequence: SenseSequence
 
     @property
     def verb_divider(self) -> str:
@@ -347,7 +366,7 @@ class DefinitionSection(Model):
 
     @property
     def sense_sequence(self) -> Sense.List:
-        return CognateCrossReferenceTarget.List(self.get("sseq") or [])
+        return self.get("sseq")
 
 
 class Definition(Sense):
@@ -406,11 +425,11 @@ class Definition(Sense):
     def stems(self) -> List[str]:
         return self.meta.stems
 
+    definitions: DefinitionSection.List
+
+    @property
+    def definitions(self) -> DefinitionSection.List:
+        return self.get('def')
+
     def to_dict(self, **kw):
         return self.serialize(only_visible=True)
-
-
-class ThesaurusDefinition(Definition):
-    """responsible for modeling a `Definition within the Thesaurus Dictionary <https://dictionaryapi.com/products/json#sec-3>`_
-    of the `Merriam-Webster API <https://dictionaryapi.com/products/json>`_
-    """

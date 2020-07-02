@@ -30,10 +30,36 @@ def test_noun_equanimity_thesaurus_definition(fixture: Union[dict, list]):
 
     item.to_dict().should.equal(
         {
+            "definitions": [
+                {
+                    "sense_sequence": {
+                        "senses": [
+                            {
+                                "defining_text": {
+                                    "data": [
+                                        [
+                                            "text",
+                                            "evenness of emotions or temper ",
+                                        ],
+                                        [
+                                            "vis",
+                                            [
+                                                {
+                                                    "t": "an Olympic diver who always displays remarkable {it}equanimity{/it} on the platform"
+                                                }
+                                            ],
+                                        ],
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
             "functional_label": "noun",
-            "offensive": False,
             "headword": "equanimity",
-            "stems": ["equanimity", "equanimities"],
+            "offensive": False,
             "short": ["evenness of emotions or temper"],
+            "stems": ["equanimity", "equanimities"],
         }
     )
