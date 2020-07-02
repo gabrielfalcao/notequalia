@@ -1,3 +1,32 @@
+{{- if .Values.notequalia.merriam_webster_api.backup.enabled }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "notequalia-io.fullname" . }}-regenerate
+spec:
+  schedule: "0    2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: reprocess-lexicon
+            image: alpine:latest
+            command: ["/bin/sh"]
+            args:
+              - -c
+              - >
+                apk update && apk add --no-cache curl bash && bash -c
+                " echo \"updating lexicon\";
+
+                    exit_status=$(curl -X POST -v -o /dev/null -w '%{http_code}' http://cognod.es/reprocess);
+                    if [ $exit_status -ne 200 ]; then
+                        exit 1;
+                    fi
+                  "
+{{- end }}
+
 {{- if .Values.zmq.enabled }}
 ---
 apiVersion: batch/v1beta1

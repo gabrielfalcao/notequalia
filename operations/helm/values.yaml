@@ -9,6 +9,9 @@ notequalia_url: "https://api.visualcu.es/"
 
 notequalia:
   merriam_webster_api:
+    backup:
+      enabled: false
+
     enabled: true
     keys: # https://dictionaryapi.com/account/my-keys
       thesaurus: '--set-by-makefile--'
