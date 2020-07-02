@@ -45,7 +45,7 @@ $(VENV):  # creates $(VENV) folder if does not exist
 $(VENV)/bin/notequalia-io $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
 	test -e $(VENV)/bin/pip || $(MAKE) $(VENV)
 	$(VENV)/bin/pip install -r development.txt
-	$(VENV)/bin/pip install -e .
+	$(VENV)/bin/python setup.py develop
 
 # Runs the unit and functional tests
 tests: | $(VENV)/bin/nosetests  # runs all tests
@@ -54,7 +54,7 @@ tests: | $(VENV)/bin/nosetests  # runs all tests
 # Install dependencies
 dependencies: | $(VENV)/bin/nosetests
 	$(VENV)/bin/pip install -r development.txt
-	$(VENV)/bin/pip install -e .
+	$(VENV)/bin/python setup.py develop
 
 check:
 	$(VENV)/bin/notequalia-io check

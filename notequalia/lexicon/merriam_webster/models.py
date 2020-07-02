@@ -213,6 +213,74 @@ class CognateCrossReference(Model):
         return CognateCrossReferenceTarget.List(self.get("cxtis") or [])
 
 
+class DefiningText(Model):
+    """represents a `Defining Text <https://dictionaryapi.com/products/json#sec-2.dt>`_
+    """
+
+    data: Any
+
+    def __init__(self, data):
+        super().__init__(data=data)
+
+
+class Etymology(Model):
+    """represents an `Etymology <https://dictionaryapi.com/products/json#sec-2.et>`_
+    """
+
+    def __init__(self, elements):
+        super().__init__(elements=elements)
+
+    def serialize(self, *args, **kwargs):
+        result = []
+        for item in self.get('elements'):
+            kind, *lines = item
+            result.append({
+                kind: lines
+            })
+
+        return result
+
+class DividedSense(Model):
+    """represents a `Divided Sense <https://dictionaryapi.com/products/json#sec-2.sdsense>`_
+    """
+
+    divider: str
+
+    @property
+    def divider(self) -> str:
+        return self.get("sd")
+
+    etymology: Etymology
+
+    @property
+    def etymology(self) -> Etymology:
+        return self.get("et")
+
+    status_labels: List[str]
+
+    @property
+    def status_labels(self) -> List[str]:
+        return self.get("sls")
+
+    variants: Variant.List
+
+    @property
+    def variants(self) -> Variant.List:
+        return self.get("vrs")
+
+    pronounciations: Pronounciation.List
+
+    @property
+    def pronounciations(self) -> Pronounciation.List:
+        return self.hwi.pronounciations
+
+    defining_text: DefiningText
+
+    @property
+    def defining_text(self) -> DefiningText:
+        return self.get("dt")
+
+
 class Sense(Model):
     """represents a `Sense <https://dictionaryapi.com/products/json#sec-2.sense>`_
     """
@@ -247,9 +315,10 @@ class Sense(Model):
     def pronounciations(self) -> Pronounciation.List:
         return self.hwi.pronounciations
 
-    defining_text: List[str]
+    defining_text: DefiningText
+
     @property
-    def defining_text(self) -> List[str]:
+    def defining_text(self) -> DefiningText:
         return self.get("dt")
 
     inflections: Inflection.List
@@ -257,6 +326,12 @@ class Sense(Model):
     @property
     def inflections(self) -> Inflection.List:
         return self.hwi.inflections
+
+    etymology: Etymology
+
+    @property
+    def etymology(self) -> Etymology:
+        return self.get("et")
 
 
 class DefinitionSection(Model):
