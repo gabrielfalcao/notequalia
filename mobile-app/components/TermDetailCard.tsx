@@ -57,15 +57,19 @@ class TermDetailCard extends Component<TermDetailCardProps, any> {
         //console.log(item);
         return (
             <React.Fragment>
-                <Text
-                    style={{
-                        backgroundColor: "#e3f1f1",
-                        padding: 10,
-                        fontStyle: "italic"
-                    }}
-                >
-                    {item.short}
-                </Text>
+                {item.short.map((description: string, index: number) => (
+                    <Text
+                        key={`${index}`}
+                        style={{
+                            backgroundColor: "#e3f1f1",
+                            padding: 10,
+                            margin: 2,
+                            fontStyle: "italic"
+                        }}
+                    >
+                        {description}
+                    </Text>
+                ))}
                 {pronounciations
                     ? pronounciations.map((pronom: any, index: number) => (
                         <React.Fragment key={`${index}`}>

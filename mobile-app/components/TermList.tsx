@@ -108,13 +108,9 @@ class TermList extends Component<TermListProps, TermListState> {
     public search = ({ searchTerm }: TermListState) => {
         const { addTerms, navigation }: TermListProps = this.props;
 
-        if (!this.state.loading) {
-            this.setState({ loading: true });
-            return;
-        }
         this.api.searchDefinition(searchTerm, (term: TermProps) => {
-            addTerms([term]);
             this.setState({ termName: "", searchTerm: "", loading: false });
+            addTerms([term]);
             navigation.push("WordDefinition", {
                 termName: searchTerm
             });
@@ -170,7 +166,7 @@ class TermList extends Component<TermListProps, TermListState> {
                                 this.setState({ searchTerm: text });
                             }}
                             onEndEditing={() => {
-                                if (filtered.length === 0) {
+                                if (this.state.searchTerm.length > 2) {
                                     search(this.state);
                                 }
                             }}
