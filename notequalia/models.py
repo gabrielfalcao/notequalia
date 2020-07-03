@@ -195,8 +195,12 @@ class Term(Model):
             return None
 
     @property
-    def content(self) -> List[dict]:
-        return self.get_parsed_json_property("content")
+    def content(self) -> dict:
+        return {
+            'pydictionary': self.pydictionary,
+            'thesaurus': self.thesaurus.to_dict(only_visible=True),
+            'collegiate': self.collegiate.to_dict(only_visible=True),
+        }
 
     @property
     def pydictionary(self) -> List[dict]:
