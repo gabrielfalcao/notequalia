@@ -198,8 +198,8 @@ class Term(Model):
     def content(self) -> dict:
         return {
             'pydictionary': self.pydictionary,
-            'thesaurus': self.thesaurus.to_dict(only_visible=True),
-            'collegiate': self.collegiate.to_dict(only_visible=True),
+            'thesaurus': self.get_thesaurus_definitions().to_dict(only_visible=True),
+            'collegiate': self.get_collegiate_definitions().to_dict(only_visible=True),
         }
 
     @property

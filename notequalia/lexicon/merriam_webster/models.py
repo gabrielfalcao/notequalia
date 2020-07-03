@@ -509,7 +509,11 @@ class Paragraph(Model):
     text: List[str]  # https://dictionaryapi.com/products/json#sec-2.fmttokens
 
     def __init__(self, __data__, *args, **kw):
-        if isinstance(__data__, str):
+        __data__ = __data__ or kw.pop('__data__', None) or {}
+        if isinstance(__data__, Model):
+            __data__ = __data__.to_dict()
+
+        elif isinstance(__data__, str):
             __data__ = {"text": __data__}
         elif isinstance(__data__, list):
             data = defaultdict(list)
@@ -522,12 +526,15 @@ class Paragraph(Model):
                     data[k].append(v)
             __data__ = data
 
-        elif not isinstance(__data__, dict):
+        elif not isinstance(__data__, (Model, dict)):
             raise NotImplementedError(
                 "please write add a unit test and implement this"
             )
 
-        super().__init__(__data__=__data__, *args, **kw)
+        try:
+            super().__init__(__data__=__data__, *args, **kw)
+        except Exception as e:
+            import ipdb;ipdb.set_trace()
 
     def serialize(self, *args, **kw):
         return self.text
