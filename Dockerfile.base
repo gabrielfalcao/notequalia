@@ -6,6 +6,7 @@ RUN apk --update --no-cache add \
     ca-certificates \
     figlet \
     gcc \
+    git \
     libffi-dev \
     openssl-dev \
     make \
