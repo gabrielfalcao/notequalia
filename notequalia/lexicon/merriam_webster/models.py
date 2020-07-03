@@ -1,6 +1,7 @@
 """data models for the `Merriam-Webster API <https://dictionaryapi.com/products/json>`_
 """
 import re
+from collections import defaultdict
 from itertools import chain
 from typing import List, Optional, Dict, Tuple, Any
 from uiclasses import Model, IterableCollection, ModelList, ModelSet
@@ -501,6 +502,77 @@ class DefinitionSection(Model):
         return self.get("sls")
 
 
+class Paragraph(Model):
+    """represents a `Synonym Paragraph <https://dictionaryapi.com/products/json#sec-2.pt>`_
+    """
+
+    text: List[str]  # https://dictionaryapi.com/products/json#sec-2.fmttokens
+
+    def __init__(self, __data__, *args, **kw):
+        if isinstance(__data__, str):
+            __data__ = {"text": __data__}
+        elif isinstance(__data__, list):
+            data = defaultdict(list)
+            for k, *v in __data__:
+                if isinstance(k, str) and not v:
+                    data["text"].append(v)
+                elif isinstance(v, list):
+                    data[k].extend(v)
+                else:
+                    data[k].append(v)
+            __data__ = data
+
+        elif not isinstance(__data__, dict):
+            raise NotImplementedError(
+                "please write add a unit test and implement this"
+            )
+
+        super().__init__(__data__=__data__, *args, **kw)
+
+    def serialize(self, *args, **kw):
+        return self.text
+
+    verbal_illustrations: VerbalIllustration.List
+
+    @property
+    def verbal_illustrations(self) -> VerbalIllustration.List:
+        return self.get("vis")
+
+
+class Synonym(Model):
+    """represents a `Synonym Section <https://dictionaryapi.com/products/json#sec-2.syns>`_
+    """
+
+    paragraph_label: str
+
+    @property
+    def paragraph_label(self) -> str:
+        return self.get("pl")
+
+    paragraphs: Paragraph
+
+    @property
+    def paragraphs(self) -> Paragraph:
+        return self.get("pt")
+
+
+class Antonym(Model):
+    """represents a `Antonym Section <https://dictionaryapi.com/products/json#sec-2.syns>`_
+    """
+
+    paragraph_label: str
+
+    @property
+    def paragraph_label(self) -> str:
+        return self.get("pl")
+
+    paragraphs: Paragraph
+
+    @property
+    def paragraphs(self) -> Paragraph:
+        return self.get("pt")
+
+
 class Definition(Sense):
     """represents `Definition <https://dictionaryapi.com/products/json#sec-2>`_
     """
@@ -562,6 +634,24 @@ class Definition(Sense):
     @property
     def definitions(self) -> DefinitionSection.List:
         return self.get("def")
+
+    synonym_discussions: Synonym.List
+
+    @property
+    def synonym_discussions(self) -> Synonym.List:
+        return self.get("syns")
+
+    antonyms: List[str]
+
+    @property
+    def antonyms(self) -> List[str]:
+        return list(chain(*self.meta.get("ants") or [])) or None
+
+    synonyms: List[str]
+
+    @property
+    def synonyms(self) -> List[str]:
+        return list(chain(*self.meta.get("syns") or [])) or None
 
     def to_dict(self, **kw):
         return self.serialize(only_visible=True)
