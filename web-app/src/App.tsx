@@ -93,7 +93,7 @@ class App extends Component<AppProps, AppState> {
                         <Logout />
                     </Route>
                     <Route exact path="/">
-                        <Redirect to="/notes" />
+                        <Redirect to="/dashboard" />
                     </Route>
 
                     <AuthenticatedRoute exact path="/dashboard">
