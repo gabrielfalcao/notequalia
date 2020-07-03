@@ -1,9 +1,5 @@
 FROM gabrielfalcao/notequalia-io-base
 
-RUN apk --update --no-cache add \
-    git
-
-
 VOLUME /notequalia.io
 
 ENV VENV /venv/
@@ -13,10 +9,6 @@ ENV UPLOAD_FOLDER /notequalia.io/file-uploads
 ENV PIP_CACHE_DIR /pip/cache
 
 COPY . /app/
-
-RUN /venv/bin/pip install -U pip
-RUN /venv/bin/pip install -U setuptools
-RUN /venv/bin/pip install -U wheel
 RUN /venv/bin/pip install /app
 
 RUN make tests
