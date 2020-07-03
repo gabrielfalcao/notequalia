@@ -17,6 +17,9 @@
       "image": "./assets/splash.png",
       "backgroundColor": "#ecf0f1"
     },
-    "description": ""
+    "description": "",
+    "ios": {
+      "bundleIdentifier": "it.falcao.lexicon"
+    }
   }
 }

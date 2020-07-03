@@ -16,7 +16,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Modal from "react-bootstrap/Modal";
 // import ListGroup from "react-bootstrap/ListGroup";
 // import ProgressBar from "react-bootstrap/ProgressBar";
-import Alert from "react-bootstrap/Alert";
+// import Alert from "react-bootstrap/Alert";
 import Col from "react-bootstrap/Col";
 // import { ComponentWithStore } from "../ui";
 import { AuthPropTypes } from "../domain/auth";
