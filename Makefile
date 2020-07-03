@@ -48,8 +48,8 @@ $(VENV)/bin/notequalia-io $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/p
 	$(VENV)/bin/python setup.py develop
 
 # Runs the unit and functional tests
-tests: | $(VENV)/bin/nosetests  # runs all tests
-	$(VENV)/bin/nosetests tests
+tests: unit functional  # runs all tests
+
 
 # Install dependencies
 dependencies: | $(VENV)/bin/nosetests
