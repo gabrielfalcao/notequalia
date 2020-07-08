@@ -124,84 +124,14 @@ class ViewTerm extends Component<ViewTermProps, any> {
                                 ) : null}
 
                                 {thesaurus ? (
-                                    <ListGroup variant="flush">
-                                        {thesaurus.map(
-                                            (
-                                                definition: any,
-                                                index: number
-                                            ) => {
-                                                const short_definitions: any =
-                                                    definition.short;
-                                                return (
-                                                    <ListGroup.Item
-                                                        key={`${index}`}
-                                                    >
-                                                        <h4>
-                                                            {
-                                                                definition.functional_label
-                                                            }
-                                                        </h4>
-                                                        {short_definitions.map(
-                                                            (
-                                                                description: any,
-                                                                index: number
-                                                            ) => (
-                                                                    <ListGroup.Item
-                                                                        key={`${index}`}
-                                                                    >
-                                                                        <h5>
-                                                                            {
-                                                                                description
-                                                                            }
-                                                                        </h5>
-                                                                    </ListGroup.Item>
-                                                                )
-                                                        )}
-                                                    </ListGroup.Item>
-                                                );
-                                            }
-                                        )}
-                                    </ListGroup>
+                                    <pre>
+                                        {JSON.stringify(thesaurus, null, 2)}
+                                    </pre>
                                 ) : null}
                                 {collegiate ? (
-                                    <ListGroup variant="flush">
-                                        {collegiate.map(
-                                            (
-                                                definition: any,
-                                                index: number
-                                            ) => {
-                                                const short_definitions: any =
-                                                    definition.short;
-                                                return (
-                                                    <ListGroup.Item
-                                                        key={`${index}`}
-                                                    >
-                                                        <h4>
-                                                            {
-                                                                definition.functional_label
-                                                            }
-                                                        </h4>
-                                                        {short_definitions.map(
-                                                            (
-                                                                description: any,
-                                                                index: number
-                                                            ) => (
-                                                                    <ListGroup.Item
-                                                                        key={`${index}`}
-                                                                    >
-                                                                        <h5>
-                                                                            {
-                                                                                description
-                                                                            }
-                                                                        </h5>
-                                                                    </ListGroup.Item>
-                                                                )
-                                                        )}
-                                                    </ListGroup.Item>
-                                                );
-                                            }
-                                        )}
-                                    </ListGroup>
+                                    <pre>
+                                        {JSON.stringify(collegiate, null, 2)}
+                                    </pre>
                                 ) : null}
                             </Modal.Body>
 
