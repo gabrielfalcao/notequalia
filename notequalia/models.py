@@ -196,11 +196,7 @@ class Term(Model):
 
     @property
     def content(self) -> dict:
-        return {
-            'pydictionary': self.pydictionary,
-            'thesaurus': self.get_thesaurus_definitions().to_dict(only_visible=True),
-            'collegiate': self.get_collegiate_definitions().to_dict(only_visible=True),
-        }
+        return self.get_parsed_json_property('content')
 
     @property
     def pydictionary(self) -> List[dict]:
