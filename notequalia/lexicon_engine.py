@@ -34,6 +34,4 @@ class PyDictionaryClient(object):
     def define_term(self, term: str) -> Dict[str, Union[dict, str]]:
         result = {}
         result["meaning"] = self.dictionary.meaning(term)
-        result["synonym"] = self.dictionary.synonym(term)
-        result["antonym"] = self.dictionary.antonym(term)
         return result
