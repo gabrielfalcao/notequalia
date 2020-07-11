@@ -11,12 +11,19 @@ const NewState = (): TermsReducerState => ({
 });
 
 const filtered = (filterBy: any, items: Array<TermProps>): Array<TermProps> => {
+    console.log(
+        "[start] reducers.terms.filtered(filterBy, items)",
+        filterBy,
+        items
+    );
     const elements = [...items];
     elements.sort((a, b) => {
-        if (a.id < b.id) {
-            return 1;
-        } else if (b.id > a.id) {
+        const aid = parseInt(a.id);
+        const bid = parseInt(b.id);
+        if (aid < bid) {
             return -1;
+        } else if (bid > aid) {
+            return 1;
         }
         return 0;
     });
@@ -25,9 +32,11 @@ const filtered = (filterBy: any, items: Array<TermProps>): Array<TermProps> => {
         return elements;
     }
 
-    return elements.filter((item: TermProps) =>
-        item.term.match(filterBy.filterTerm)
+    const result = elements.filter(
+        (item: TermProps) => item.term.search(filterBy.term) > 0
     );
+    console.log("[end] reducers.terms.filtered() -> result", result);
+    return result;
 };
 export const terms = (
     state: TermsReducerState = NewState(),
@@ -53,14 +62,14 @@ export const terms = (
             return {
                 ...state,
                 by_term: { ...state.by_term, ...new_by_term },
-                terms: terms
+                terms: filtered(action.filterBy, Object.values(state.by_term))
             };
 
         case "DELETE_TERM":
             delete state.by_term[action.term];
             return {
                 ...state,
-                terms: filtered(state.filterBy, Object.values(state.by_term))
+                terms: filtered(action.filterBy, Object.values(state.by_term))
             };
 
         case "LOADING_TERMS":
@@ -69,7 +78,8 @@ export const terms = (
         case "FILTER_TERMS":
             return {
                 ...state,
-                terms: filtered(state.filterBy, Object.values(state.by_term))
+                filterBy: action.filterBy,
+                terms: filtered(action.filterBy, Object.values(state.by_term))
             };
 
         default:

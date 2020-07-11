@@ -42,6 +42,10 @@ class TermList extends Component<TermListProps, TermListState> {
         const { addError } = props;
         this.api = new DictionaryAPIClient(addError);
         this.filterTermRef = React.createRef();
+        this.state = {
+            filterTerm: props.terms.filterBy.term,
+            terms: []
+        };
     }
 
     public fetchDefinitions = () => {
@@ -53,6 +57,7 @@ class TermList extends Component<TermListProps, TermListState> {
         const { filterTerm }: TermListState = this.state;
         const { filterTerms }: TermListProps = this.props;
 
+        console.log("filterTerms(filterTerm)", filterTerm);
         filterTerms(filterTerm);
     };
 
@@ -63,6 +68,7 @@ class TermList extends Component<TermListProps, TermListState> {
         const { fetchDefinitions, filterDefinitions } = this;
         const all: TermProps[] = Object.values(by_term);
         const showFunctionalLabels = !hideFunctionalLabels;
+        console.log("state", this.state);
         return (
             <React.Fragment>
                 <Form inline>
@@ -72,17 +78,22 @@ class TermList extends Component<TermListProps, TermListState> {
                             event: React.ChangeEvent<HTMLInputElement>
                         ) => {
                             this.setState({
-                                filterTerm: event.currentTarget.value
+                                filterTerm: event.target.value
                             });
                         }}
                         placeholder="Filter"
+                        defaultValue={
+                            terms.filterBy ? terms.filterBy.term : null
+                        }
                         className="mr-sm-2"
                     />
                     <Button
-                        onClick={() => {
+                        type="button"
+                        onClick={(e: any) => {
                             filterDefinitions();
+                            e.preventDefault();
                         }}
-                        variant="outline-success"
+                        variant="outline-info"
                     >
                         Filter
 					</Button>
