@@ -21,7 +21,13 @@ const filtered = (filterBy: any, items: Array<TermProps>): Array<TermProps> => {
         return 0;
     });
 
-    return elements.filter((item: TermProps) => item.term.match(filterBy.term));
+    if (!filterBy) {
+        return elements;
+    }
+
+    return elements.filter((item: TermProps) =>
+        item.term.match(filterBy.filterTerm)
+    );
 };
 export const terms = (
     state: TermsReducerState = NewState(),

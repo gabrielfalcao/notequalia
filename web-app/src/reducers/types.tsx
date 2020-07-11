@@ -32,4 +32,5 @@ export type TermsAction =
     | any;
 export type TermListState = {
     terms: TermProps[];
+    filterTerm: string;
 };

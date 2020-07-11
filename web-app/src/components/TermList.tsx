@@ -4,7 +4,7 @@ import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
 import Table from "react-bootstrap/Table";
-// import Alert from "react-bootstrap/Alert";
+import Form from "react-bootstrap/Form";
 
 import { LinkContainer } from "react-router-bootstrap";
 
@@ -22,20 +22,26 @@ export const TermListPropTypes = {
     auth: AuthPropTypes,
     addError: PropTypes.func,
     hideFunctionalLabels: PropTypes.bool,
-    addTerms: PropTypes.func
+    addTerms: PropTypes.func,
+    filterTerm: PropTypes.string
 };
 
 type TermListProps =
-    | (InferProps<typeof TermListPropTypes> & { terms: TermsReducerState })
+    | (InferProps<typeof TermListPropTypes> & {
+        terms: TermsReducerState;
+        filterTerm: string;
+    })
     | any;
 
 class TermList extends Component<TermListProps, TermListState> {
     private api: DictionaryAPIClient;
+    private filterTermRef: React.RefObject<HTMLInputElement>;
     static propTypes = TermListPropTypes;
     constructor(props: TermListProps) {
         super(props);
         const { addError } = props;
         this.api = new DictionaryAPIClient(addError);
+        this.filterTermRef = React.createRef();
     }
 
     public fetchDefinitions = () => {
@@ -43,16 +49,44 @@ class TermList extends Component<TermListProps, TermListState> {
 
         this.api.listDefinitions(addTerms);
     };
+    public filterDefinitions = () => {
+        const { filterTerm }: TermListState = this.state;
+        const { filterTerms }: TermListProps = this.props;
+
+        filterTerms(filterTerm);
+    };
 
     componentDidMount() { }
     render() {
         const { terms, hideFunctionalLabels }: TermListProps = this.props;
         const { by_term } = terms;
-        const { fetchDefinitions } = this;
+        const { fetchDefinitions, filterDefinitions } = this;
         const all: TermProps[] = Object.values(by_term);
         const showFunctionalLabels = !hideFunctionalLabels;
         return (
             <React.Fragment>
+                <Form inline>
+                    <Form.Control
+                        type="text"
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => {
+                            this.setState({
+                                filterTerm: event.currentTarget.value
+                            });
+                        }}
+                        placeholder="Filter"
+                        className="mr-sm-2"
+                    />
+                    <Button
+                        onClick={() => {
+                            filterDefinitions();
+                        }}
+                        variant="outline-success"
+                    >
+                        Filter
+					</Button>
+                </Form>
                 <Table responsive bordered hover>
                     <thead>
                         <tr>
@@ -273,6 +307,14 @@ export default connect<TermListProps>(
             return {
                 type: "ADD_TERMS",
                 terms
+            };
+        },
+        filterTerms: function(filterTerm: string) {
+            return {
+                type: "FILTER_TERMS",
+                filterBy: {
+                    term: filterTerm
+                }
             };
         },
         addError: function(error: Error) {
