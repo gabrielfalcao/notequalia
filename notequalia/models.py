@@ -2,6 +2,7 @@ import json
 import logging
 
 from typing import Optional, List, Dict
+from sqlalchemy import desc
 
 # from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
@@ -159,6 +160,14 @@ class Term(Model):
             nullable=True,
         ),
     )
+
+    @classmethod
+    def latest(cls, *expressions):
+        table = cls.table
+        order_by = (desc(table.c.id), )
+        return cls.where_many(
+            order_by=order_by,
+        )
 
     def to_dict(self):
         data = {}

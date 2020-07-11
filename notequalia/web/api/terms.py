@@ -107,9 +107,7 @@ class DefinitionsEndpoint(Resource):
         return json_response(model.to_dict(), created and 201 or 200)
 
     def get(self):
-        terms = sorted(
-            [t.to_dict() for t in Term.all()], key=lambda d: d.get("term")
-        )
+        terms = [t.to_dict() for t in Term.latest()]
         return json_response(terms, 200)
 
 

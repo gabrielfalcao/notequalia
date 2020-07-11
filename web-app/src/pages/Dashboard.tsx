@@ -87,7 +87,7 @@ class Dashboard extends Component<DashboardProps> {
                             <Card bg="light" text="dark" className="mb-2">
                                 <Card.Header>Lexicon</Card.Header>
                                 <Card.Body>
-                                    <TermList />
+                                    <TermList hideFunctionalLabels />
                                 </Card.Body>
                             </Card>
                         </Col>

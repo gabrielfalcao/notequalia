@@ -4,7 +4,6 @@ import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
 import Table from "react-bootstrap/Table";
-import { withRouter } from "react-router";
 // import Alert from "react-bootstrap/Alert";
 
 import { LinkContainer } from "react-router-bootstrap";
@@ -19,10 +18,12 @@ import { TermsReducerState, TermListState } from "../reducers/types";
 import { DictionaryAPIClient } from "../networking";
 
 // const x = { FormControl< "input" >}
-const TermListPropTypes = {
+export const TermListPropTypes = {
     auth: AuthPropTypes,
     addError: PropTypes.func,
-    addTerms: PropTypes.func
+    hideFunctionalLabels: PropTypes.bool,
+    addTerms: PropTypes.func,
+    terms: TermPropTypes
 };
 
 type TermListProps =
@@ -31,10 +32,7 @@ type TermListProps =
 
 class TermList extends Component<TermListProps, TermListState> {
     private api: DictionaryAPIClient;
-    static propTypes = {
-        auth: AuthPropTypes,
-        terms: TermPropTypes
-    };
+    static propTypes = TermListPropTypes;
     constructor(props: TermListProps) {
         super(props);
         const { addError } = props;
@@ -49,17 +47,18 @@ class TermList extends Component<TermListProps, TermListState> {
 
     componentDidMount() { }
     render() {
-        const { terms }: TermListProps = this.props;
+        const { terms, hideFunctionalLabels }: TermListProps = this.props;
         const { by_term } = terms;
         const { fetchDefinitions } = this;
         const all: TermProps[] = Object.values(by_term);
+        const showFunctionalLabels = !hideFunctionalLabels;
         return (
             <React.Fragment>
                 <Table responsive bordered hover>
                     <thead>
                         <tr>
                             <th>Term</th>
-                            <th>Meaning</th>
+                            {showFunctionalLabels ? <th>Meaning</th> : null}
                             <th>Action</th>
                             {
                                 //     <th>Synonyms</th>
@@ -82,9 +81,13 @@ class TermList extends Component<TermListProps, TermListState> {
                             return (
                                 <tr key={`${index}`}>
                                     <td>
-                                        <h3>{term.term}</h3>
+                                        <LinkContainer
+                                            to={`/terms/view/${term.term}`}
+                                        >
+                                            <h3>{term.term}</h3>
+                                        </LinkContainer>
                                     </td>
-                                    {pydictionary ? (
+                                    {showFunctionalLabels && pydictionary ? (
                                         <React.Fragment>
                                             <td>
                                                 {pydictionary ? (
@@ -218,22 +221,6 @@ class TermList extends Component<TermListProps, TermListState> {
                                                     </ListGroup>
                                                 ) : null}
                                             </td>
-                                            <td>
-                                                <LinkContainer
-                                                    to={`/terms/delete/${term.term}`}
-                                                >
-                                                    <Button variant="danger">
-                                                        Delete{""}
-                                                    </Button>
-                                                </LinkContainer>
-                                                <LinkContainer
-                                                    to={`/terms/view/${term.term}`}
-                                                >
-                                                    <Button variant="primary">
-                                                        View{""}
-                                                    </Button>
-                                                </LinkContainer>
-                                            </td>
                                             {
                                                 // <td>
                                                 //     {pydictionary.synonym || ""}
@@ -243,11 +230,23 @@ class TermList extends Component<TermListProps, TermListState> {
                                                 // </td>
                                             }
                                         </React.Fragment>
-                                    ) : (
-                                            <React.Fragment>
-                                                <td>UNDEFINED</td>
-                                            </React.Fragment>
-                                        )}
+                                    ) : null}
+                                    <td>
+                                        <LinkContainer
+                                            to={`/terms/delete/${term.term}`}
+                                        >
+                                            <Button variant="danger">
+                                                Delete{""}
+                                            </Button>
+                                        </LinkContainer>
+                                        <LinkContainer
+                                            to={`/terms/view/${term.term}`}
+                                        >
+                                            <Button variant="primary">
+                                                View{""}
+                                            </Button>
+                                        </LinkContainer>
+                                    </td>
                                 </tr>
                             );
                         })}
@@ -266,24 +265,22 @@ class TermList extends Component<TermListProps, TermListState> {
     }
 }
 
-export default withRouter(
-    connect<TermListProps>(
-        state => {
-            return { ...state };
+export default connect<TermListProps>(
+    state => {
+        return { ...state };
+    },
+    {
+        addTerms: function(terms: TermListState[]) {
+            return {
+                type: "ADD_TERMS",
+                terms
+            };
         },
-        {
-            addTerms: function(terms: TermListState[]) {
-                return {
-                    type: "ADD_TERMS",
-                    terms
-                };
-            },
-            addError: function(error: Error) {
-                return {
-                    type: "ADD_ERROR",
-                    error
-                };
-            }
+        addError: function(error: Error) {
+            return {
+                type: "ADD_ERROR",
+                error
+            };
         }
-    )(TermList)
-);
+    }
+)(TermList);
