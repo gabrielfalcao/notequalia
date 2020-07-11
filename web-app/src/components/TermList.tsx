@@ -13,7 +13,7 @@ import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import { AuthPropTypes } from "../domain/auth";
 
-import { TermPropTypes, TermProps } from "../domain/terms";
+import { TermProps } from "../domain/terms";
 import { TermsReducerState, TermListState } from "../reducers/types";
 import { DictionaryAPIClient } from "../networking";
 
@@ -22,8 +22,7 @@ export const TermListPropTypes = {
     auth: AuthPropTypes,
     addError: PropTypes.func,
     hideFunctionalLabels: PropTypes.bool,
-    addTerms: PropTypes.func,
-    terms: TermPropTypes
+    addTerms: PropTypes.func
 };
 
 type TermListProps =
@@ -139,7 +138,7 @@ class TermList extends Component<TermListProps, TermListState> {
                                                         ) : null}
                                                     </React.Fragment>
                                                 ) : null}
-
+												y{" "}
                                                 {thesaurus ? (
                                                     <ListGroup variant="flush">
                                                         {thesaurus.map(

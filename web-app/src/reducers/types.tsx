@@ -17,7 +17,10 @@ export type NotesAction =
 export type MapOfTermProps = { [index: string]: TermProps };
 
 export type TermsReducerState = {
+    terms: Array<TermProps>; // note id
     by_term: MapOfTermProps;
+    filtered: Array<TermProps>; // note id
+    filterBy: any;
     loaded: boolean;
     current: TermProps | null;
 };
