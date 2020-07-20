@@ -1,4 +1,5 @@
 import json
+import jwt
 import bcrypt
 import logging
 
@@ -9,6 +10,7 @@ from sqlalchemy import desc
 # from uiclasses import Model as DataClass
 from chemist import Model, db, metadata
 from notequalia.lexicon.merriam_webster.models import Definition
+from notequalia import config
 
 # from notequalia.utils import parse_jwt_token
 
@@ -256,7 +258,7 @@ class User(Model):
         return True
 
     def match_password(self, plain) -> bool:
-        return bcrypt.checkpw(plain.encode('utf-8'), self.password.encode('utf-8'))
+        return bcrypt.checkpw(plain.encode("utf-8"), self.password.encode("utf-8"))
 
     @classmethod
     def authenticate(cls, email, password):
@@ -272,13 +274,35 @@ class User(Model):
     def secretify_password(cls, plain) -> str:
         if not plain:
             raise RuntimeError(f"cannot hash without a plain password: {plain!r}")
-        return bcrypt.hashpw(plain.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        return bcrypt.hashpw(plain.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
     @classmethod
     def create(cls, email, password, **kw):
         email = email.lower()
         password = cls.secretify_password(password)
         return super(User, cls).create(email=email, password=password, **kw)
+
+    def create_token(self, duration: int = 28800):
+        """
+        :param duration: in seconds - defaults to 28800 (8 hours)
+        """
+        created_at = now().isoformat()
+        secret = bcrypt.kdf(
+            password=config.SECRET_KEY,
+            salt=self.password.encode("utf-8"),
+            desired_key_bytes=32,
+            rounds=100,
+        )
+        access_token = jwt.encode(
+            {"created_at": created_at, "duration": duration}, secret, algorithm="HS256"
+        )
+        return AccessToken.create(
+            content=access_token,
+            scope='manage:notes manage:terms',
+            created_at=created_at,
+            duration=duration,
+            user_id=self.id,
+        )
 
 
 class AccessToken(Model):
@@ -301,3 +325,9 @@ class AccessToken(Model):
     @property
     def user(self):
         return User.find_one_by(id=self.user_id) if self.user_id else None
+
+    def to_dict(self):
+        data = self.serialize()
+        data.pop("id")
+        data["access_token"] = data.pop("content")
+        return data
