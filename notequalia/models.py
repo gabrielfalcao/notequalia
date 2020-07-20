@@ -226,7 +226,7 @@ class Term(Model):
 
 class User(Model):
     table = db.Table(
-        "user",
+        "auth_user",
         metadata,
         db.Column("id", db.Integer, primary_key=True),
         db.Column("email", db.String(100), nullable=False, unique=True),
@@ -279,3 +279,25 @@ class User(Model):
         email = email.lower()
         password = cls.secretify_password(password)
         return super(User, cls).create(email=email, password=password, **kw)
+
+
+class AccessToken(Model):
+    table = db.Table(
+        "auth_access_token",
+        metadata,
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("content", db.UnicodeText, nullable=False),
+        db.Column("scope", db.UnicodeText, nullable=True),
+        db.Column("created_at", db.DateTime, default=now),
+        db.Column("duration", db.Integer),
+        db.Column(
+            "user_id",
+            db.Integer,
+            db.ForeignKey("auth_user.id", ondelete="RESTRICT"),
+            nullable=False,
+        ),
+    )
+
+    @property
+    def user(self):
+        return User.find_one_by(id=self.user_id) if self.user_id else None

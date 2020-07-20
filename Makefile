@@ -139,7 +139,7 @@ operations/helm/charts:
 template: operations/helm/charts
 	helm template $(HELM_SET_VARS) operations/helm
 
-deploy: tests k8s-namespace operations/helm/charts
+deploy: tests migrate k8s-namespace operations/helm/charts
 	iterm2 color orange
 	git push
 	helm dependency update --skip-refresh operations/helm/
