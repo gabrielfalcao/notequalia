@@ -68,6 +68,7 @@ unit: | $(VENV)/bin/nosetests  # runs only unit tests
 	$(VENV)/bin/nosetests --cover-erase tests/unit
 
 functional:| $(VENV)/bin/nosetests  # runs functional tests
+	$(VENV)/bin/nosetests tests/functional/test_user_management.py
 	$(VENV)/bin/nosetests tests/functional
 
 tdd-functional:| $(VENV)/bin/nosetests  # runs functional tests

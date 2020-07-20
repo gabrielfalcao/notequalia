@@ -19,3 +19,12 @@ cors = CORS(application, resources="*")
 
 session_manager = Session(application)
 # oidc = OpenIDConnect(application)
+
+
+
+
+class ValidationError(ValueError):
+    def __init__(self, field_name, message):
+        self.field = field_name
+        self.message = message
+        super(ValidationError, self).__init__(message)

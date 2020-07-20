@@ -1,6 +1,8 @@
 import json
+import bcrypt
 import logging
 
+from datetime import datetime
 from typing import Optional, List, Dict
 from sqlalchemy import desc
 
@@ -9,6 +11,10 @@ from chemist import Model, db, metadata
 from notequalia.lexicon.merriam_webster.models import Definition
 
 # from notequalia.utils import parse_jwt_token
+
+
+def now():
+    return datetime.utcnow()
 
 
 logger = logging.getLogger(__name__)
@@ -142,17 +148,11 @@ class Term(Model):
         "terms",
         metadata,
         db.Column("id", db.Integer, primary_key=True),
-        db.Column(
-            "term", db.UnicodeText, nullable=True, index=True, unique=True
-        ),
+        db.Column("term", db.UnicodeText, nullable=True, index=True, unique=True),
         db.Column("content", db.UnicodeText, nullable=True),
         db.Column("pydictionary_json", db.UnicodeText, nullable=True),
-        db.Column(
-            "merriamwebster_thesaurus_json", db.UnicodeText, nullable=True
-        ),
-        db.Column(
-            "merriamwebster_collegiate_json", db.UnicodeText, nullable=True
-        ),
+        db.Column("merriamwebster_thesaurus_json", db.UnicodeText, nullable=True),
+        db.Column("merriamwebster_collegiate_json", db.UnicodeText, nullable=True),
         db.Column(
             "parent_id",
             db.Integer,
@@ -164,10 +164,8 @@ class Term(Model):
     @classmethod
     def latest(cls, *expressions):
         table = cls.table
-        order_by = (desc(table.c.id), )
-        return cls.where_many(
-            order_by=order_by,
-        )
+        order_by = (desc(table.c.id),)
+        return cls.where_many(order_by=order_by)
 
     def to_dict(self):
         data = {}
@@ -205,7 +203,7 @@ class Term(Model):
 
     @property
     def content(self) -> dict:
-        return self.get_parsed_json_property('content')
+        return self.get_parsed_json_property("content")
 
     @property
     def pydictionary(self) -> List[dict]:
@@ -224,3 +222,60 @@ class Term(Model):
 
     def get_collegiate_definitions(self) -> Definition.List:
         return Definition.List(self.collegiate)
+
+
+class User(Model):
+    table = db.Table(
+        "user",
+        metadata,
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("email", db.String(100), nullable=False, unique=True),
+        db.Column("password", db.Unicode(128), nullable=False),
+        db.Column("created_at", db.DateTime, default=now),
+        db.Column("updated_at", db.DateTime, default=now),
+        db.Column("requested_subscription_at", db.DateTime),
+        db.Column("invited_at", db.DateTime),
+        db.Column("activated_at", db.DateTime),
+    )
+
+    def to_dict(self):
+        data = self.serialize()
+        data.pop("password")
+        return data
+
+    def change_password(self, old_password, new_password):
+        right_password = self.match_password(old_password)
+        if right_password:
+            return self.set_password(new_password)
+
+        return False
+
+    def set_password(self, password) -> bool:
+        self.set(password=self.secretify_password(password))
+        self.save()
+        return True
+
+    def match_password(self, plain) -> bool:
+        return bcrypt.checkpw(plain.encode('utf-8'), self.password.encode('utf-8'))
+
+    @classmethod
+    def authenticate(cls, email, password):
+        email = email.lower()
+        user = cls.find_one_by(email=email)
+        if not user:
+            return
+
+        if user.match_password(password):
+            return user
+
+    @classmethod
+    def secretify_password(cls, plain) -> str:
+        if not plain:
+            raise RuntimeError(f"cannot hash without a plain password: {plain!r}")
+        return bcrypt.hashpw(plain.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+    @classmethod
+    def create(cls, email, password, **kw):
+        email = email.lower()
+        password = cls.secretify_password(password)
+        return super(User, cls).create(email=email, password=password, **kw)

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-
-from flask import render_template
+import json
+from flask import render_template, jsonify
 
 from notequalia.logs import set_log_level_by_name
-from notequalia.web.core import application
+from notequalia.web.core import application, ValidationError
 
 # from notequalia import config
 
@@ -30,3 +30,9 @@ def backend():
 @application.route("/oauth2/callback")
 def index(path=None):
     return render_template("index.html")
+
+
+
+@application.errorhandler(ValidationError)
+def handle_validation_error(error):
+    return json.dumps({'errors': {error.field: error.message}}), 400, {'Content-Type': 'application/json'}
