@@ -1,11 +1,11 @@
 import json
 from notequalia.web.api.terms import define_new_term
 
-from .helpers import web_test, vcr
+from .helpers import auth_web_test, vcr
 
 
 @vcr.use_cassette("ap1/v1/dict/definitions/POST:201.yaml")
-@web_test
+@auth_web_test
 def test_create_definition(context):
     ("POST on /api/v1/dict/definitions should return 201")
 
@@ -30,7 +30,7 @@ def test_create_definition(context):
 
 
 @vcr.use_cassette("ap1/v1/dict/definitions/POST:200.yaml")
-@web_test
+@auth_web_test
 def test_get_or_create_definition(context):
     (
         "POST on /api/v1/dict/definitions should return 200 when term already exists"
@@ -54,7 +54,7 @@ def test_get_or_create_definition(context):
 
 
 @vcr.use_cassette("ap1/v1/dict/definitions/GET:200.yaml")
-@web_test
+@auth_web_test
 def test_list_definitions(context):
     (
         "GET /api/v1/dict/definitions should return 200 with a list of definitions"
@@ -79,7 +79,7 @@ def test_list_definitions(context):
 
 
 @vcr.use_cassette("ap1/v1/dict/definitions/DELETE:200.yaml")
-@web_test
+@auth_web_test
 def test_delete_definitions(context):
     (
         "DELETE /api/v1/dict/definitions should return 200 with a list of definitions"

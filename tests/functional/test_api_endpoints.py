@@ -1,9 +1,9 @@
 # import vcr
 import json
-from .helpers import web_test
+from .helpers import auth_web_test
 
 
-@web_test
+@auth_web_test
 def test_list_notes(context):
     ("GET on /api/v1/notes should return 200")
 
@@ -19,7 +19,7 @@ def test_list_notes(context):
     response.status_code.should.equal(200)
 
 
-@web_test
+@auth_web_test
 def test_create_note_without_authentication(context):
     ("POST on /api/v1/notes should return a json ")
 
@@ -44,7 +44,7 @@ def test_create_note_without_authentication(context):
     response.status_code.should.equal(201)
 
 
-@web_test
+@auth_web_test
 def test_backup_lexicon(context):
     ("GET on /api/v1/dict/download should return a json ")
 

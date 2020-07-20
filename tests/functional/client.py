@@ -27,7 +27,7 @@ class JSONFlaskClient(FlaskClient):
         if not "headers" in kw:
             kw["headers"] = {}
 
-        if "json" not in kw["headers"].get("Content-Type", ""):
+        if json_source and "json" not in kw["headers"].get("Content-Type", ""):
             kw["headers"]["Content-Type"] = "application/json"
 
         return super().open(*args, **kw)

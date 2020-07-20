@@ -8,6 +8,7 @@ from pathlib import Path
 from notequalia.config import dbconfig
 from notequalia.web import application
 from notequalia.logs import set_debug_mode
+from notequalia.models import User
 from chemist import set_default_uri, metadata
 from .client import JSONFlaskClient
 
@@ -46,8 +47,16 @@ def after_each_test(context):
         metadata.drop_all(context.engine)
 
 
-web_test = scenario(before_each_test, after_each_test)
+def inject_user_and_token(context):
+    context.password = '_^0123aBcD#$'
+    context.user = User.create('injected@test.com', context.password)
+    context.access_token = context.user.create_token()
+    context.http = JSONFlaskClient.from_app(context.web, bearer_token=context.access_token.content)
 
+
+
+web_test = scenario(before_each_test, after_each_test)
+auth_web_test = scenario([before_each_test, inject_user_and_token], after_each_test)
 
 
 def response_errors_for_field(response: flask.Response, field: str) -> List[str]:
