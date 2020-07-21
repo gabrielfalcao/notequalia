@@ -10,6 +10,21 @@ jobs:
   build:
     name: "Python Tests"
     runs-on: ubuntu-latest
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_DATABASE: test
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v2
@@ -18,7 +33,7 @@ jobs:
       run: sudo apt-get update
 
     - name: Install dependencies
-      run: sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl
+      run: sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl postgresql
 
     - name: setup pyenv
       uses: "gabrielfalcao/pyenv-action@v6"
@@ -37,9 +52,25 @@ jobs:
 
     - name: Functional Tests
       run: make functional
+      env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: postgres
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DATABASE: test
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
 
     - name: Randomize All Tests
       run: make tests
+      env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: postgres
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DATABASE: test
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
 
     - name: "Upload coverage results to codecov.io"
       uses: codecov/codecov-action@v1
