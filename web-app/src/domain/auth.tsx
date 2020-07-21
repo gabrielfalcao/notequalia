@@ -1,13 +1,17 @@
 import PropTypes, { InferProps } from "prop-types";
+const MIN_TOKEN_LENGTH = 10;
 
 export function needs_login(auth: any) {
     if (!auth) {
         return true;
     }
-    if (!auth.scope) {
+    if (!auth.access_token) {
         return true;
     }
-    return typeof auth.scope !== "string";
+    return (
+        typeof auth.access_token !== "string" ||
+        auth.access_token.length < MIN_TOKEN_LENGTH
+    );
 }
 
 export class Scope {

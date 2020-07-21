@@ -73,3 +73,35 @@ export class DictionaryAPIClient {
             .then(handler);
     };
 }
+
+export class AuthClient {
+    private api: APIRouter;
+    private defaultOptions: AxiosRequestConfig;
+    private handleError: ErrorHandler;
+
+    constructor(handleError: ErrorHandler) {
+        this.api = new APIRouter("https://cognod.es/");
+        this.defaultOptions = {
+            headers: { "Content-Type": "application/json" }
+        };
+        this.handleError = handleError;
+    }
+
+    private getOptions = (): any => {
+        return { ...this.defaultOptions };
+    };
+    public authenticate = (
+        email: string,
+        password: string,
+        handler: SuccessHandler
+    ): void => {
+        const url = this.api.urlFor("/api/v1/auth");
+        axios
+            .post(url, { email, password }, this.getOptions())
+            .then((response: AxiosResponse<TermProps>) => {
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+}

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { InferProps } from "prop-types";
+import PropTypes, { InferProps } from "prop-types";
 
 import {
     BrowserRouter as Router,
@@ -8,6 +8,7 @@ import {
     Redirect
 } from "react-router-dom";
 
+import Alert from "react-bootstrap/Alert";
 import NewNote from "./pages/NewNote";
 import NoteEditor from "./pages/NoteEditor";
 import NoteView from "./pages/NoteView";
@@ -30,14 +31,15 @@ type AppState = {
     error: Error | null;
 };
 const AppPropTypes = {
-    auth: AuthPropTypes
+    auth: AuthPropTypes,
+    error: PropTypes.any
 };
 type AppProps = InferProps<typeof AppPropTypes> | any;
 
 class App extends Component<AppProps, AppState> {
     static propTypes = AppPropTypes;
     render() {
-        const { auth } = this.props;
+        const { auth, error } = this.props;
 
         function AuthenticatedRoute({
             children,
@@ -66,6 +68,7 @@ class App extends Component<AppProps, AppState> {
 
         return (
             <Router>
+                {error ? <Alert variant="danger">{error}</Alert> : null}
                 <Route
                     path={[
                         "/dashboard",

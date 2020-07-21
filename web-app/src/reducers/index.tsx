@@ -11,6 +11,8 @@ const DEFAULT_STATE = {};
 
 export const mainReducer = (state: any = DEFAULT_STATE, action: any = {}) => {
     switch (action.type) {
+        case "ADD_ERROR":
+            return { ...state, error: action };
         default:
             return { ...state };
     }

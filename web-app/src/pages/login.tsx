@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ChangeEvent } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
 
@@ -7,33 +7,46 @@ import { Redirect } from "react-router-dom";
 // import { LinkContainer } from "react-router-bootstrap";
 
 import Row from "react-bootstrap/Row";
+import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
 import { needs_login, AuthPropTypes } from "../domain/auth";
+import { AuthClient } from "../networking";
 
 const LoginPropTypes = {
+    addError: PropTypes.func,
     setUser: PropTypes.func,
+    error: PropTypes.any,
     auth: AuthPropTypes
 };
 
 type LoginProps = InferProps<typeof LoginPropTypes>;
 
-class Login extends Component<LoginProps> {
+export type LoginState = {
+    email: string;
+    password: string;
+};
+
+class Login extends Component<LoginProps, LoginState> {
+    private api: AuthClient;
+    constructor(props: LoginProps) {
+        super(props);
+        const { addError } = props;
+        this.api = new AuthClient(addError);
+    }
+
     public login = () => {
-        // dummy login
-        this.props.setUser({
-            scope: "notes:write notes:read",
-            user: { email: "johndoe@mail.visualcu.es" },
-            access_token: "FAKETOKEN",
-            profile: {
-                preferred_username: "John Doe"
-            }
+        // const { setUser } = this.props;
+        const { email, password } = this.state;
+        this.api.authenticate(email, password, (data: any) => {
+            console.log("SUCCESS LOGIN", data);
         });
     };
 
     render() {
         const { auth }: any = this.props;
+
         if (!needs_login(auth)) {
             return <Redirect to="/" />;
         }
@@ -47,8 +60,42 @@ class Login extends Component<LoginProps> {
                             </Modal.Header>
 
                             <Modal.Body>
-                                This is a dummy login for now, just click login
-								{"."}
+                                <Form>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Label>Email address</Form.Label>
+                                        <Form.Control
+                                            type="email"
+                                            placeholder="Enter email"
+                                            onChange={(
+                                                event: React.ChangeEvent<
+                                                    HTMLInputElement
+                                                >
+                                            ) => {
+                                                this.setState({
+                                                    email: event.target.value
+                                                });
+                                            }}
+                                        />
+                                        <Form.Text className="text-muted"></Form.Text>
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formBasicPassword">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Password"
+                                            onChange={(
+                                                event: React.ChangeEvent<
+                                                    HTMLInputElement
+                                                >
+                                            ) => {
+                                                this.setState({
+                                                    password: event.target.value
+                                                });
+                                            }}
+                                        />
+                                    </Form.Group>
+                                </Form>
                             </Modal.Body>
 
                             <Modal.Footer>
@@ -65,7 +112,7 @@ class Login extends Component<LoginProps> {
 }
 
 export default connect(
-    state => {
+    (state: LoginState) => {
         return { ...state };
     },
     {
@@ -73,6 +120,12 @@ export default connect(
             return {
                 type: "NEW_AUTHENTICATION",
                 user
+            };
+        },
+        addError: function(error: Error) {
+            return {
+                type: "ADD_ERROR",
+                error
             };
         }
     }
