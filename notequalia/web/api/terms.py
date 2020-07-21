@@ -20,6 +20,9 @@ from notequalia.lexicon_engine import (
 from notequalia.utils import json_response
 from .base import api, application
 
+from .auth import authorization_parser, require_auth
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -90,9 +93,10 @@ def validate_term(term: str) -> str:
 
 
 @term_ns.route("/definitions")
-@term_ns.expect(parser)
+@term_ns.expect(authorization_parser, validate=True)
 class DefinitionsEndpoint(Resource):
     @term_ns.expect(definition_json)
+    @require_auth(scope='term:write')
     def post(self):
         term = validate_term((api.payload.get("term") or "").strip())
         if not term:
@@ -114,6 +118,7 @@ class DefinitionsEndpoint(Resource):
 @term_ns.route("/term/<term>")
 @term_ns.expect(parser)
 class TermEndpoint(Resource):
+    @require_auth(scope='term:write')
     def delete(self, term):
         found = Term.find_one_by(term=term)
         if not found:
@@ -163,6 +168,7 @@ def backup():
 
 
 @application.route("/reprocess", methods=["POST"])
+@require_auth(scope='term:write')
 def backup_reprocess():
     return lexicon_backup_response(should_reprocess=True)
 

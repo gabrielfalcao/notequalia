@@ -1,19 +1,38 @@
 # -*- coding: utf-8 -*-
-#
+import re
 import logging
-from flask import request
+from decorator import decorator
+from flask import request, g
 from flask_restplus import Resource
 from flask_restplus import reqparse
 from flask_restplus import inputs
 from flask_restplus import fields
 
-from notequalia.models import User
+from notequalia.models import User, AccessToken
 from .base import api
 
 from .inputs import password as password_input
 
 logger = logging.getLogger(__name__)
 
+
+
+@decorator
+def require_auth(func, scope=None, *args, **kw):
+    header = request.headers.get('Authorization', '')
+    found = re.search(r'[bB]earer\s(?P<token>\S+)', header)
+
+    token = AccessToken.find_one_by(content=found.group('token'))
+    if token:
+        g.user = token.user
+        g.access_token = token
+        return func(*args, **kw)
+
+    return {'error': 'unauthorized'}, 401
+
+
+authorization_parser = reqparse.RequestParser()
+authorization_parser.add_argument("Authorization", required=True, location='headers')
 
 auth_json = api.model(
     "AccessToken",

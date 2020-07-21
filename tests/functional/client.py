@@ -13,7 +13,9 @@ from flask.testing import FlaskClient
 class JSONFlaskClient(FlaskClient):
     def __init__(self, *args, **kwargs):
         bearer_token = kwargs.pop('bearer_token', None)
-        self.default_headers = {}
+        self.default_headers = {
+            'Content-Type': 'application/json',
+        }
         if bearer_token:
             self.default_headers['Authorization'] = f'Bearer {bearer_token}'
 
@@ -24,11 +26,9 @@ class JSONFlaskClient(FlaskClient):
         if json_source:
             kw["data"] = json.dumps(json_source)
 
-        if not "headers" in kw:
-            kw["headers"] = {}
-
-        if json_source and "json" not in kw["headers"].get("Content-Type", ""):
-            kw["headers"]["Content-Type"] = "application/json"
+        headers = self.default_headers.copy()
+        headers.update(kw.pop('headers', {}))
+        kw["headers"] = headers
 
         return super().open(*args, **kw)
 
