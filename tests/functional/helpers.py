@@ -21,7 +21,7 @@ vcr = VCR(
 
 
 def supports_postgres():
-    return dbconfig.host is not None and len(dbconfig.host) > 0
+    return shutil.which("initdb") is not None
 
 
 def before_each_test(context):

@@ -235,8 +235,8 @@ class User(Model):
         db.Column("id", db.Integer, primary_key=True),
         db.Column("email", db.String(100), nullable=False, unique=True),
         db.Column("password", db.Unicode(128), nullable=False),
-        db.Column("created_at", db.DateTime, default=now),
-        db.Column("updated_at", db.DateTime, default=now),
+        db.Column("created_at", db.DateTime),
+        db.Column("updated_at", db.DateTime),
         db.Column("requested_subscription_at", db.DateTime),
         db.Column("invited_at", db.DateTime),
         db.Column("activated_at", db.DateTime),
@@ -297,15 +297,13 @@ class User(Model):
         """
         :param duration: in seconds - defaults to 28800 (8 hours)
         """
-        created_at = now().isoformat()
+        created_at = now()
         access_token = jwt.encode(
-            {"created_at": created_at, "duration": duration}, self.token_secret, algorithm="HS256"
+            {"created_at": created_at.isoformat(), "duration": duration}, self.token_secret, algorithm="HS256"
         )
         return AccessToken.create(
             content=access_token,
             scope='manage:notes manage:terms',
-            created_at=created_at,
-            duration=duration,
             user_id=self.id,
         )
 
@@ -323,7 +321,7 @@ class AccessToken(Model):
         db.Column("id", db.Integer, primary_key=True),
         db.Column("content", db.UnicodeText, nullable=False, unique=True),
         db.Column("scope", db.UnicodeText, nullable=True),
-        db.Column("created_at", db.DateTime, default=now),
+        db.Column("created_at", db.DateTime),
         db.Column("duration", db.Integer),
         db.Column(
             "user_id",
