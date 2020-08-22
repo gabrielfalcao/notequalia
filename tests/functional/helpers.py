@@ -65,6 +65,9 @@ def response_errors_for_field(response: flask.Response, field: str) -> List[str]
     errors = data['errors']
     return errors[field]
 
-def response_matches_status(response: flask.Response, status: int) -> bool:
+def response_matches_status(response: flask.Response, status: int) -> dict:
     assert response.status_code == status, f'{response}\nexpected status code {status} but got {response.status_code}\n{response.json!s}'
-    return response.json
+    if response.data and 'json' in (response.headers.get('Content-Type') or ''):
+        return response.json
+
+    return {}

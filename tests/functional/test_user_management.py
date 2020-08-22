@@ -147,3 +147,22 @@ def test_get_user_by_email(context):
 
     user.should.be.a(dict)
     user.should.have.key('email').being.equal('preexisting@email.com')
+
+
+@web_test
+def test_delete_user_by_id(context):
+    ("DELETE on /api/v1/users/<id> should return 204")
+
+    # Given that a user exists with email preexisting@email.com
+    created = User.create(email='preexisting@email.com', password='aV2d5#5-dewf3')
+
+    # Given that I perform a DELETE in /api/v1/users?email=preexisting@email.com
+    response = context.http.delete(f"/api/v1/users/{created.id}")
+
+    # When I check the response
+    response.headers.should.have.key("Content-Type").being.equal(
+        "application/json"
+    )
+
+    # And check if the status was 204
+    response_matches_status(response, 204)
