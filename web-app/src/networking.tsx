@@ -13,6 +13,7 @@ export class APIRouter {
             throw new Error(`Invalid url: "${baseURL}"`);
         }
         this.baseURL = baseURL;
+        console.log(`API Router base url= ${baseURL}`);
     }
 
     public urlFor = (path: string): string => {
@@ -23,25 +24,34 @@ export class APIRouter {
     };
 }
 
+const getAPIBaseURL = (): string => {
+    if ((window.location.href + "").match(/localhost/)) {
+        return "http://localhost:5000/";
+    }
+    return "https://cognod.es/";
+};
 export type ErrorHandler = (err: Error) => void;
 export type SuccessHandler = (data: any) => void;
 
-export class DictionaryAPIClient {
-    private api: APIRouter;
-    private defaultOptions: AxiosRequestConfig;
-    private handleError: ErrorHandler;
+export class BaseAPIClient {
+    protected api: APIRouter;
+    protected defaultOptions: AxiosRequestConfig;
+    protected handleError: ErrorHandler;
 
     constructor(handleError: ErrorHandler) {
-        this.api = new APIRouter("https://cognod.es/");
+        this.api = new APIRouter(getAPIBaseURL());
         this.defaultOptions = {
             headers: { "Content-Type": "application/json" }
         };
         this.handleError = handleError;
     }
 
-    private getOptions = (): any => {
+    protected getOptions = (): any => {
         return { ...this.defaultOptions };
     };
+}
+
+export class DictionaryAPIClient extends BaseAPIClient {
     public listDefinitions = (handler: SuccessHandler): void => {
         const url = this.api.urlFor("/api/v1/dict/definitions");
         axios
