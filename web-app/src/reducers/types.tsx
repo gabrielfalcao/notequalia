@@ -1,5 +1,6 @@
 import { NoteProps } from "../domain/notes";
 import { TermProps } from "../domain/terms";
+import { UserProps } from "../domain/users";
 
 export type NotesReducerState = {
     all: Array<NoteProps>; // note id
@@ -29,4 +30,8 @@ export type TermsAction =
     | any;
 export type TermListState = {
     terms: TermProps[];
+};
+
+export type UserListState = {
+    users: UserProps[];
 };

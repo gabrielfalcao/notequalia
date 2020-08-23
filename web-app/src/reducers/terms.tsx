@@ -25,9 +25,11 @@ export const terms = (
 
         case "ADD_TERMS":
             const new_by_term: MapOfTermProps = {};
-            action.terms.forEach((term: TermProps) => {
-                new_by_term[term.term] = term;
-            });
+            if (action.terms.forEach) {
+                action.terms.forEach((term: TermProps) => {
+                    new_by_term[term.term] = term;
+                });
+            }
             return {
                 ...state,
                 by_term: { ...state.by_term, ...new_by_term },
