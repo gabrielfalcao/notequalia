@@ -6,6 +6,7 @@ from flask_restplus import Api
 from flask import url_for
 from notequalia.utils import json_response
 from notequalia.web.base import application
+# from notequalia.web.core import ValidationError
 
 from notequalia import config
 
@@ -37,3 +38,8 @@ api = Api(application, doc="/api/")
 @application.route("/health")
 def get(*args, **kw):
     return json_response({"system": "ok"})
+
+
+# @application.errorhandler(ValidationError)
+# def handle_validation_error(e):
+#     return json_response({"error": str(e)}, status=400)

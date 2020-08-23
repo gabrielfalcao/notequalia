@@ -59,23 +59,28 @@ user_ns = api.namespace(
 )
 
 
-@user_ns.route("/")
-class UserListEndpoint(Resource):
+@user_ns.route("/by-email")
+class UsersByEmailEndpoint(Resource):
     def get(self):
         query = parser_retrieve_by_email.parse_args()
         user = User.find_one_by(**query)
         if not user:
             return {'error': "user not found"}, 404
 
-        return user.to_dict(), 200
+        return user.to_dict(), 200, {'Content-Type': 'application/json'}
+
+@user_ns.route("/")
+class UserListEndpoint(Resource):
+    def get(self):
+        user = User.all()
+        return [u.to_dict() for u in user], 200
 
     def prepare_creation_params(self):
         email = api.payload.get("email")
         password = validate_password(api.payload.get("password"))
         return {"email": email, "password": password}
 
-
-    # @user_ns.expect(create_user_json, validate=True)
+    @user_ns.expect(create_user_json, validate=False)
     @user_ns.expect(parser_create, validate=True)
     def post(self):
         params = self.prepare_creation_params()

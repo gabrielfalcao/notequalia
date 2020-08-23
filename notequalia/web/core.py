@@ -3,6 +3,7 @@ from flask import jsonify
 from flask_cors import CORS
 from flask_session import Session
 from flask_oidc import OpenIDConnect
+from werkzeug.exceptions import BadRequest
 
 from notequalia.filesystem import templates_path, static_path
 
@@ -23,7 +24,7 @@ session_manager = Session(application)
 
 
 
-class ValidationError(ValueError):
+class ValidationError(BadRequest):
     def __init__(self, field_name, message):
         self.field = field_name
         self.message = message

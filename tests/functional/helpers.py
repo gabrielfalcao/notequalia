@@ -59,11 +59,12 @@ web_test = scenario(before_each_test, after_each_test)
 auth_web_test = scenario([before_each_test, inject_user_and_token], after_each_test)
 
 
-def response_errors_for_field(response: flask.Response, field: str) -> List[str]:
+def response_errors_for_field(response: flask.Response, field: str) -> str:
     data = json.loads(response.data)
-    data.should.have.key("errors")
-    errors = data['errors']
-    return errors[field]
+    data.should.have.key("message")
+    message = data['message']
+    assert field in str(data), f'{field!r} is not present in {message!r}'
+    return message
 
 def response_matches_status(response: flask.Response, status: int) -> dict:
     assert response.status_code == status, f'{response}\nexpected status code {status} but got {response.status_code}\n{response.json!s}'

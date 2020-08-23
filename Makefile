@@ -3,7 +3,7 @@
 GIT_ROOT		:= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 VENV_ROOT		:= $(GIT_ROOT)/.venv
 export VENV		?= $(VENV_ROOT)
-export FLASK_DEBUG	:= 1
+# export FLASK_DEBUG	:= 1
 export HTTPS_API	?= $(shell ps aux | grep ngrok | grep -v grep)
 
 export OAUTH2_ACCESS_TOKEN_URL	:= https://id.t.newstore.net/auth/realms/gabriel-NA-43928/protocol/openid-connect/token
@@ -38,11 +38,11 @@ BACKEND_FLASK_NGROK	:= notequalia-be
 
 all: dependencies tests
 
-$(VENV):  # creates $(VENV) folder if does not exist
+venv $(VENV):  # creates $(VENV) folder if does not exist
 	python3 -mvenv $(VENV)
 	$(VENV)/bin/pip install -U pip setuptools
 
-$(VENV)/bin/notequalia-io $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
+develop $(VENV)/bin/notequalia-io $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
 	test -e $(VENV)/bin/pip || $(MAKE) $(VENV)
 	$(VENV)/bin/pip install -r development.txt
 	$(VENV)/bin/python setup.py develop

@@ -129,13 +129,13 @@ def test_change_password_of_user(context):
 
 @web_test
 def test_get_user_by_email(context):
-    ("GET on /api/v1/users?email=preexisting@email.com should return 200")
+    ("GET on /api/v1/users/by-email?email=preexisting@email.com should return 200")
 
     # Given that a user exists with email preexisting@email.com
     created = User.create(email='preexisting@email.com', password='aV2d5#5-dewf3')
 
-    # Given that I perform a GET in /api/v1/users?email=preexisting@email.com
-    response = context.http.get(f"/api/v1/users/?email=preexisting@email.com")
+    # Given that I perform a GET in /api/v1/users/by-email?email=preexisting@email.com
+    response = context.http.get(f"/api/v1/users/by-email?email=preexisting@email.com")
 
     # When I check the response
     response.headers.should.have.key("Content-Type").being.equal(
@@ -166,3 +166,30 @@ def test_delete_user_by_id(context):
 
     # And check if the status was 204
     response_matches_status(response, 204)
+
+
+@web_test
+def test_list_users(context):
+    ("GET on /api/v1/users should return 200")
+
+    # Given that 3 users exist
+    User.create(email='user1@email.com', password='aV2d5#5-dewf3')
+    User.create(email='user2@email.com', password='aV2d5#5-dewf3')
+    User.create(email='user3@email.com', password='aV2d5#5-dewf3')
+
+    # When that I perform a GET in /api/v1/users
+    response = context.http.get(f"/api/v1/users/")
+
+    # When I check the response
+    response.headers.should.have.key("Content-Type").being.equal(
+        "application/json"
+    )
+
+    # And check if the status was 200
+    result = response_matches_status(response, 200)
+
+    # Then The result should be a list
+    result.should.be.a(list)
+
+    # And have 3 items
+    result.should.have.length_of(3)
