@@ -14,6 +14,8 @@ import NoteView from "./pages/NoteView";
 import DeleteNote from "./pages/DeleteNote";
 import DeleteTerm from "./pages/DeleteTerm";
 import ViewTerm from "./pages/ViewTerm";
+import ManageUsers from "./pages/admin/ManageUsers";
+import DeleteUser from "./pages/admin/DeleteUser";
 
 import Login from "./pages/login";
 import MindMapView from "./views/MindMapView";
@@ -86,6 +88,14 @@ class App extends Component<AppProps, AppState> {
                             graph={DEFAULT_GRAPH}
                         />
                     </Route>
+                    <Route path="/.admin/users/delete/:id">
+                        <DeleteUser />
+                    </Route>
+
+                    <Route path="/.admin">
+                        <ManageUsers />
+                    </Route>
+
                     <Route path="/login">
                         <Login />
                     </Route>

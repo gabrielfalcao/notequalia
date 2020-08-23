@@ -32,6 +32,19 @@ export type TermListState = {
     terms: TermProps[];
 };
 
+export type MapOfUserProps = { [index: string]: UserProps };
+export type UsersReducerState = {
+    by_id: MapOfUserProps;
+    loaded: boolean;
+    current: UserProps | null;
+};
+export type UsersAction =
+    | {
+        user: UserProps;
+        extendOnly: boolean;
+        users: Array<UserProps>;
+    }
+    | any;
 export type UserListState = {
     users: UserProps[];
 };

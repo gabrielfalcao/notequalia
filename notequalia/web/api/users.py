@@ -88,7 +88,7 @@ class UserListEndpoint(Resource):
         return user.to_dict(), 201
 
 
-@user_ns.route("/<int:user_id>")
+@user_ns.route("/<int:user_id>/")
 class ManageUserEndpoint(Resource):
 
     def delete(self, user_id):
@@ -96,6 +96,7 @@ class ManageUserEndpoint(Resource):
         if not user:
             return {"error": "user not found"}, 404
 
+        user.delete()
         return "", 204
 
 

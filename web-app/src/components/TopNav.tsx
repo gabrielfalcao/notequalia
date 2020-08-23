@@ -48,6 +48,10 @@ class TopNav extends Component<TopNavProps, any> {
                                     <LinkContainer to="/mindmap">
                                         <Nav.Link>MindMap</Nav.Link>
                                     </LinkContainer>
+                                    <LinkContainer to="/.admin">
+                                        <Nav.Link>Admin</Nav.Link>
+                                    </LinkContainer>
+
                                     <LinkContainer to="/logout">
                                         <Nav.Link>Logout</Nav.Link>
                                     </LinkContainer>

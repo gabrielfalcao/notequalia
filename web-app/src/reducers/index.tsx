@@ -3,6 +3,7 @@ import { compose } from "redux";
 import { auth } from "./auth";
 import { notes } from "./notes";
 import { terms } from "./terms";
+import { users } from "./users";
 import { templates } from "./templates";
 import { connectRouter } from "connected-react-router";
 import { history } from "../history";
@@ -21,6 +22,7 @@ export default compose(
     combineReducers({
         auth,
         terms,
+        users,
         notes,
         templates,
         router: connectRouter(history)

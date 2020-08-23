@@ -157,7 +157,7 @@ def test_delete_user_by_id(context):
     created = User.create(email='preexisting@email.com', password='aV2d5#5-dewf3')
 
     # Given that I perform a DELETE in /api/v1/users?email=preexisting@email.com
-    response = context.http.delete(f"/api/v1/users/{created.id}")
+    response = context.http.delete(f"/api/v1/users/{created.id}/")
 
     # When I check the response
     response.headers.should.have.key("Content-Type").being.equal(
@@ -166,6 +166,9 @@ def test_delete_user_by_id(context):
 
     # And check if the status was 204
     response_matches_status(response, 204)
+
+    # And the user should not be present in the database
+    User.all().should.be.empty
 
 
 @web_test

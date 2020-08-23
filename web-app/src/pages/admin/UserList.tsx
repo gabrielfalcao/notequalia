@@ -10,181 +10,67 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import Button from "react-bootstrap/Button";
 
-import ListGroup from "react-bootstrap/ListGroup";
 import { AuthPropTypes } from "../../domain/auth";
 
-import { TermPropTypes, TermProps } from "../../domain/terms";
-import { TermsReducerState, UserListState } from "../../reducers/types";
-import { DictionaryAPIClient } from "../../networking";
+import { UserProps } from "../../domain/users";
+import { UsersReducerState, UserListState } from "../../reducers/types";
+import { AdminAPIClient } from "../../networking";
 
 // const x = { FormControl< "input" >}
 export const UserListPropTypes = {
     auth: AuthPropTypes,
     addError: PropTypes.func,
-    hideFunctionalLabels: PropTypes.bool,
-    addTerms: PropTypes.func,
-    terms: TermPropTypes
+    addUsers: PropTypes.func
 };
 
 type UserListProps =
-    | (InferProps<typeof UserListPropTypes> & { terms: TermsReducerState })
+    | (InferProps<typeof UserListPropTypes> & { users: UsersReducerState })
     | any;
 
 class UserList extends Component<UserListProps, UserListState> {
-    private api: DictionaryAPIClient;
+    private api: AdminAPIClient;
     static propTypes = UserListPropTypes;
     constructor(props: UserListProps) {
         super(props);
         const { addError } = props;
-        this.api = new DictionaryAPIClient(addError);
+        this.api = new AdminAPIClient(addError);
     }
 
-    public fetchDefinitions = () => {
-        const { addTerms }: UserListProps = this.props;
+    public fetchUsers = () => {
+        const { addUsers }: UserListProps = this.props;
 
-        this.api.listDefinitions(addTerms);
+        this.api.listUsers(addUsers);
     };
 
     componentDidMount() { }
     render() {
-        const { terms, hideFunctionalLabels }: UserListProps = this.props;
-        const { by_term } = terms;
-        const { fetchDefinitions } = this;
-        const all: TermProps[] = Object.values(by_term);
-        const showFunctionalLabels = !hideFunctionalLabels;
+        const { users }: UserListProps = this.props;
+        const { by_id } = users;
+        const { fetchUsers } = this;
+        const all: UserProps[] = Object.values(by_id);
+
         return (
             <React.Fragment>
                 <Table responsive bordered hover>
                     <thead>
                         <tr>
-                            <th>Term</th>
-                            {showFunctionalLabels ? <th>Meaning</th> : null}
+                            <th>User</th>
                             <th>Action</th>
-                            {
-                                //     <th>Synonyms</th>
-                                // <th>Antonyms</th>
-                            }
                         </tr>
                     </thead>
                     <tbody>
-                        {all.map((term: TermProps, index: number) => {
-                            const meta: any = term.content;
-
-                            if (typeof meta !== "object") {
-                                return (
-                                    <tr key={`${index}`}>
-                                        <td></td>
-                                    </tr>
-                                );
-                            }
-                            const { collegiate, thesaurus } = meta;
-
-                            if (!collegiate && !thesaurus) {
-                                return null;
-                            }
+                        {all.map((user: UserProps, index: number) => {
                             return (
                                 <tr key={`${index}`}>
                                     <td>
-                                        <LinkContainer
-                                            to={`/terms/view/${term.term}`}
-                                        >
-                                            <h3>{term.term}</h3>
-                                        </LinkContainer>
+                                        <h3>{user.email}</h3>
                                     </td>
-
-                                    {thesaurus ? (
-                                        <ListGroup variant="flush">
-                                            {thesaurus.map(
-                                                (
-                                                    definition: any,
-                                                    index: number
-                                                ) => {
-                                                    const short_definitions: any =
-                                                        definition.short;
-                                                    return (
-                                                        <ListGroup.Item
-                                                            key={`${index}`}
-                                                        >
-                                                            <h4>
-                                                                {
-                                                                    definition.functional_label
-                                                                }
-                                                            </h4>
-                                                            {short_definitions.map(
-                                                                (
-                                                                    description: any,
-                                                                    index: number
-                                                                ) => (
-                                                                        <ListGroup.Item
-                                                                            key={`${index}`}
-                                                                        >
-                                                                            <h5>
-                                                                                {
-                                                                                    description
-                                                                                }
-                                                                            </h5>
-                                                                        </ListGroup.Item>
-                                                                    )
-                                                            )}
-                                                        </ListGroup.Item>
-                                                    );
-                                                }
-                                            )}
-                                        </ListGroup>
-                                    ) : null}
-                                    {collegiate ? (
-                                        <ListGroup variant="flush">
-                                            {collegiate.map(
-                                                (
-                                                    definition: any,
-                                                    index: number
-                                                ) => {
-                                                    const short_definitions: any =
-                                                        definition.short;
-                                                    return (
-                                                        <ListGroup.Item
-                                                            key={`${index}`}
-                                                        >
-                                                            <h4>
-                                                                {
-                                                                    definition.functional_label
-                                                                }
-                                                            </h4>
-                                                            {short_definitions.map(
-                                                                (
-                                                                    description: any,
-                                                                    index: number
-                                                                ) => (
-                                                                        <ListGroup.Item
-                                                                            key={`${index}`}
-                                                                        >
-                                                                            <h5>
-                                                                                {
-                                                                                    description
-                                                                                }
-                                                                            </h5>
-                                                                        </ListGroup.Item>
-                                                                    )
-                                                            )}
-                                                        </ListGroup.Item>
-                                                    );
-                                                }
-                                            )}
-                                        </ListGroup>
-                                    ) : null}
                                     <td>
                                         <LinkContainer
-                                            to={`/terms/delete/${term.term}`}
+                                            to={`/.admin/users/delete/${user.id}`}
                                         >
                                             <Button variant="danger">
                                                 Delete{""}
-                                            </Button>
-                                        </LinkContainer>
-                                        <LinkContainer
-                                            to={`/terms/view/${term.term}`}
-                                        >
-                                            <Button variant="primary">
-                                                View{""}
                                             </Button>
                                         </LinkContainer>
                                     </td>
@@ -195,7 +81,7 @@ class UserList extends Component<UserListProps, UserListState> {
                 </Table>
                 <Button
                     onClick={() => {
-                        fetchDefinitions();
+                        fetchUsers();
                     }}
                     variant="success"
                 >
@@ -211,10 +97,10 @@ export default connect<UserListProps>(
         return { ...state };
     },
     {
-        addTerms: function(terms: UserListState[]) {
+        addUsers: function(users: UserProps[]) {
             return {
-                type: "ADD_TERMS",
-                terms
+                type: "ADD_USERS",
+                users
             };
         },
         addError: function(error: Error) {
