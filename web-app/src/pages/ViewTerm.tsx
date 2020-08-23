@@ -63,9 +63,9 @@ class ViewTerm extends Component<ViewTermProps, any> {
         }
         const meta: any = term.content;
 
-        const { pydictionary, collegiate, thesaurus } = meta;
+        const { collegiate, thesaurus } = meta;
 
-        if (!pydictionary && !collegiate && !thesaurus) {
+        if (!collegiate && !thesaurus) {
             return null;
         }
 
@@ -79,50 +79,6 @@ class ViewTerm extends Component<ViewTermProps, any> {
                             </Modal.Header>
 
                             <Modal.Body>
-                                {pydictionary ? (
-                                    <React.Fragment>
-                                        {pydictionary.meaning ? (
-                                            <ListGroup variant="flush">
-                                                {Object.keys(
-                                                    pydictionary.meaning
-                                                ).map(
-                                                    (
-                                                        key: string,
-                                                        index: number
-                                                    ) => {
-                                                        const values: string[] =
-                                                            pydictionary
-                                                                .meaning[key];
-                                                        return (
-                                                            <ListGroup.Item
-                                                                key={`${index}`}
-                                                            >
-                                                                <h4>{key}</h4>
-                                                                {values.map(
-                                                                    (
-                                                                        description,
-                                                                        index: number
-                                                                    ) => (
-                                                                            <ListGroup.Item
-                                                                                key={`${index}`}
-                                                                            >
-                                                                                <h5>
-                                                                                    {
-                                                                                        description
-                                                                                    }
-                                                                                </h5>
-                                                                            </ListGroup.Item>
-                                                                        )
-                                                                )}
-                                                            </ListGroup.Item>
-                                                        );
-                                                    }
-                                                )}
-                                            </ListGroup>
-                                        ) : null}
-                                    </React.Fragment>
-                                ) : null}
-
                                 {thesaurus ? (
                                     <ListGroup variant="flush">
                                         {thesaurus.map(
