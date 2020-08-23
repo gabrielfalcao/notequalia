@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, ChangeEvent } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { connect } from "react-redux";
+import { withRouter, RouteComponentProps } from "react-router";
 
 import Container from "react-bootstrap/Container";
 import { Redirect } from "react-router-dom";
@@ -11,25 +12,52 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
 import { needs_login, AuthPropTypes } from "../domain/auth";
+import Form from "react-bootstrap/Form";
+import FormControl from "react-bootstrap/FormControl";
+import { AuthAPIClient } from "../networking";
+import { UserProps } from "../domain/users";
 
 const LoginPropTypes = {
+    addError: PropTypes.func,
     setUser: PropTypes.func,
     auth: AuthPropTypes
 };
 
-type LoginProps = InferProps<typeof LoginPropTypes>;
+type LoginProps = InferProps<typeof LoginPropTypes> & RouteComponentProps;
+type LoginState = {
+    email: string;
+    password: string;
+};
+class Login extends Component<LoginProps, LoginState> {
+    private api: AuthAPIClient;
+    static propTypes = LoginPropTypes;
 
-class Login extends Component<LoginProps> {
+    constructor(props: LoginProps) {
+        super(props);
+        this.state = {
+            email: "",
+            password: ""
+        };
+        const { addError } = props;
+        this.api = new AuthAPIClient(addError);
+    }
+
     public login = () => {
-        // dummy login
-        this.props.setUser({
-            scope: "notes:write notes:read",
-            user: { email: "johndoe@mail.visualcu.es" },
-            access_token: "FAKETOKEN",
-            profile: {
-                preferred_username: "John Doe"
-            }
+        const { setUser, history } = this.props;
+        const { email, password } = this.state;
+        this.api.authenticate(email, password, (user: UserProps) => {
+            console.log(user);
+            setUser({
+                user: user
+            });
+            history.push(`/`);
         });
+    };
+    public onSetEmail = (event: ChangeEvent<HTMLInputElement>) => {
+        this.setState({ email: event.target.value });
+    };
+    public onSetPassword = (event: ChangeEvent<HTMLInputElement>) => {
+        this.setState({ password: event.target.value });
     };
 
     render() {
@@ -47,13 +75,31 @@ class Login extends Component<LoginProps> {
                             </Modal.Header>
 
                             <Modal.Body>
-                                This is a dummy login for now, just click login
-								{"."}
+                                <Form.Group controlId="formLogin">
+                                    <Form.Text className="text-muted">
+                                        {"Email"}
+                                    </Form.Text>
+
+                                    <FormControl
+                                        type="email"
+                                        onChange={this.onSetEmail}
+                                        value={this.state.email}
+                                    />
+                                    <Form.Text className="text-muted">
+                                        {"Password"}
+                                    </Form.Text>
+
+                                    <FormControl
+                                        type="password"
+                                        onChange={this.onSetPassword}
+                                        value={this.state.password}
+                                    />
+                                </Form.Group>
                             </Modal.Body>
 
-                            <Modal.Footer>
-                                <Button onClick={this.login} variant="success">
-                                    Proceed{""}
+                            <Modal.Footer className="text-center">
+                                <Button onClick={this.login} variant="primary">
+                                    {"Authenticate"}
                                 </Button>
                             </Modal.Footer>
                         </Modal.Dialog>
@@ -64,16 +110,24 @@ class Login extends Component<LoginProps> {
     }
 }
 
-export default connect(
-    state => {
-        return { ...state };
-    },
-    {
-        setUser: function(user: any) {
-            return {
-                type: "NEW_AUTHENTICATION",
-                user
-            };
+export default withRouter(
+    connect(
+        state => {
+            return { ...state };
+        },
+        {
+            addError: function(error: Error) {
+                return {
+                    type: "ADD_ERROR",
+                    error
+                };
+            },
+            setUser: function(user: UserProps) {
+                return {
+                    type: "NEW_AUTHENTICATION",
+                    user
+                };
+            }
         }
-    }
-)(Login);
+    )(Login)
+);

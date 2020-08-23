@@ -263,14 +263,20 @@ class User(Model):
         return bcrypt.checkpw(plain.encode("utf-8"), self.password.encode("utf-8"))
 
     @classmethod
-    def authenticate(cls, email, password):
+    def find_one_by_email(cls, email):
         email = email.lower()
-        user = cls.find_one_by(email=email)
+        return cls.find_one_by(email=email)
+
+    @classmethod
+    def authenticate(cls, email, password):
+        user = cls.find_one_by_email(email)
         if not user:
             return
 
         if user.match_password(password):
             return user
+        else:
+            import ipdb;ipdb.set_trace()
 
     @classmethod
     def secretify_password(cls, plain) -> str:
@@ -302,7 +308,7 @@ class User(Model):
             {"created_at": created_at.isoformat(), "duration": duration}, self.token_secret, algorithm="HS256"
         )
         return AccessToken.create(
-            content=access_token,
+            content=access_token.decode("utf-8"),
             scope='manage:notes manage:terms',
             user_id=self.id,
         )
@@ -321,7 +327,7 @@ class AccessToken(Model):
         db.Column("id", db.Integer, primary_key=True),
         db.Column("content", db.UnicodeText, nullable=False, unique=True),
         db.Column("scope", db.UnicodeText, nullable=True),
-        db.Column("created_at", db.DateTime),
+        # db.Column("created_at", db.DateTime),
         db.Column("duration", db.Integer),
         db.Column(
             "user_id",
@@ -336,7 +342,7 @@ class AccessToken(Model):
         return User.find_one_by(id=self.user_id) if self.user_id else None
 
     def to_dict(self):
-        data = self.serialize()
+        data = self.user.to_dict()
         data.pop("id")
-        data["access_token"] = data.pop("content")
+        data["access_token"] = self.serialize()
         return data

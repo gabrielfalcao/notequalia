@@ -65,12 +65,15 @@ class TokenEndpoint(Resource):
         return {"email": email, "password": password}
 
     @auth_ns.expect(parser_auth, validate=True)
-    @auth_ns.marshal_with(auth_json)
     def post(self):
         params = self.prepare_auth_params()
-        auth_user = User.authenticate(**params)
+        logger.info(f'auth request {params}')
+        auth_user = User.find_one_by_email(email=params['email'])
         if not auth_user:
-            return {'error': "user not found"}, 404
+            return {'error': "user not found"}, 401
+
+        if not auth_user.match_password(params['password']):
+            return {'error': "invalid password"}, 401
 
         token = auth_user.create_token(duration=300)
 

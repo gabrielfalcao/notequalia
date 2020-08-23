@@ -17,7 +17,7 @@ from notequalia.web import application
 
 from notequalia import config
 from notequalia.config import dbconfig
-from notequalia.models import metadata, Term
+from notequalia.models import metadata, Term, User
 from notequalia.worker.client import EchoClient
 from notequalia.worker.server import EchoServer
 from notequalia.es import es
@@ -366,3 +366,35 @@ def es_index(ctx, data):
     }
     res = es.index(index="random-index", doc_type="cli", id=1, body=doc)
     print(res)
+
+
+@main.command("create-user")
+@click.option(
+    "--email",
+    help="email",
+)
+@click.option(
+    "--password",
+    help="password",
+)
+@click.pass_context
+def create_user(ctx, email, password):
+    "runs the web server"
+
+    user = User.find_one_by_email(email)
+    if not user:
+        try:
+            user = User.create(email=email, password=password)
+            print(f"created user {user.email!r}")
+            return
+        except Exception as e:
+            print(f"Failed to create user with email {user.email!r}")
+            print(e)
+            raise SystemExit(1)
+
+    try:
+        if user.set_password(password):
+            print(f"password updated for {user.email!r} !")
+    except Exception as e:
+            print(f"Failed to set new password to {user.email!r}")
+            print(e)

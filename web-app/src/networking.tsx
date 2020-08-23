@@ -131,3 +131,21 @@ export class AdminAPIClient extends BaseAPIClient {
             .then(handler);
     };
 }
+
+export class AuthAPIClient extends BaseAPIClient {
+    public authenticate = (
+        email: string,
+        password: string,
+        handler: SuccessHandler
+    ): void => {
+        const url = this.api.urlFor("/api/v1/auth/");
+        axios
+            .post(url, { email, password }, this.getOptions())
+            .then((response: AxiosResponse<UserProps>) => {
+                console.log("response", response);
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+}
