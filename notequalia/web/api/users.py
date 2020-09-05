@@ -100,7 +100,7 @@ class ManageUserEndpoint(Resource):
         return "", 204
 
 
-@user_ns.route("/<user_id>/change-password")
+@user_ns.route("/<int:user_id>/change-password")
 class ChangeUserPasswordEndpoint(Resource):
 
     def prepare_params(self):
