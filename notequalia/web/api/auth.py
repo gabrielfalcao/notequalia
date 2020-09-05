@@ -67,7 +67,6 @@ class TokenEndpoint(Resource):
     @auth_ns.expect(parser_auth, validate=True)
     def post(self):
         params = self.prepare_auth_params()
-        logger.info(f'auth request {params}')
         auth_user = User.find_one_by_email(email=params['email'])
         if not auth_user:
             return {'error': "user not found"}, 401
