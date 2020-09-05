@@ -5,7 +5,7 @@ import logging
 
 from datetime import datetime, timedelta
 from dateutil.parser import parse as parse_datetime
-
+from functools import cached_property
 from typing import Optional, List, Dict
 from sqlalchemy import desc
 
@@ -54,18 +54,8 @@ class Note(Model):
         ),
     )
 
-    @property
+    @cached_property
     def parent(self):
-        self._parent = getattr(self, "_parent", None)
-        if not self.parent:
-            self._parent = self.get_parent()
-
-        return self._parent
-
-    def get_parent(self):
-        if not self.parent_id:
-            return
-
         return Note.find_one_by(id=self.parent_id)
 
     @property
@@ -94,18 +84,8 @@ class NoteMail(Model):
         ),
     )
 
-    @property
+    @cached_property
     def note(self):
-        self._note = getattr(self, "_note", None)
-        if not self.note:
-            self._note = self.get_note()
-
-        return self._note
-
-    def get_note(self):
-        if not self.note_id:
-            return
-
         return Note.find_one_by(id=self.note_id)
 
 
@@ -184,18 +164,8 @@ class Term(Model):
 
         return data
 
-    @property
+    @cached_property
     def parent(self):
-        self._parent = getattr(self, "_parent", None)
-        if not self._parent:
-            self._parent = self.get_parent()
-
-        return self._parent
-
-    def get_parent(self):
-        if not self.parent_id:
-            return
-
         return Note.find_one_by(id=self.parent_id)
 
     def get_parsed_json_property(self, property_name: str) -> Optional[dict]:
@@ -276,7 +246,9 @@ class User(Model):
         if user.match_password(password):
             return user
         else:
-            import ipdb;ipdb.set_trace()
+            import ipdb
+
+            ipdb.set_trace()
 
     @classmethod
     def secretify_password(cls, plain) -> str:
@@ -305,20 +277,23 @@ class User(Model):
         """
         created_at = now()
         access_token = jwt.encode(
-            {"created_at": created_at.isoformat(), "duration": duration}, self.token_secret, algorithm="HS256"
+            {"created_at": created_at.isoformat(), "duration": duration},
+            self.token_secret,
+            algorithm="HS256",
         )
         return AccessToken.create(
             content=access_token.decode("utf-8"),
-            scope='manage:notes manage:terms',
+            scope="manage:notes manage:terms",
             user_id=self.id,
         )
 
     def validate_token(self, access_token: str) -> bool:
-        data = jwt.decode(access_token, self.token_secret, algorithms=['HS256'])
-        created_at = date['created_at']
-        duration = date['duration']
+        data = jwt.decode(access_token, self.token_secret, algorithms=["HS256"])
+        created_at = date["created_at"]
+        duration = date["duration"]
         valid_until = parse_datetime(created_at) + timedelta(seconds=duration)
         return now() < valid_until
+
 
 class AccessToken(Model):
     table = db.Table(
