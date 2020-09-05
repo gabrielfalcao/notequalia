@@ -19,8 +19,7 @@ pydictionary>=1.5.2
 python-jose==3.1.0
 pyzmq==18.0.1
 redis==3.5.1
-requests==2.23.0
+requests==2.24.0
 uiclasses==2.3.2
-vcrpy==4.0.2
 werkzeug==0.16.1
 jsonschema==3.2.0
