@@ -6,6 +6,7 @@ import json
 import socket
 import click
 import logging
+import hashlib
 import zmq
 from pathlib import Path
 from datetime import datetime
@@ -20,7 +21,8 @@ from notequalia.config import dbconfig
 from notequalia.models import metadata, Term, User
 from notequalia.worker.client import EchoClient
 from notequalia.worker.server import EchoServer
-from notequalia.es import es
+from notequalia.web.api.terms import define_new_term
+from notequalia.es import ElasticSearchEngine
 from notequalia.filesystem import alembic_ini_path
 from notequalia.logs import set_log_level_by_name, set_debug_mode
 from notequalia import version
@@ -353,21 +355,6 @@ def close_server(ctx, address):
         logger.warning(f"no response from server")
 
 
-@main.command("index", context_settings=dict(ignore_unknown_options=True))
-@click.argument("data")
-@click.pass_context
-def es_index(ctx, data):
-    "tells the RPC server to kill itself"
-
-    doc = {
-        "author": os.environ["USER"],
-        "text": data,
-        "timestamp": datetime.now(),
-    }
-    res = es.index(index="random-index", doc_type="cli", id=1, body=doc)
-    print(res)
-
-
 @main.command("create-user")
 @click.option(
     "--email",
@@ -398,3 +385,33 @@ def create_user(ctx, email, password):
     except Exception as e:
             print(f"Failed to set new password to {user.email!r}")
             print(e)
+
+
+@main.command("index-terms")
+@click.option(
+    "--host",
+    help="elastic search host url (can be used multiple times)",
+    multiple=True,
+    default=['http://localhost:9200']
+)
+@click.pass_context
+def index_terms(ctx, host):
+    "scans all rows from the `terms` postgres database and index them in the given elasticsearch url"
+
+
+    logger = logging.getLogger('notequalia.elasticsearch')
+    engine = ElasticSearchEngine(host)
+    for term in Term.all():
+        if not term.term:
+            logger.warning(f'skipping elasticsearch indexing of unnamed term {term}')
+            continue
+
+        logger.info(f'indexing {term}')
+        term.send_to_elasticsearch(engine)
+
+
+@main.command("define")
+@click.argument("term")
+@click.pass_context
+def define_term(ctx, term):
+    print(define_new_term(term))

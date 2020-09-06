@@ -19,6 +19,9 @@ export SECRET_KEY		:= $(shell 2>/dev/null dd bs=128 count=1 if=/dev/urandom | ba
 export MERRIAM_WEBSTER_DICTIONARY_API_KEY	:= 234297ff-eb8d-49e5-94d6-66aec4c4b7e0
 export MERRIAM_WEBSTER_THESAURUS_API_KEY	:= eb37bf1c-0f2a-4399-86b8-ba444a0a9fbb
 
+export DIGITAL_OCEAN_SPACES_ACCESS_KEY	:= GWN5P6GR4PXNUOZMWIUY
+export DIGITAL_OCEAN_SPACES_SECRET_KEY	:= MG3dT7Ux8IA5jCL1x4oerfPH8Us4Z3Lqb8Du8CRqRKk
+
 DEPLOY_TIMEOUT		:= 300
 # NOTE: the sha must be the long version to match the ${{ github.sha
 # }} variable in the github actions. Using %h (short sha) will cause

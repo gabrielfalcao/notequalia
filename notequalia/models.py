@@ -1,11 +1,12 @@
 import json
+import hashlib
 import jwt
 import bcrypt
 import logging
 
 from datetime import datetime, timedelta
 from dateutil.parser import parse as parse_datetime
-from functools import cached_property
+from cached_property import cached_property
 from typing import Optional, List, Dict
 from sqlalchemy import desc
 
@@ -13,7 +14,7 @@ from sqlalchemy import desc
 from chemist import Model, db, metadata
 from notequalia.lexicon.merriam_webster.models import Definition
 from notequalia import config
-
+from notequalia.es import ElasticSearchEngine
 # from notequalia.utils import parse_jwt_token
 
 
@@ -145,6 +146,9 @@ class Term(Model):
         ),
     )
 
+    def __repr__(self):
+        return f'<Term: "{self.term}">'
+
     @classmethod
     def latest(cls, *expressions):
         table = cls.table
@@ -196,6 +200,35 @@ class Term(Model):
 
     def get_collegiate_definitions(self) -> Definition.List:
         return Definition.List(self.collegiate)
+
+    def send_to_elasticsearch(self, engine: ElasticSearchEngine):
+        logger.info(f'indexing {self}')
+        if not self.term:
+            logger.warning(f'skipping elasticsearch indexing of unnamed term {self}')
+            return
+
+        document_id = hashlib.sha256(self.term.encode("utf-8")).hexdigest()
+        raw = self.to_dict()
+        mw_thesaurus = raw.get('thesaurus')
+        mw_collegiate = raw.get('collegiate')
+
+        for definition in mw_thesaurus:
+            functional_label = definition.get('functional_label')
+            logger.info(f'stored {functional_label} %s', engine.store_document(
+                'dict_mw_thesaurus',
+                functional_label,
+                document_id,
+                body=definition,
+            ))
+
+        for definition in mw_collegiate:
+            functional_label = definition.get('functional_label')
+            logger.info(f'stored {functional_label} %s', engine.store_document(
+                'dict_mw_collegiate',
+                functional_label,
+                document_id,
+                body=definition,
+            ))
 
 
 class User(Model):
