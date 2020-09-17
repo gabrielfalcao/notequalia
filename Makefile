@@ -146,10 +146,10 @@ deploy: tests db k8s-namespace operations/helm/charts
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
 	iterm2 color green
 
-helm-install:
+helm-install: setup-helm
 	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
 
-helm-upgrade:
+helm-upgrade: setup-helm
 	helm upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
 
 k8s-namespace:
@@ -181,7 +181,7 @@ worker:
 
 setup-helm:
 	helm repo add elastic https://helm.elastic.co
-
+	helm repo add dgraph https://charts.dgraph.io
 
 tunnel:
 	ngrok http --subdomain=$(BACKEND_FLASK_NGROK) 5000

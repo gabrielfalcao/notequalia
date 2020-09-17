@@ -1,0 +1,56 @@
+{{- if .Values.splash.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splash-browser-api
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: splash-browser-api
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: splash-browser-api
+        app.kubernetes.io/instance: {{ .Release.Name }}
+
+    spec:
+      containers:
+      - image: "{{ .Values.splash.image.repository }}:{{ .Values.splash.image.tag }}"
+        imagePullPolicy: {{ .Values.splash.image.pullPolicy }}
+        name: {{ .Chart.Name }}
+        ports:
+        - containerPort: 8050
+          name: splash
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: splash-browser-api
+  labels:
+    app.kubernetes.io/name: splash-browser-api
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+spec:
+  type: NodePort
+  ports:
+    - port: 8050
+      targetPort: 8050
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: splash-browser-api
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+{{- end }}

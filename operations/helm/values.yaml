@@ -34,8 +34,14 @@ flask:
   secret_key: '--set-by-makefile--'
 
 service:
-  type: ClusterIP
+  type: NodePort
   port: 5000
+
+dgraph:
+  enabled: true
+  service:
+    type: NodePort
+    port: 5601
 
 kibana:
   enabled: false
@@ -57,6 +63,15 @@ ngrok:
 
   token: "34DAA242kqHzC3z1PxsnG_4hehzoCdvw7qbi5768QQg"
   subdomain: pron-f1l3-serv3r  # from "https:///pron-f1l3-serv3r.ngrok.io/"
+
+splash:
+  enabled: true
+  bindtls: both
+  port: 8050
+  image:
+    repository: scrapinghub/splash
+    tag: latest
+    pullPolicy: Always
 
 zmq:
   enabled: false

@@ -22,6 +22,8 @@ spec:
     - app.visualcu.es
     - data.visualcu.es
     - mail.visualcu.es
+    - splash.visualcu.es
+
     secretName: visualcu-es-letsencrypt-secret
   rules:
   - host: visualcu.es
@@ -32,13 +34,6 @@ spec:
           serviceName: {{ include "notequalia-io.fullname" . }}
           servicePort: 5000
   - host: api.visualcu.es
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{ include "notequalia-io.fullname" . }}
-          servicePort: 5000
-  - host: data.visualcu.es
     http:
       paths:
       - path: /
@@ -59,6 +54,20 @@ spec:
         backend:
           serviceName: {{ include "notequalia-io.fullname" . }}
           servicePort: 5000
+  - host: splash.visualcu.es
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: splash-browser-api
+          servicePort: 8050
+  - host: data.visualcu.es
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: splash-browser-api
+          servicePort: 8050
 {{- end }}
 
 # ---
