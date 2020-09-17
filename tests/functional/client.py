@@ -17,9 +17,12 @@ class JSONFlaskClient(FlaskClient):
             'Content-Type': 'application/json',
         }
         if bearer_token:
-            self.default_headers['Authorization'] = f'Bearer {bearer_token}'
+            self.set_token(bearer_token)
 
         super().__init__(*args, **kwargs)
+
+    def set_token(self, bearer_token):
+        self.default_headers['Authorization'] = f'Bearer {bearer_token}'
 
     def open(self, *args, **kw):
         json_source = kw.pop("json", None)

@@ -68,4 +68,8 @@ def auth_admin_push_revokation(path=""):
 
 
 def is_authenticated():
-    return AUTH_SESSION_KEYS.intersection(set(session.keys()))
+    keys = AUTH_SESSION_KEYS.intersection(set(session.keys()))
+    if not keys:
+        return False
+
+    import ipdb;ipdb.set_trace()

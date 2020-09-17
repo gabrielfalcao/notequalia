@@ -1,12 +1,12 @@
 # import vcr
 import json
-from .helpers import web_test
+from .helpers import auth_web_test
 from .helpers import response_errors_for_field, response_matches_status
 from notequalia.models import User
 
 
 # Deliberate Practice
-@web_test
+@auth_web_test
 def test_create_user_ok(context):
     ("POST on /api/v1/user should return 201")
 
@@ -31,7 +31,7 @@ def test_create_user_ok(context):
     found.email.should.equal('chuck@norris.com')
 
 
-@web_test
+@auth_web_test
 def test_create_user_missing_pw(context):
     ("POST on /api/v1/user with missing password should return 400")
 
@@ -52,7 +52,7 @@ def test_create_user_missing_pw(context):
     response_errors_for_field(response, "password").should.contain("'password' is a required property")
 
 
-@web_test
+@auth_web_test
 def test_create_user_short_pw(context):
     ("POST on /api/v1/user with short password should return 400")
 
@@ -74,7 +74,7 @@ def test_create_user_short_pw(context):
     response_errors_for_field(response, "password").should.contain("should be at least 8 characters long.")
 
 
-@web_test
+@auth_web_test
 def test_create_user_weak_pw(context):
     ("POST on /api/v1/user with weak password should return 400")
 
@@ -98,7 +98,7 @@ def test_create_user_weak_pw(context):
 
 
 
-@web_test
+@auth_web_test
 def test_change_password_of_user(context):
     ("POST on /api/v1/user/<id>/change-password should return 200")
 
@@ -127,7 +127,7 @@ def test_change_password_of_user(context):
     found.email.should.equal('foo@bar.com')
 
 
-@web_test
+@auth_web_test
 def test_get_user_by_email(context):
     ("GET on /api/v1/users/by-email?email=preexisting@email.com should return 200")
 
@@ -149,7 +149,7 @@ def test_get_user_by_email(context):
     user.should.have.key('email').being.equal('preexisting@email.com')
 
 
-@web_test
+@auth_web_test
 def test_delete_user_by_id(context):
     ("DELETE on /api/v1/users/<id> should return 204")
 
@@ -168,10 +168,12 @@ def test_delete_user_by_id(context):
     response_matches_status(response, 204)
 
     # And the user should not be present in the database
-    User.all().should.be.empty
+    users = User.all()
+    users.should.have.length_of(1)
+    users[0].email.shouldnt.equal(created.email)
 
 
-@web_test
+@auth_web_test
 def test_list_users(context):
     ("GET on /api/v1/users should return 200")
 
@@ -194,5 +196,5 @@ def test_list_users(context):
     # Then The result should be a list
     result.should.be.a(list)
 
-    # And have 3 items
-    result.should.have.length_of(3)
+    # And have 4 items
+    result.should.have.length_of(4)

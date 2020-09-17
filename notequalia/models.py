@@ -15,14 +15,20 @@ from chemist import Model, db, metadata
 from notequalia.lexicon.merriam_webster.models import Definition
 from notequalia import config
 from notequalia.es import ElasticSearchEngine
+from ordered_set import OrderedSet
+
 # from notequalia.utils import parse_jwt_token
+
+
+logger = logging.getLogger(__name__)
 
 
 def now():
     return datetime.utcnow()
 
 
-logger = logging.getLogger(__name__)
+def scope_string_to_set(scope: str) -> OrderedSet:
+    return OrderedSet(filter(bool, scope.split()))
 
 
 class NoteBook(Model):
@@ -202,33 +208,33 @@ class Term(Model):
         return Definition.List(self.collegiate)
 
     def send_to_elasticsearch(self, engine: ElasticSearchEngine):
-        logger.info(f'indexing {self}')
+        logger.info(f"indexing {self}")
         if not self.term:
-            logger.warning(f'skipping elasticsearch indexing of unnamed term {self}')
+            logger.warning(f"skipping elasticsearch indexing of unnamed term {self}")
             return
 
         document_id = hashlib.sha256(self.term.encode("utf-8")).hexdigest()
         raw = self.to_dict()
-        mw_thesaurus = raw.get('thesaurus')
-        mw_collegiate = raw.get('collegiate')
+        mw_thesaurus = raw.get("thesaurus")
+        mw_collegiate = raw.get("collegiate")
 
         for definition in mw_thesaurus:
-            functional_label = definition.get('functional_label')
-            logger.info(f'stored {functional_label} %s', engine.store_document(
-                'dict_mw_thesaurus',
-                functional_label,
-                document_id,
-                body=definition,
-            ))
+            functional_label = definition.get("functional_label")
+            logger.info(
+                f"stored {functional_label} %s",
+                engine.store_document(
+                    "dict_mw_thesaurus", functional_label, document_id, body=definition
+                ),
+            )
 
         for definition in mw_collegiate:
-            functional_label = definition.get('functional_label')
-            logger.info(f'stored {functional_label} %s', engine.store_document(
-                'dict_mw_collegiate',
-                functional_label,
-                document_id,
-                body=definition,
-            ))
+            functional_label = definition.get("functional_label")
+            logger.info(
+                f"stored {functional_label} %s",
+                engine.store_document(
+                    "dict_mw_collegiate", functional_label, document_id, body=definition
+                ),
+            )
 
 
 class User(Model):
@@ -304,20 +310,24 @@ class User(Model):
             rounds=100,
         )
 
-    def create_token(self, duration: int = 28800):
+    def create_token(
+        self, scope: str = "manage:notes manage:terms", duration: int = 28800
+    ):
         """
         :param duration: in seconds - defaults to 28800 (8 hours)
         """
         created_at = now()
         access_token = jwt.encode(
-            {"created_at": created_at.isoformat(), "duration": duration},
+            {
+                "created_at": created_at.isoformat(),
+                "duration": duration,
+                "scope": scope,
+            },
             self.token_secret,
             algorithm="HS256",
         )
         return AccessToken.create(
-            content=access_token.decode("utf-8"),
-            scope="manage:notes manage:terms",
-            user_id=self.id,
+            content=access_token.decode("utf-8"), scope=scope, user_id=self.id
         )
 
     def validate_token(self, access_token: str) -> bool:
@@ -345,6 +355,10 @@ class AccessToken(Model):
         ),
     )
 
+    @cached_property
+    def scopes(self):
+        return scope_string_to_set(self.scope)
+
     @property
     def user(self):
         return User.find_one_by(id=self.user_id) if self.user_id else None
@@ -354,3 +368,10 @@ class AccessToken(Model):
         data.pop("id")
         data["access_token"] = self.serialize()
         return data
+
+    def matches_scope(self, scope: str) -> bool:
+        scope_choices = scope_string_to_set(scope)
+        intersection = self.scopes.intersection(scope_choices)
+        if not intersection:
+            import ipdb;ipdb.set_trace()
+        return bool(intersection)
