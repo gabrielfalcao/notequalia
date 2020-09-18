@@ -4,6 +4,7 @@ import axios, {
     // AxiosPromise
 } from "axios";
 import { TermProps } from "./domain/terms";
+import { UserProps } from "./domain/users";
 
 export class APIRouter {
     private baseURL: string;
@@ -77,6 +78,71 @@ export class DictionaryAPIClient extends BaseAPIClient {
         axios
             .delete(url, this.getOptions())
             .then((response: AxiosResponse<TermProps>) => {
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+}
+
+export class AdminAPIClient extends BaseAPIClient {
+    public listUsers = (handler: SuccessHandler): void => {
+        const url = this.api.urlFor("/api/v1/users/");
+        axios
+            .get(url, this.getOptions())
+            .then((response: AxiosResponse<UserProps[]>) => {
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+    public searchUser = (email: string, handler: SuccessHandler): void => {
+        const url = this.api.urlFor(`/api/v1/users/by-email/?email=${email}`);
+        axios
+            .get(url, this.getOptions())
+            .then((response: AxiosResponse<UserProps>) => {
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+    public deleteUser = (id: string, handler: SuccessHandler): void => {
+        const url = this.api.urlFor(`/api/v1/users/${id}/`);
+        axios
+            .delete(url, this.getOptions())
+            .then((response: AxiosResponse<UserProps>) => {
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+    public createUser = (
+        email: string,
+        password: string,
+        handler: SuccessHandler
+    ): void => {
+        const url = this.api.urlFor("/api/v1/users/");
+        axios
+            .post(url, { email, password }, this.getOptions())
+            .then((response: AxiosResponse<UserProps>) => {
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+}
+
+export class AuthAPIClient extends BaseAPIClient {
+    public authenticate = (
+        email: string,
+        password: string,
+        handler: SuccessHandler
+    ): void => {
+        const url = this.api.urlFor("/api/v1/auth/");
+        axios
+            .post(url, { email, password }, this.getOptions())
+            .then((response: AxiosResponse<UserProps>) => {
+                console.log("response", response);
                 return response.data;
             })
             .catch(this.handleError)

@@ -5,21 +5,11 @@ const DEFAULT_STATE = {};
 export const auth = (state: any = DEFAULT_STATE, action: any = {}) => {
     switch (action.type) {
         case "NEW_AUTHENTICATION":
-            const { user } = action;
-            const {
-                id_token,
-                access_token,
-                refresh_token,
-                scope,
-                profile
-            } = user;
+            const { user } = action.user;
+            console.log("NEW_AUTHENTICATION", user);
             return {
                 ...state,
-                scope,
-                profile,
-                id_token,
-                access_token,
-                refresh_token
+                ...user
             };
 
         case "LOGOUT":

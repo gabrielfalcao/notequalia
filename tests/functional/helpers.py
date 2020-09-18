@@ -50,7 +50,7 @@ def after_each_test(context):
 def inject_user_and_token(context):
     context.password = '_^0123aBcD#$'
     context.user = User.create('injected@test.com', context.password)
-    context.access_token = context.user.create_token()
+    context.access_token = context.user.create_token(scope='manage:notes manage:terms admin:user admin')
     context.http = JSONFlaskClient.from_app(context.web, bearer_token=context.access_token.content)
 
 

@@ -13,6 +13,7 @@ from .base import api
 from .inputs import password as password_input
 from .fields import EmailField, PasswordField
 from .validation import validate_password, ValidationError
+from .auth import require_auth
 
 logger = logging.getLogger(__name__)
 
@@ -61,6 +62,7 @@ user_ns = api.namespace(
 
 @user_ns.route("/by-email")
 class UsersByEmailEndpoint(Resource):
+    @require_auth(scope='admin:user')
     def get(self):
         query = parser_retrieve_by_email.parse_args()
         user = User.find_one_by(**query)
@@ -71,6 +73,7 @@ class UsersByEmailEndpoint(Resource):
 
 @user_ns.route("/")
 class UserListEndpoint(Resource):
+    @require_auth(scope='admin:user')
     def get(self):
         user = User.all()
         return [u.to_dict() for u in user], 200
@@ -80,6 +83,7 @@ class UserListEndpoint(Resource):
         password = validate_password(api.payload.get("password"))
         return {"email": email, "password": password}
 
+    @require_auth(scope='admin:user')
     @user_ns.expect(create_user_json, validate=False)
     @user_ns.expect(parser_create, validate=True)
     def post(self):
@@ -88,18 +92,20 @@ class UserListEndpoint(Resource):
         return user.to_dict(), 201
 
 
-@user_ns.route("/<int:user_id>")
+@user_ns.route("/<int:user_id>/")
 class ManageUserEndpoint(Resource):
 
+    @require_auth(scope='admin:user')
     def delete(self, user_id):
         user = User.find_one_by(id=user_id)
         if not user:
             return {"error": "user not found"}, 404
 
+        user.delete()
         return "", 204
 
 
-@user_ns.route("/<user_id>/change-password")
+@user_ns.route("/<int:user_id>/change-password")
 class ChangeUserPasswordEndpoint(Resource):
 
     def prepare_params(self):
@@ -112,6 +118,7 @@ class ChangeUserPasswordEndpoint(Resource):
         return {"old_password": current_password, "new_password": new_password}
 
     @user_ns.expect(change_password_json, validate=True)
+    @require_auth(scope='admin:user')
     def post(self, user_id):
         user = User.find_one_by(id=user_id)
         if not user:

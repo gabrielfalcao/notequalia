@@ -96,7 +96,7 @@ def validate_term(term: str) -> str:
 @term_ns.expect(authorization_parser, validate=True)
 class DefinitionsEndpoint(Resource):
     @term_ns.expect(definition_json)
-    @require_auth(scope='term:write')
+    @require_auth(scope='term:write manage:terms')
     def post(self):
         term = validate_term((api.payload.get("term") or "").strip())
         if not term:
@@ -118,7 +118,7 @@ class DefinitionsEndpoint(Resource):
 @term_ns.route("/term/<term>")
 @term_ns.expect(parser)
 class TermEndpoint(Resource):
-    @require_auth(scope='term:write')
+    @require_auth(scope='manage:terms term:write')
     def delete(self, term):
         found = Term.find_one_by(term=term)
         if not found:
@@ -168,7 +168,7 @@ def backup():
 
 
 @application.route("/reprocess", methods=["POST"])
-@require_auth(scope='term:write')
+@require_auth(scope='term:write manage:terms')
 def backup_reprocess():
     return lexicon_backup_response(should_reprocess=True)
 

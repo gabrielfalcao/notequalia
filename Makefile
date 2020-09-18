@@ -19,6 +19,9 @@ export SECRET_KEY		:= $(shell 2>/dev/null dd bs=128 count=1 if=/dev/urandom | ba
 export MERRIAM_WEBSTER_DICTIONARY_API_KEY	:= 234297ff-eb8d-49e5-94d6-66aec4c4b7e0
 export MERRIAM_WEBSTER_THESAURUS_API_KEY	:= eb37bf1c-0f2a-4399-86b8-ba444a0a9fbb
 
+export DIGITAL_OCEAN_SPACES_ACCESS_KEY	:= GWN5P6GR4PXNUOZMWIUY
+export DIGITAL_OCEAN_SPACES_SECRET_KEY	:= MG3dT7Ux8IA5jCL1x4oerfPH8Us4Z3Lqb8Du8CRqRKk
+
 DEPLOY_TIMEOUT		:= 300
 # NOTE: the sha must be the long version to match the ${{ github.sha
 # }} variable in the github actions. Using %h (short sha) will cause
@@ -103,6 +106,10 @@ docker-push-all: docker-push
 wheels:
 	mkdir -p wheels
 	docker run --rm -w /python -v $$(pwd):/python -v $$(pwd)/wheels:/wheels python:3.7-alpine sh -c 'pip wheel -r development.txt'
+
+create-user:
+	$(VENV)/bin/notequalia-io create-user --email="foo@bar.com" --password="01234567"
+	$(VENV)/bin/notequalia-io create-user --email="gfalcao@newstore.com" --password='Y;gCb$S*9N9_r~?%'
 
 docker: docker-image docker-push
 

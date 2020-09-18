@@ -1,13 +1,14 @@
-import PropTypes, { InferProps } from "prop-types";
+// import { InferProps } from "prop-types";
+import { UserPropTypes, UserProps } from "./users";
 
 export function needs_login(auth: any) {
     if (!auth) {
         return true;
     }
-    if (!auth.scope) {
+    if (!auth.access_token) {
         return true;
     }
-    return typeof auth.scope !== "string";
+    return false;
 }
 
 export class Scope {
@@ -25,14 +26,6 @@ export class Scope {
         return this.matches(/notes:write/);
     }
 }
-export const AuthPropTypes = PropTypes.shape({
-    scope: PropTypes.string,
-    access_token: PropTypes.string,
-    id_token: PropTypes.string,
-    refresh_token: PropTypes.string,
-    profile: PropTypes.shape({
-        preferred_username: PropTypes.string
-    })
-});
+export const AuthPropTypes = UserPropTypes;
 
-export type AuthProps = InferProps<typeof AuthPropTypes> | any;
+export type AuthProps = UserProps;
