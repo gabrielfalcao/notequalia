@@ -24,3 +24,4 @@ redis==3.5.1
 requests==2.24.0
 uiclasses==2.3.2
 werkzeug==0.16.1
+kopf==0.27
