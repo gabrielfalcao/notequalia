@@ -251,6 +251,9 @@ class User(Model):
         db.Column("activated_at", db.DateTime),
     )
 
+    def __str__(self):
+        return f'<User id={self.id} email={self.email!r}>'
+
     def to_dict(self):
         data = self.serialize()
         data.pop("password")

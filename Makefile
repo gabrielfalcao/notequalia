@@ -83,6 +83,10 @@ tdd-unit:| $(VENV)/bin/nosetests  # runs unit tests
 run: purge-sessions | $(VENV)/bin/python
 	$(VENV)/bin/notequalia-io web --port=5000
 
+# runs the server, exposing the routes to http://localhost:5000
+operator: purge-sessions | $(VENV)/bin/python
+	$(VENV)/bin/notequalia-io k8s
+
 
 docker-base-image:
 	@$(FIGLET) base image
@@ -127,6 +131,7 @@ forward-queue-port:
 
 db: purge-sessions | $(VENV)/bin/notequalia-io
 	@echo "recreating database from scratch..."
+	-@2>/dev/null echo "DROP TABLE alembic_version;" psql -U notequalia_io notequalia_io || echo ''
 	-@2>/dev/null dropdb notequalia_io || echo ''
 	-@2>/dev/null dropuser notequalia_io || echo 'no db user'
 	-@2>/dev/null createuser notequalia_io --createrole --createdb

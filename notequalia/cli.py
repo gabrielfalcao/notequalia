@@ -27,6 +27,7 @@ from notequalia.filesystem import alembic_ini_path
 from notequalia.logs import set_log_level_by_name, set_debug_mode
 from notequalia import version
 from notequalia import email
+from notequalia import k8s, core
 from notequalia import mailserver
 from alembic.config import Config as AlembicConfig
 from alembic import command as alembic_command
@@ -186,8 +187,10 @@ def run_smtp(ctx, host, port, debug):
     default=False,
 )
 @click.pass_context
+@core.with_gevent
 def run_web(ctx, host, port, debug):
     "runs the web server"
+
     debug = debug or bool(os.getenv("FLASK_DEBUG"))
     if debug:
         set_debug_mode()
@@ -229,7 +232,6 @@ def migrate_db(ctx, drop, target):
         "alembic", "sqlalchemy.url", dbconfig.sqlalchemy_url()
     )
     alembic_command.upgrade(alembic_cfg, target)
-    delete_invalid_terms()
 
 
 def delete_invalid_terms():
@@ -252,6 +254,7 @@ def delete_invalid_terms():
     default=60000,
 )
 @click.pass_context
+@core.with_gevent
 def worker(ctx, address, polling_timeout):
     "runs a worker"
 
@@ -270,6 +273,7 @@ def worker(ctx, address, polling_timeout):
 @click.option("--number", "-n", help="of attempts", type=int, default=5)
 @click.option("--times", "-x", help="of execution", type=int, default=1)
 @click.pass_context
+@core.with_gevent
 def enqueue(ctx, address, data, number, times):
     "sends a message"
 
@@ -298,6 +302,7 @@ def enqueue(ctx, address, data, number, times):
     default=f"tcp://0.0.0.0:{DEFAULT_DEALER_PORT}",
 )
 @click.pass_context
+@core.with_gevent
 def queue(ctx, router, dealer):
     "runs a queue"
 
@@ -324,6 +329,7 @@ def queue(ctx, router, dealer):
     default=f"tcp://0.0.0.0:{DEFAULT_SUBSCRIBER_PORT}",
 )
 @click.pass_context
+@core.with_gevent
 def forwarder(ctx, publisher, subscriber):
     "runs a pubsub forwarder"
 
@@ -344,6 +350,7 @@ def forwarder(ctx, publisher, subscriber):
     default=DEFAULT_ROUTER_ADDRESS,
 )
 @click.pass_context
+@core.with_gevent
 def close_server(ctx, address):
     "tells the RPC server to kill itself"
 
@@ -415,3 +422,9 @@ def index_terms(ctx, host):
 @click.pass_context
 def define_term(ctx, term):
     print(define_new_term(term))
+
+
+@main.command("k8s")
+@click.pass_context
+def k8s_operator(ctx):
+    k8s.useroperator.run()

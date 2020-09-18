@@ -1,0 +1,10 @@
+---
+apiVersion: cognod.es/v1
+kind: ApplicationAuthUser
+metadata:
+  name: gabriel
+
+spec:
+  email: gabriel@nacaolivre.org
+  password: 012345678
+  scope: "admin admin:user manage:terms manage:notes"

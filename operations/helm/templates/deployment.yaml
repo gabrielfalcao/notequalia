@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -121,3 +122,30 @@ spec:
         volumeMounts:
           - name: notequalia-uploads-volume
             mountPath: /notequalia.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "notequalia-io.fullname" . }}-operator
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      application: notequalia-operator
+  template:
+    metadata:
+      labels:
+        application: notequalia-operator
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: notequalia-k8s-operator
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: check-installation
+        command: ['/venv/bin/notequalia-io', 'k8s']
+        envFrom:
+          - configMapRef:
+              name: {{ include "notequalia-io.fullname" . }}-env
