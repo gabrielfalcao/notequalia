@@ -158,10 +158,10 @@ deploy: tests db k8s-namespace operations/helm/charts
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
 	iterm2 color green
 
-helm-install: setup-helm
+helm-install:
 	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
 
-helm-upgrade: setup-helm
+helm-upgrade:
 	helm upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
 
 k8s-namespace:
@@ -190,6 +190,18 @@ close:
 
 worker:
 	$(VENV)/bin/notequalia-io worker --address='tcp://127.0.0.1:6969'
+
+setup-cluster:
+	kubectl apply -f operations/kube/digitalocean-flexplugin-rbac.yml
+	kubectl apply -f operations/kube/storage-class-digitalocean.yml
+	kubectl apply -f operations/kube/mandatory.yaml
+	kubectl apply -f operations/kube/ingress-nginx-digitalocean.yaml
+	kubectl apply -f operations/kube/cert-manager.yaml
+	kubectl apply -f operations/kube/namespaces.yaml
+	kubectl apply -f operations/kube/letsencrypt-staging-issuer.yaml
+	kubectl apply -f operations/kube/letsencrypt-prod-issuer.yaml
+	-kubectl create clusterrolebinding add-on-cluster-admin   --clusterrole=cluster-admin   --serviceaccount=kube-system:default
+	-helm init --history-max=50 --service-account helm --upgrade
 
 setup-helm:
 	helm repo add elastic https://helm.elastic.co

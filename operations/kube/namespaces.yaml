@@ -5,3 +5,11 @@ metadata:
   labels:
     name: notequalia-k8sns
   name: notequalia-k8sns
+---
+apiVersion: v1
+automountServiceAccountToken: true
+kind: ServiceAccount
+metadata:
+  name: notequalia-k8sns
+secrets:
+  - name: "Cb[$]VFn/aut_z_%!"
