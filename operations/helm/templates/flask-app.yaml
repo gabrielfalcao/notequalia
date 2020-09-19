@@ -1,0 +1,164 @@
+# ---
+# kind: PersistentVolume
+# apiVersion: v1
+# metadata:
+#   name: volume-notequalia-io
+#   annotations:
+#     # fake it by indicating this is provisioned dynamically, so the system
+#     # works properly
+#     pv.kubernetes.io/provisioned-by: dobs.csi.digitalocean.com
+# spec:
+#   storageClassName: do-block-storage
+#   # by default, the volume will be not deleted if you delete the PVC, change to
+#   # "Delete" if you wish the volume to be deleted automatically with the PVC
+#   persistentVolumeReclaimPolicy: Retain
+
+#   capacity:
+#     storage: 10Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   csi:
+#     driver: dobs.csi.digitalocean.com
+#     fsType: ext4
+#     volumeHandle: e6413dbc-a90a-11ea-9aea-0a58ac14d0a1  # run command "doctl compute volume list" to get hande
+#     volumeAttributes:
+#       com.digitalocean.csi/noformat: "true"
+
+#   nodeAffinity:
+#     required:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: In
+#           values:
+#           - pool-cognodes-36in3
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: notequalia-flask-app
+#   labels:
+#     app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
+#     app.kubernetes.io/instance: {{ .Release.Name }}
+
+# spec:
+#   type: {{ .Values.service.type }}
+#   ports:
+#     - port: {{ .Values.service.port }}
+#       targetPort: {{ .Values.service.port }}
+#       protocol: TCP
+#       name: http
+#   selector:
+#     app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
+#     app.kubernetes.io/instance: {{ .Release.Name }}
+# ---
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: web
+# spec:
+#   serviceName: notequalia-flask-app
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: notequalia-flask
+#   template:
+#     metadata:
+#       labels:
+#         app: notequalia-flask
+#     spec:
+#       initContainers:
+#       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+#         imagePullPolicy: {{ .Values.image.pullPolicy }}
+#         name: check-installation
+#         command: ['/venv/bin/notequalia-io', 'check']
+#         envFrom:
+#           - configMapRef:
+#               name: {{ include "notequalia-io.fullname" . }}-env
+
+#       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+#         imagePullPolicy: {{ .Values.image.pullPolicy }}
+#         name: check-db-connection
+#         command: ['/venv/bin/notequalia-io', 'check-db']
+#         envFrom:
+#           - configMapRef:
+#               name: {{ include "notequalia-io.fullname" . }}-env
+
+#       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+#         imagePullPolicy: {{ .Values.image.pullPolicy }}
+#         name: run-database-migrations
+#         command: ['/venv/bin/notequalia-io', 'migrate-db']
+#         envFrom:
+#           - configMapRef:
+#               name: {{ include "notequalia-io.fullname" . }}-env
+#         env:
+#         - name: POSTGRES_PASSWORD
+#           valueFrom:
+#             secretKeyRef:
+#               name: {{ template "notequalia-io.fullname" . }}-secrets
+#               key: postgresql-password
+
+#         env:
+#         - name: DOCKER_IMAGE
+#           value: {{ .Values.image.tag }}
+
+#       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+#         imagePullPolicy: {{ .Values.image.pullPolicy }}
+#         name: purge-sessions
+#         command: ['/venv/bin/notequalia-io', 'purge-sessions']
+#         envFrom:
+#           - configMapRef:
+#               name: {{ include "notequalia-io.fullname" . }}-env
+
+#       volumes:
+#         - name: notequalia-uploads-volume
+#           persistentVolumeClaim:
+#             claimName: pvc-notequalia-io
+
+#       containers:
+#       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+#         imagePullPolicy: {{ .Values.image.pullPolicy }}
+#         name: {{ .Chart.Name }}-web-application-server
+#         command: ['/venv/bin/notequalia-io', 'web']
+#         livenessProbe:
+#           httpGet:
+#             path: /health
+#             port: api
+#           initialDelaySeconds: 30
+#           periodSeconds: 150
+#         readinessProbe:
+#           httpGet:
+#             path: /health
+#             port: api
+#           initialDelaySeconds: 1
+
+#         env:
+#           - name: UPLOAD_FOLDER
+#             value: /notequalia.io/file-uploads
+#           # - name: OAUTH2_CLIENT_SECRET
+#           #   valueFrom:
+#           #     secretKeyRef:
+#           #       name: {{ template "notequalia-io.fullname" . }}-secrets
+#           #       key: oauth2-client-secret
+
+#         envFrom:
+#           - configMapRef:
+#               name: {{ include "notequalia-io.fullname" . }}-env
+
+#         ports:
+#         - containerPort: 5000
+#           name: api
+
+#         volumeMounts:
+#           - name: notequalia-uploads-volume
+#             mountPath: /notequalia.io
+
+#   volumeClaimTemplates:
+#   - metadata:
+#       name: pvc-notequalia-io
+#     spec:
+#       accessModes: [ "ReadWriteOnce" ]
+#       resources:
+#         requests:
+#           storage: 10Gi
+#       storageClassName: do-block-storage

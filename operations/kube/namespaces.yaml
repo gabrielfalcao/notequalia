@@ -7,9 +7,9 @@ metadata:
   name: notequalia-k8sns
 ---
 apiVersion: v1
-automountServiceAccountToken: true
+automountServiceAccountToken: false
 kind: ServiceAccount
 metadata:
-  name: notequalia-k8sns
+  name: notequalia-user
 secrets:
-  - name: "Cb[$]VFn/aut_z_%!"
+  - name: ngrok-token

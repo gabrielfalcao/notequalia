@@ -28,7 +28,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       affinity:
-        # kubernetes.io/hostname=pool-cognodes
+        # kubernetes.io/hostname=pool-cognodes-361bk
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -36,7 +36,7 @@ spec:
               - key: kubernetes.io/hostname
                 operator: In
                 values:
-                - pool-cognodes
+                - pool-cognodes-361bk
 
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
@@ -45,7 +45,7 @@ spec:
               - key: kubernetes.io/hostname
                 operator: In
                 values:
-                - pool-cognodes
+                - pool-cognodes-361bk
 
       initContainers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

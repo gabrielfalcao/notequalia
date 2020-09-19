@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notequalia-operator
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      application: notequalia-operator
+  template:
+    metadata:
+      labels:
+        application: notequalia-operator
+    spec:
+      serviceAccountName: notequalia-user
+      containers:
+      - name: notequalia-k8s-operator
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ['/venv/bin/notequalia-io', 'k8s']
+        envFrom:
+          - configMapRef:
+              name: {{ include "notequalia-io.fullname" . }}-env

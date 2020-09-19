@@ -87,6 +87,15 @@ run: purge-sessions | $(VENV)/bin/python
 operator: purge-sessions | $(VENV)/bin/python
 	$(VENV)/bin/notequalia-io k8s
 
+enqueue:
+	$(VENV)/bin/notequalia-io enqueue -x $(X) -n 10 --address='tcp://127.0.0.1:4242' "$${USER}@$$(hostname):[SENT=$$(date +'%s')]"
+
+close:
+	$(VENV)/bin/notequalia-io close --address='tcp://127.0.0.1:4242'
+
+worker:
+	$(VENV)/bin/notequalia-io worker --address='tcp://127.0.0.1:6969'
+
 
 docker-base-image:
 	@$(FIGLET) base image
@@ -158,6 +167,9 @@ deploy: tests db k8s-namespace operations/helm/charts
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
 	iterm2 color green
 
+deploy-cluster: setup-cluster
+	$(MAKE) helm-install || $(MAKE) helm-upgrade
+
 helm-install:
 	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
 
@@ -178,34 +190,38 @@ rollback:
 k9s:
 	iterm2 color k
 	k9s -n $(NAMESPACE)
+undeploy:
+	helm delete --purge nginx-ingress
+	helm delete --purge external-dns
+	helm delete --purge cert-manager
 
 redeploy:
 	$(MAKE) undeploy deploy
 
-enqueue:
-	$(VENV)/bin/notequalia-io enqueue -x $(X) -n 10 --address='tcp://127.0.0.1:4242' "$${USER}@$$(hostname):[SENT=$$(date +'%s')]"
+setup-helm-and-tiller:
+	kubectl -n kube-system create serviceaccount tiller
+	kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+	helm init --history-max=20 --service-account tiller --wait --upgrade
+	helm repo add dgraph https://charts.dgraph.io
+	helm repo add elastic https://helm.elastic.co
+	helm repo add jetstack https://charts.jetstack.io
+	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	helm install --name nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
+	helm install bitnami/external-dns --name external-dns -f operations/helm/externaldns-values.yaml
 
-close:
-	$(VENV)/bin/notequalia-io close --address='tcp://127.0.0.1:4242'
-
-worker:
-	$(VENV)/bin/notequalia-io worker --address='tcp://127.0.0.1:6969'
-
-setup-cluster:
-	kubectl apply -f operations/kube/digitalocean-flexplugin-rbac.yml
-	kubectl apply -f operations/kube/storage-class-digitalocean.yml
-	kubectl apply -f operations/kube/mandatory.yaml
-	kubectl apply -f operations/kube/ingress-nginx-digitalocean.yaml
-	kubectl apply -f operations/kube/cert-manager.yaml
-	kubectl apply -f operations/kube/namespaces.yaml
+setup-cert-manager: # setup-helm-and-tiller
+	kubectl apply -f operations/kube/cert-manager.crds.yaml
+	-kubectl create namespace cert-manager
+	helm install -n cert-manager --version v0.14.1 --namespace cert-manager jetstack/cert-manager
 	kubectl apply -f operations/kube/letsencrypt-staging-issuer.yaml
 	kubectl apply -f operations/kube/letsencrypt-prod-issuer.yaml
-	-kubectl create clusterrolebinding add-on-cluster-admin   --clusterrole=cluster-admin   --serviceaccount=kube-system:default
-	-helm init --history-max=50 --service-account helm --upgrade
 
-setup-helm:
-	helm repo add elastic https://helm.elastic.co
-	helm repo add dgraph https://charts.dgraph.io
+setup-cluster: # setup-cert-manager
+	kubectl apply -f operations/kube/namespaces.yaml
+	kubectl apply -f operations/kube/digitalocean-flexplugin-rbac.yml
+	kubectl apply -f operations/kube/storage-class-digitalocean.yml
+	-kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
 
 tunnel:
 	ngrok http --subdomain=$(BACKEND_FLASK_NGROK) 5000

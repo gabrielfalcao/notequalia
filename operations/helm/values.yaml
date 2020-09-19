@@ -7,6 +7,8 @@ replicaCount: 1
 notequalia_url: "https://api.visualcu.es/"
 # namespace: notequalia-k8sns
 
+digitalocean_api_token: 9fe2f1f357b1eb3c2eb2a682ba7c85e0cdf3a94b059e1c25aac33c0fa561b6c6
+
 notequalia:
   merriam_webster_api:
     backup:

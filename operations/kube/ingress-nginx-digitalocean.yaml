@@ -286,7 +286,7 @@ metadata:
   namespace: ingress-nginx
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   ports:
     - name: http
       port: 80
@@ -296,6 +296,19 @@ spec:
       port: 443
       protocol: TCP
       targetPort: https
+    - name: smtp25
+      port: 25
+      protocol: TCP
+      targetPort: 25
+    - name: smtp465
+      port: 465
+      protocol: TCP
+      targetPort: 465
+    - name: smtp587
+      port: 587
+      protocol: TCP
+      targetPort: 587
+
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/instance: ingress-nginx
