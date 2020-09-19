@@ -171,7 +171,7 @@ deploy-cluster: setup-cluster
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
 
 helm-install:
-	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm
+	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm --timeout 900
 
 helm-upgrade:
 	helm upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
@@ -184,6 +184,11 @@ k8s-namespace:
 rollback:
 	iterm2 color cyan
 	-helm delete --purge $(HELM_RELEASE)
+	-kubectl patch crd/applicationauthusers.cognod.es -p '{"metadata":{"finalizers":[]}}' --type=merge
+	-kubectl delete -f notequalia/k8s/crd.yaml
+	-kubectl create -f notequalia/k8s/crd.yaml
+	-kubectl patch applicationauthusers/gabriel -p '{"metadata":{"finalizers":[]}}' --type=merge
+	-kubectl delete -f notequalia/k8s/crd.yaml
 	-kubectl get pv -n $(NAMESPACE) -o yaml  | kubectl delete --timeout=50s -f -
 	iterm2 color green
 
@@ -222,6 +227,7 @@ setup-cluster: # setup-cert-manager
 	kubectl apply -f operations/kube/digitalocean-flexplugin-rbac.yml
 	kubectl apply -f operations/kube/storage-class-digitalocean.yml
 	-kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
+	-kubectl create -f notequalia/k8s/crd.yaml
 
 tunnel:
 	ngrok http --subdomain=$(BACKEND_FLASK_NGROK) 5000

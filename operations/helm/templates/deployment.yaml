@@ -132,29 +132,13 @@ spec:
         volumeMounts:
           - name: notequalia-uploads-volume
             mountPath: /notequalia.io
-# ---
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: notequalia-operator
-# spec:
-#   replicas: 1
-#   strategy:
-#     type: Recreate
-#   selector:
-#     matchLabels:
-#       application: notequalia-operator
-#   template:
-#     metadata:
-#       labels:
-#         application: notequalia-operator
-#     spec:
-#       serviceAccountName: default
-#       containers:
-#       - name: notequalia-k8s-operator
-#         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-#         imagePullPolicy: {{ .Values.image.pullPolicy }}
-#         command: ['/venv/bin/notequalia-io', 'k8s']
-#         envFrom:
-#           - configMapRef:
-#               name: {{ include "notequalia-io.fullname" . }}-env
+---
+apiVersion: cognod.es/v1
+kind: ApplicationAuthUser
+metadata:
+  name: gabriel
+
+spec:
+  email: "gabriel@nacaolivre.org"
+  password: "012345678"
+  scope: "admin admin:user manage:terms manage:notes"
