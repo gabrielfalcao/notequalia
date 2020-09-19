@@ -6,5 +6,5 @@ metadata:
 
 spec:
   email: gabriel@nacaolivre.org
-  password: 012345678
+  password: "012345678"
   scope: "admin admin:user manage:terms manage:notes"

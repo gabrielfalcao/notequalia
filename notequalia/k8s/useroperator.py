@@ -44,7 +44,7 @@ def create_fn(body, spec, new, **kwargs):
 @kopf.on.update("cognod.es", "v1", "applicationauthusers")
 def update_fn(body, spec, new, **kwargs):
     email, password = get_credentials(spec)
-    user = update_user(email, password)
+    user = create_user(email, password)
     if user:
         logger.info(f'updated user {user}')
     else:

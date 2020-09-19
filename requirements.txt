@@ -15,6 +15,8 @@ flask-session==0.3.1
 flask==1.1.2
 gevent==1.4.0
 jsonschema==3.2.0
+kopf==0.27
+kubernetes==11.0.0
 loginpass==0.4
 psycopg2-binary==2.8.5
 pydictionary>=1.5.2
@@ -24,5 +26,3 @@ redis==3.5.1
 requests==2.24.0
 uiclasses==2.3.2
 werkzeug==0.16.1
-kopf==0.27
-kubernetes==11.0.0

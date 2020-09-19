@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   name: notequalia-user
 secrets:
-  - name: "}YOR]~kc/?]DB@q%|"
+  - name: postgresql-password
 
 ---
 apiVersion: apps/v1
