@@ -31,9 +31,7 @@ parser = reqparse.RequestParser()
 
 # parser.add_argument('session', location='cookies', help='the session id containing the state of authentication')
 
-note_ns = api.namespace(
-    "Note API V1", description="Notes API", path="/api/v1/notes",
-)
+note_ns = api.namespace("Note API V1", description="Notes API", path="/api/v1/notes")
 
 
 @note_ns.route("/")
@@ -44,7 +42,7 @@ class NoteListEndpoint(Resource):
         return [u.to_dict() for u in notes]
 
     @note_ns.expect(note_json)
-    @require_auth(scope='note:write')
+    @require_auth(scope="note:write")
     def post(self):
         name = api.payload.get("name")
         content = api.payload.get("content")
@@ -54,7 +52,7 @@ class NoteListEndpoint(Resource):
         except Exception as e:
             return {"error": str(e)}, 400
 
-    @require_auth(scope='note:delete')
+    @require_auth(scope="note:delete")
     def delete(self):
         response = []
         try:
@@ -76,7 +74,7 @@ class NoteEndpoint(Resource):
 
         return note.to_dict()
 
-    @require_auth(scope='note:write')
+    @require_auth(scope="note:write")
     def delete(self, note_id):
         note = Note.find_one_by(id=note_id)
         if not note:
@@ -85,7 +83,7 @@ class NoteEndpoint(Resource):
         note.delete()
         return {"deleted": note.to_dict()}
 
-    @require_auth(scope='note:write')
+    @require_auth(scope="note:write")
     @note_ns.expect(note_json)
     def put(self, note_id):
         note = Note.find_one_by(id=note_id)

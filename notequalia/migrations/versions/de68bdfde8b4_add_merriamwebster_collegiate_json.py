@@ -19,9 +19,7 @@ depends_on = None
 def upgrade():
     op.add_column(
         "terms",
-        db.Column(
-            "merriamwebster_collegiate_json", db.UnicodeText, nullable=True
-        ),
+        db.Column("merriamwebster_collegiate_json", db.UnicodeText, nullable=True),
     )
 
 

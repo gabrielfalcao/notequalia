@@ -31,11 +31,7 @@ def test_noun_kaballah_collegiate_definition(fixture: Union[dict, list]):
                     },
                 ],
                 "etymology": [
-                    {
-                        "text": [
-                            "Medieval Latin {it}cabbala{/it} {ma}{mat|cabal|}{/ma}"
-                        ]
-                    }
+                    {"text": ["Medieval Latin {it}cabbala{/it} {ma}{mat|cabal|}{/ma}"]}
                 ],
                 "short": [
                     "a medieval and modern system of Jewish theosophy, mysticism, and thaumaturgy marked by belief in creation through emanation and a cipher method of interpreting Scripture",

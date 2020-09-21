@@ -9,9 +9,7 @@ from tests.unit.helpers import with_merriam_webster_fixture
 
 @with_merriam_webster_fixture("collegiate/alliteration.json")
 def test_2_12_aq_collegiate(fixture: Union[dict, list]):
-    (
-        "2.12 ATTRIBUTION OF QUOTE: AQ - https://dictionaryapi.com/products/json#sec-2.aq"
-    )
+    ("2.12 ATTRIBUTION OF QUOTE: AQ - https://dictionaryapi.com/products/json#sec-2.aq")
 
     Definition.List(fixture).to_dict().should.equal(
         [

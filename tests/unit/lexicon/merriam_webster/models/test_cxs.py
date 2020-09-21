@@ -66,13 +66,7 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
                 "homograph": 2,
                 "headword": "ba*lo*ney",
                 "offensive": False,
-                "stems": [
-                    "baloney",
-                    "baloneys",
-                    "bologna",
-                    "boloney",
-                    "boloneys",
-                ],
+                "stems": ["baloney", "baloneys", "bologna", "boloney", "boloneys"],
                 "definitions": [
                     {
                         "sense_sequence": {
@@ -189,13 +183,7 @@ def test_2_9_cxs_collegiate(fixture: Union[dict, list]):
                 "definitions": [
                     {
                         "sense_sequence": {
-                            "senses": [
-                                {
-                                    "defining_text": {
-                                        "text": "{bc}{sx|phony||e}"
-                                    }
-                                }
-                            ]
+                            "senses": [{"defining_text": {"text": "{bc}{sx|phony||e}"}}]
                         }
                     }
                 ],

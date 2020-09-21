@@ -13,10 +13,7 @@ from flask_restplus import reqparse
 from flask_restplus import inputs
 
 from notequalia.models import Term
-from notequalia.lexicon_engine import (
-    PyDictionaryClient,
-    MerriamWebsterAPIClient,
-)
+from notequalia.lexicon_engine import PyDictionaryClient, MerriamWebsterAPIClient
 from notequalia.utils import json_response
 from .base import api, application
 
@@ -28,11 +25,7 @@ logger = logging.getLogger(__name__)
 
 definition_json = api.model(
     "Definition",
-    {
-        "term": fields.String(
-            required=True, description="the term to be defined"
-        )
-    },
+    {"term": fields.String(required=True, description="the term to be defined")},
 )
 
 parser = reqparse.RequestParser()
@@ -65,12 +58,8 @@ def define_new_term(term: str) -> Tuple[Term, bool]:
 
     params = dict(
         content=content,
-        merriamwebster_thesaurus_json=json.dumps(
-            thesaurus.to_dict(), default=str
-        ),
-        merriamwebster_collegiate_json=json.dumps(
-            collegiate.to_dict(), default=str
-        ),
+        merriamwebster_thesaurus_json=json.dumps(thesaurus.to_dict(), default=str),
+        merriamwebster_collegiate_json=json.dumps(collegiate.to_dict(), default=str),
         pydictionary_json=json.dumps(pydictionary, default=str),
     )
     if not model:
@@ -96,7 +85,7 @@ def validate_term(term: str) -> str:
 @term_ns.expect(authorization_parser, validate=True)
 class DefinitionsEndpoint(Resource):
     @term_ns.expect(definition_json)
-    @require_auth(scope='term:write manage:terms')
+    @require_auth(scope="term:write manage:terms")
     def post(self):
         term = validate_term((api.payload.get("term") or "").strip())
         if not term:
@@ -118,13 +107,11 @@ class DefinitionsEndpoint(Resource):
 @term_ns.route("/term/<term>")
 @term_ns.expect(parser)
 class TermEndpoint(Resource):
-    @require_auth(scope='manage:terms term:write')
+    @require_auth(scope="manage:terms term:write")
     def delete(self, term):
         found = Term.find_one_by(term=term)
         if not found:
-            return json_response(
-                {"error": f"term {term!r} does not exist"}, 404
-            )
+            return json_response({"error": f"term {term!r} does not exist"}, 404)
 
         found.delete()
         return json_response(found.to_dict(), 200)
@@ -132,9 +119,7 @@ class TermEndpoint(Resource):
     def get(self, term):
         found = Term.find_one_by(term=term)
         if not found:
-            return json_response(
-                {"error": f"term {term!r} does not exist"}, 404
-            )
+            return json_response({"error": f"term {term!r} does not exist"}, 404)
 
         return json_response(found.to_dict(), 200)
 
@@ -168,7 +153,7 @@ def backup():
 
 
 @application.route("/reprocess", methods=["POST"])
-@require_auth(scope='term:write manage:terms')
+@require_auth(scope="term:write manage:terms")
 def backup_reprocess():
     return lexicon_backup_response(should_reprocess=True)
 

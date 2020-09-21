@@ -10,9 +10,7 @@ from tests.unit.helpers import with_merriam_webster_fixture
 
 @with_merriam_webster_fixture("collegiate/agree.json")
 def test_2_22_syns_collegiate(fixture: Union[dict, list]):
-    (
-        "2.22 SYNONYMS SECTION: SYNS - https://dictionaryapi.com/products/json#sec-2.syns"
-    )
+    ("2.22 SYNONYMS SECTION: SYNS - https://dictionaryapi.com/products/json#sec-2.syns")
 
     data = Definition.List(fixture).to_dict()
     str(data).should.contain("synonym_discussions")
@@ -93,9 +91,7 @@ def test_2_22_syns_collegiate(fixture: Union[dict, list]):
                                     "defining_text": {
                                         "text": "{bc}to accept or concede something (such as the views or wishes of another) ",
                                         "verbal_illustrations": [
-                                            {
-                                                "text": "{wi}agree{/wi} to a plan"
-                                            }
+                                            {"text": "{wi}agree{/wi} to a plan"}
                                         ],
                                     },
                                 },
@@ -132,9 +128,7 @@ def test_2_22_syns_collegiate(fixture: Union[dict, list]):
                                     "defining_text": {
                                         "text": "{bc}to be similar {bc}{sx|correspond||} ",
                                         "verbal_illustrations": [
-                                            {
-                                                "text": "Both copies {wi}agree{/wi}."
-                                            }
+                                            {"text": "Both copies {wi}agree{/wi}."}
                                         ],
                                     },
                                 },
@@ -243,12 +237,7 @@ def test_2_22_syns_collegiate(fixture: Union[dict, list]):
                 "functional_label": "phrasal verb",
                 "headword": "agree with",
                 "offensive": False,
-                "stems": [
-                    "agree with",
-                    "agreed with",
-                    "agreeing with",
-                    "agrees with",
-                ],
+                "stems": ["agree with", "agreed with", "agreeing with", "agrees with"],
                 "definitions": [
                     {
                         "sense_sequence": {

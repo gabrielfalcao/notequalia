@@ -11,9 +11,7 @@ def test_list_notes(context):
     response = context.http.get("/api/v1/notes/")
 
     # When I check the response
-    response.headers.should.have.key("Content-Type").being.equal(
-        "application/json"
-    )
+    response.headers.should.have.key("Content-Type").being.equal("application/json")
 
     # And check if the status was 401
     response.status_code.should.equal(200)
@@ -27,18 +25,13 @@ def test_create_note_without_authentication(context):
     response = context.http.post(
         "/api/v1/notes/",
         data=json.dumps(
-            {
-                "name": "test create note 1",
-                "content": json.dumps({"some": "data"}),
-            }
+            {"name": "test create note 1", "content": json.dumps({"some": "data"})}
         ),
         headers={"Content-Type": "application/json"},
     )
 
     # When I check the response
-    response.headers.should.have.key("Content-Type").being.equal(
-        "application/json"
-    )
+    response.headers.should.have.key("Content-Type").being.equal("application/json")
 
     # And check if the status was 201
     response.status_code.should.equal(201)
@@ -54,8 +47,6 @@ def test_backup_lexicon(context):
     )
 
     # When I check the response
-    response.headers.should.have.key("Content-Type").being.equal(
-        "application/json"
-    )
+    response.headers.should.have.key("Content-Type").being.equal("application/json")
 
     # And check if the status was 200

@@ -3,9 +3,7 @@ from flask_restplus import Resource, fields
 from .validation import validate_email, validate_password
 
 
-
 class EmailField(fields.String):
-
     def format(self, value):
         return validate_email(value)
 

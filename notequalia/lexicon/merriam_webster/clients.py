@@ -32,8 +32,10 @@ class BaseClient(object):
         try:
             response = self.http.get(url)
         except Exception as e:
-            logger.exception(f'failed to retrieve term {term!r} via {url!r}')
-            raise MerriamWebsterAPIClientError(f'failed to retrieve term {term!r} via {url!r}: {e}')
+            logger.exception(f"failed to retrieve term {term!r} via {url!r}")
+            raise MerriamWebsterAPIClientError(
+                f"failed to retrieve term {term!r} via {url!r}: {e}"
+            )
 
         if response.status_code != 200:
             logger.warning(f"failed request {response.request}: {response}")
@@ -46,13 +48,9 @@ class BaseClient(object):
 
 
 class CollegiateClient(BaseClient):
-    base_url = (
-        "https://dictionaryapi.com/api/v3/references/collegiate/json/{term}"
-    )
+    base_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/{term}"
 
 
 class ThesaurusClient(BaseClient):
-    base_url = (
-        "https://dictionaryapi.com/api/v3/references/thesaurus/json/{term}"
-    )
+    base_url = "https://dictionaryapi.com/api/v3/references/thesaurus/json/{term}"
     config_key = "MERRIAM_WEBSTER_THESAURUS_API_KEY"

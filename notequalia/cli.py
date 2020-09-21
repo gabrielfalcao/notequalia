@@ -143,10 +143,7 @@ def check():
     default=int(os.getenv("INBOX_PORT", 8825)),
 )
 @click.option(
-    "--host",
-    "-H",
-    help="HTTP HOST",
-    default=os.getenv("INBOX_HOST") or "0.0.0.0",
+    "--host", "-H", help="HTTP HOST", default=os.getenv("INBOX_HOST") or "0.0.0.0"
 )
 @click.option(
     "--debug",
@@ -174,10 +171,7 @@ def run_smtp(ctx, host, port, debug):
     default=int(os.getenv("FLASK_PORT", 5000)),
 )
 @click.option(
-    "--host",
-    "-H",
-    help="HTTP HOST",
-    default=os.getenv("FLASK_HOST") or "0.0.0.0",
+    "--host", "-H", help="HTTP HOST", default=os.getenv("FLASK_HOST") or "0.0.0.0"
 )
 @click.option(
     "--debug",
@@ -363,14 +357,8 @@ def close_server(ctx, address):
 
 
 @main.command("create-user")
-@click.option(
-    "--email",
-    help="email",
-)
-@click.option(
-    "--password",
-    help="password",
-)
+@click.option("--email", help="email")
+@click.option("--password", help="password")
 @click.pass_context
 def create_user(ctx, email, password):
     "runs the web server"
@@ -390,8 +378,8 @@ def create_user(ctx, email, password):
         if user.set_password(password):
             print(f"password updated for {user.email!r} !")
     except Exception as e:
-            print(f"Failed to set new password to {user.email!r}")
-            print(e)
+        print(f"Failed to set new password to {user.email!r}")
+        print(e)
 
 
 @main.command("index-terms")
@@ -399,21 +387,20 @@ def create_user(ctx, email, password):
     "--host",
     help="elastic search host url (can be used multiple times)",
     multiple=True,
-    default=['http://localhost:9200']
+    default=["http://localhost:9200"],
 )
 @click.pass_context
 def index_terms(ctx, host):
     "scans all rows from the `terms` postgres database and index them in the given elasticsearch url"
 
-
-    logger = logging.getLogger('notequalia.elasticsearch')
+    logger = logging.getLogger("notequalia.elasticsearch")
     engine = ElasticSearchEngine(host)
     for term in Term.all():
         if not term.term:
-            logger.warning(f'skipping elasticsearch indexing of unnamed term {term}')
+            logger.warning(f"skipping elasticsearch indexing of unnamed term {term}")
             continue
 
-        logger.info(f'indexing {term}')
+        logger.info(f"indexing {term}")
         term.send_to_elasticsearch(engine)
 
 

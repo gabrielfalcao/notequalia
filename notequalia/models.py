@@ -252,7 +252,7 @@ class User(Model):
     )
 
     def __str__(self):
-        return f'<User id={self.id} email={self.email!r}>'
+        return f"<User id={self.id} email={self.email!r}>"
 
     def to_dict(self):
         data = self.serialize()
@@ -372,6 +372,8 @@ class AccessToken(Model):
         scope_choices = scope_string_to_set(scope)
         intersection = self.scopes.intersection(scope_choices)
         if not intersection:
-            logger.warning(f'token {self} ({self.scopes}) of user {self.user} does not have any of the required scope {scope}')
+            logger.warning(
+                f"token {self} ({self.scopes}) of user {self.user} does not have any of the required scope {scope}"
+            )
 
         return bool(intersection)

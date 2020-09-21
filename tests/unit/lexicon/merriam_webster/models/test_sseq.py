@@ -9,9 +9,7 @@ from tests.unit.helpers import with_merriam_webster_fixture
 
 @with_merriam_webster_fixture("collegiate/hop.json")
 def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
-    (
-        "2.10.3 SENSE SEQUENCE: SSEQ - https://dictionaryapi.com/products/json#sec-2.sseq"
-    )
+    ("2.10.3 SENSE SEQUENCE: SSEQ - https://dictionaryapi.com/products/json#sec-2.sseq")
 
     Definition.List(fixture).to_dict().should.equal(
         [
@@ -54,9 +52,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                                         "defining_text": {
                                             "text": "{bc}to move as if by hopping ",
                                             "verbal_illustrations": [
-                                                {
-                                                    "text": "{wi}hop{/wi} in the car"
-                                                }
+                                                {"text": "{wi}hop{/wi} in the car"}
                                             ],
                                         },
                                     },
@@ -95,9 +91,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                                     "defining_text": {
                                         "text": "{bc}to ride on ",
                                         "verbal_illustrations": [
-                                            {
-                                                "text": "{it}hopped{/it} a flight"
-                                            }
+                                            {"text": "{it}hopped{/it} a flight"}
                                         ],
                                     },
                                     "divided_sense": {
@@ -105,9 +99,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                                         "defining_text": {
                                             "text": "{bc}to ride surreptitiously and without authorization ",
                                             "verbal_illustrations": [
-                                                {
-                                                    "text": "{wi}hop{/wi} a freight train"
-                                                }
+                                                {"text": "{wi}hop{/wi} a freight train"}
                                             ],
                                         },
                                     },
@@ -151,9 +143,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                                 },
                                 {
                                     "number": "2",
-                                    "defining_text": {
-                                        "text": "{bc}{sx|dance||3}"
-                                    },
+                                    "defining_text": {"text": "{bc}{sx|dance||3}"},
                                 },
                                 {
                                     "number": "3 a",
@@ -163,9 +153,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                                 },
                                 {
                                     "number": "b",
-                                    "defining_text": {
-                                        "text": "{bc}a short trip"
-                                    },
+                                    "defining_text": {"text": "{bc}a short trip"},
                                 },
                             ]
                         }
@@ -222,11 +210,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                         "verb_divider": "transitive verb",
                         "sense_sequence": {
                             "senses": [
-                                {
-                                    "defining_text": {
-                                        "text": "{bc}to flavor with hops"
-                                    }
-                                }
+                                {"defining_text": {"text": "{bc}to flavor with hops"}}
                             ]
                         },
                     }
@@ -277,11 +261,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                     {
                         "sense_sequence": {
                             "senses": [
-                                {
-                                    "defining_text": {
-                                        "text": "{bc}a very small person"
-                                    }
-                                }
+                                {"defining_text": {"text": "{bc}a very small person"}}
                             ]
                         }
                     }
@@ -297,11 +277,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                     {
                         "sense_sequence": {
                             "senses": [
-                                {
-                                    "defining_text": {
-                                        "text": "{bc}a short distance"
-                                    }
-                                }
+                                {"defining_text": {"text": "{bc}a short distance"}}
                             ]
                         }
                     }
@@ -317,11 +293,7 @@ def test_2_10_3_def_collegiate(fixture: Union[dict, list]):
                     {
                         "sense_sequence": {
                             "senses": [
-                                {
-                                    "defining_text": {
-                                        "text": "{bc}{sx|triple jump||}"
-                                    }
-                                }
+                                {"defining_text": {"text": "{bc}{sx|triple jump||}"}}
                             ]
                         }
                     }

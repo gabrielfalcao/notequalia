@@ -22,8 +22,6 @@ session_manager = Session(application)
 # oidc = OpenIDConnect(application)
 
 
-
-
 class ValidationError(BadRequest):
     def __init__(self, field_name, message):
         self.field = field_name

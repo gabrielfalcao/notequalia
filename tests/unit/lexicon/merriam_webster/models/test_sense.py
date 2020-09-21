@@ -9,9 +9,7 @@ from tests.unit.helpers import with_merriam_webster_fixture
 
 @with_merriam_webster_fixture("collegiate/test.json")
 def test_2_10_4_sense_collegiate(fixture: Union[dict, list]):
-    (
-        "2.10.4 SENSE: SENSE - https://dictionaryapi.com/products/json#sec-2.sense"
-    )
+    ("2.10.4 SENSE: SENSE - https://dictionaryapi.com/products/json#sec-2.sense")
 
     Definition.List(fixture).to_dict().should.equal(
         [
@@ -60,9 +58,7 @@ def test_2_10_4_sense_collegiate(fixture: Union[dict, list]):
                                 {
                                     "number": "c",
                                     "status_labels": ["chiefly British"],
-                                    "defining_text": {
-                                        "text": "{bc}{sx|cupel||}"
-                                    },
+                                    "defining_text": {"text": "{bc}{sx|cupel||}"},
                                 },
                                 {
                                     "number": "3",
@@ -72,9 +68,7 @@ def test_2_10_4_sense_collegiate(fixture: Union[dict, list]):
                                 },
                                 {
                                     "number": "4",
-                                    "defining_text": {
-                                        "text": "{bc}{sx|test match||}"
-                                    },
+                                    "defining_text": {"text": "{bc}{sx|test match||}"},
                                 },
                             ]
                         }
@@ -135,9 +129,7 @@ def test_2_10_4_sense_collegiate(fixture: Union[dict, list]):
                             "senses": [
                                 {
                                     "number": "1 a",
-                                    "defining_text": {
-                                        "text": "{bc}to undergo a test"
-                                    },
+                                    "defining_text": {"text": "{bc}to undergo a test"},
                                 },
                                 {
                                     "number": "b",
@@ -147,9 +139,7 @@ def test_2_10_4_sense_collegiate(fixture: Union[dict, list]):
                                             {
                                                 "text": "{wi}tested{/wi} positive for cocaine"
                                             },
-                                            {
-                                                "text": "the cake {wi}tested{/wi} done"
-                                            },
+                                            {"text": "the cake {wi}tested{/wi} done"},
                                         ],
                                     },
                                 },
@@ -234,11 +224,7 @@ def test_2_10_4_sense_collegiate(fixture: Union[dict, list]):
                     {
                         "sense_sequence": {
                             "senses": [
-                                {
-                                    "defining_text": {
-                                        "text": "{a_link|Testament}"
-                                    }
-                                }
+                                {"defining_text": {"text": "{a_link|Testament}"}}
                             ]
                         }
                     }
@@ -362,9 +348,7 @@ def test_2_10_4_sense_collegiate(fixture: Union[dict, list]):
                                     "defining_text": {
                                         "text": "{bc}to use or examine (something, such as a computer program) in order to evaluate performance ",
                                         "verbal_illustrations": [
-                                            {
-                                                "text": "{wi}test-drive{/wi} the new game"
-                                            }
+                                            {"text": "{wi}test-drive{/wi} the new game"}
                                         ],
                                     },
                                 },

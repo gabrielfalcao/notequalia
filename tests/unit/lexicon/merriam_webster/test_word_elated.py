@@ -5,9 +5,7 @@ from tests.unit.helpers import with_merriam_webster_fixture
 
 
 @with_merriam_webster_fixture("collegiate/elated.json")
-def test_adjective_verb_elated_collegiate_definition(
-    fixture: Union[dict, list]
-):
+def test_adjective_verb_elated_collegiate_definition(fixture: Union[dict, list]):
     ("adjective + verb 'elated' - Collegiate Data-modeling")
 
     # Given a two definitions of "elated"

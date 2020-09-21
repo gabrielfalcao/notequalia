@@ -56,12 +56,8 @@ class Inbox(object):
         """Command-line dispatch."""
         parser = argparse.ArgumentParser(description="Run an Inbox server.")
 
-        parser.add_argument(
-            "addr", metavar="addr", type=str, help="addr to bind to"
-        )
-        parser.add_argument(
-            "port", metavar="port", type=int, help="port to bind to"
-        )
+        parser.add_argument("addr", metavar="addr", type=str, help="addr to bind to")
+        parser.add_argument("port", metavar="port", type=int, help="port to bind to")
 
         args = parser.parse_args()
 

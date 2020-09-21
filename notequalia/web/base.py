@@ -33,12 +33,15 @@ def index(path=None):
     return render_template("index.html")
 
 
-
 @application.errorhandler(ValidationError)
 def handle_validation_error(error):
-    return json.dumps({'errors': {error.field: error.message}}), 400, {'Content-Type': 'application/json'}
+    return (
+        json.dumps({"errors": {error.field: error.message}}),
+        400,
+        {"Content-Type": "application/json"},
+    )
 
 
 @application.errorhandler(NotequaliaException)
 def handle_internal_error(error):
-    return json.dumps({'errors': f"{error}"}), 419, {'Content-Type': 'application/json'}
+    return json.dumps({"errors": f"{error}"}), 419, {"Content-Type": "application/json"}

@@ -10,7 +10,7 @@ def initialize_gevent():
         import gevent.monkey
 
         gevent.monkey.patch_all()
-        logger.warning(f'gevent initialized')
+        logger.warning(f"gevent initialized")
     else:
         logger.warning(
             "GEVENT_DISABLED env var is set, gevent will not monkey-patch things"

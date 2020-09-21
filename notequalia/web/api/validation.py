@@ -25,7 +25,7 @@ def invalid_password_error(value: str, msg: str, field_name: str = "password"):
     raise ValidationError(field_name, message)
 
 
-def validate_password(password, minimum_length=8, field_name='password') -> str:
+def validate_password(password, minimum_length=8, field_name="password") -> str:
     if not password:
         raise ValidationError(field_name, f"'{field_name}' is a required property")
 

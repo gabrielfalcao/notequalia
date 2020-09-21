@@ -20,9 +20,7 @@ class NoteMailInboxServer(smtpd.SMTPServer):
                     return True
 
     def process_message(self, peer, mailfrom, rcpttos, data, **kwargs):
-        logger.debug(
-            f"process_message -> {peer!r} {mailfrom!r} {rcpttos!r} {kwargs!r}"
-        )
+        logger.debug(f"process_message -> {peer!r} {mailfrom!r} {rcpttos!r} {kwargs!r}")
         if not self.accept_recepients(rcpttos):
             logger.info(f"ignoring message from {mailfrom!r} to {rcpttos!r}")
             return

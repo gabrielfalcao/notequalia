@@ -235,9 +235,7 @@ class UsageNotes(Model):
             __data__ = data
 
         elif not isinstance(__data__, dict):
-            raise NotImplementedError(
-                "please write add a unit test and implement this"
-            )
+            raise NotImplementedError("please write add a unit test and implement this")
 
         super().__init__(__data__=__data__, *args, **kw)
 
@@ -332,9 +330,7 @@ class DefiningText(Model):
             __data__ = data
 
         elif not isinstance(__data__, dict):
-            raise NotImplementedError(
-                "please add unit tests and implement this"
-            )
+            raise NotImplementedError("please add unit tests and implement this")
 
         super().__init__(__data__=__data__, *args, **kw)
 
@@ -509,7 +505,7 @@ class Paragraph(Model):
     text: List[str]  # https://dictionaryapi.com/products/json#sec-2.fmttokens
 
     def __init__(self, __data__, *args, **kw):
-        __data__ = __data__ or kw.pop('__data__', None) or {}
+        __data__ = __data__ or kw.pop("__data__", None) or {}
         if isinstance(__data__, Model):
             __data__ = __data__.to_dict()
 
@@ -527,9 +523,7 @@ class Paragraph(Model):
             __data__ = data
 
         elif not isinstance(__data__, (Model, dict)):
-            raise NotImplementedError(
-                "please write add a unit test and implement this"
-            )
+            raise NotImplementedError("please write add a unit test and implement this")
 
         try:
             super().__init__(__data__=__data__, *args, **kw)
