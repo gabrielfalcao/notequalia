@@ -121,8 +121,9 @@ wheels:
 	docker run --rm -w /python -v $$(pwd):/python -v $$(pwd)/wheels:/wheels python:3.7-alpine sh -c 'pip wheel -r development.txt'
 
 create-user:
-	$(VENV)/bin/notequalia-io create-user --email="foo@bar.com" --password="01234567"
-	$(VENV)/bin/notequalia-io create-user --email="gfalcao@newstore.com" --password='Y;gCb$S*9N9_r~?%'
+	$(VENV)/bin/notequalia-io create-user --email="foo@bar.com" --password="012345678"
+	$(VENV)/bin/notequalia-io create-user --email="gabriel@nacaolivre.org" --password='012345678'
+	$(VENV)/bin/notequalia-io create-user --email="gfalcao@newstore.com" --password='012345678'
 
 docker: docker-image docker-push
 
