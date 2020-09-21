@@ -3,6 +3,7 @@ import json
 from flask import render_template, jsonify
 
 from notequalia.logs import set_log_level_by_name
+from notequalia.errors import NotequaliaException
 from notequalia.web.core import application, ValidationError
 
 # from notequalia import config
@@ -36,3 +37,8 @@ def index(path=None):
 @application.errorhandler(ValidationError)
 def handle_validation_error(error):
     return json.dumps({'errors': {error.field: error.message}}), 400, {'Content-Type': 'application/json'}
+
+
+@application.errorhandler(NotequaliaException)
+def handle_internal_error(error):
+    return json.dumps({'errors': f"{error}"}), 419, {'Content-Type': 'application/json'}

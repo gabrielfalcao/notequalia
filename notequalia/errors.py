@@ -1,0 +1,2 @@
+class NotequaliaException(Exception):
+    pass

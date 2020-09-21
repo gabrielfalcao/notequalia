@@ -5,12 +5,17 @@ from typing import Dict, Union, List
 
 from collections import defaultdict
 from notequalia import config
+from notequalia.errors import NotequaliaException
 from .models import Definition
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/eluded?key=
 # https://dictionaryapi.com/api/v3/references/collegiate/json/eluded?key=
 
 logger = logging.getLogger(__name__)
+
+
+class MerriamWebsterAPIClientError(NotequaliaException):
+    pass
 
 
 class BaseClient(object):
@@ -23,7 +28,13 @@ class BaseClient(object):
         self.http.params = {"key": str(self.key)}
 
     def get_definitions(self, term: str) -> Definition.List:
-        response = self.http.get(self.base_url.format(term=term))
+        url = self.base_url.format(term=term)
+        try:
+            response = self.http.get(url)
+        except Exception as e:
+            logger.exception(f'failed to retrieve term {term!r} via {url!r}')
+            raise MerriamWebsterAPIClientError(f'failed to retrieve term {term!r} via {url!r}: {e}')
+
         if response.status_code != 200:
             logger.warning(f"failed request {response.request}: {response}")
             return Definition.List([])
