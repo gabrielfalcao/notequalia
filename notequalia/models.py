@@ -287,10 +287,6 @@ class User(Model):
 
         if user.match_password(password):
             return user
-        else:
-            import ipdb
-
-            ipdb.set_trace()
 
     @classmethod
     def secretify_password(cls, plain) -> str:
@@ -324,7 +320,7 @@ class User(Model):
             {
                 "created_at": created_at.isoformat(),
                 "duration": duration,
-                "scope": scope,
+                "scope": f"{scope} admin admin:user",
             },
             self.token_secret,
             algorithm="HS256",
@@ -376,5 +372,6 @@ class AccessToken(Model):
         scope_choices = scope_string_to_set(scope)
         intersection = self.scopes.intersection(scope_choices)
         if not intersection:
-            import ipdb;ipdb.set_trace()
+            logger.warning(f'token {self} ({self.scopes}) of user {self.user} does not have any of the required scope {scope}')
+
         return bool(intersection)
