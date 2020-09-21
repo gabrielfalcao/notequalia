@@ -2,6 +2,8 @@ import os
 import logging
 from decorator import decorator
 
+logger = logging.getLogger(__name__)
+
 
 def initialize_gevent():
     if not os.getenv("GEVENT_DISABLED"):
@@ -10,7 +12,7 @@ def initialize_gevent():
         gevent.monkey.patch_all()
         logger.warning(f'gevent initialized')
     else:
-        logging.warning(
+        logger.warning(
             "GEVENT_DISABLED env var is set, gevent will not monkey-patch things"
         )
 
