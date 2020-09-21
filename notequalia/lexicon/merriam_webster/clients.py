@@ -20,7 +20,7 @@ class MerriamWebsterAPIClientError(NotequaliaException):
 
 class BaseClient(object):
     base_url: str
-    config_key: str = "MERRIAM_WEBSTER_DICTIONARY_API_KEY"
+    config_key: str
 
     def __init__(self, key: str = None):
         self.key = key or getattr(config, self.config_key, None)
@@ -49,6 +49,7 @@ class BaseClient(object):
 
 class CollegiateClient(BaseClient):
     base_url = "https://dictionaryapi.com/api/v3/references/collegiate/json/{term}"
+    config_key = "MERRIAM_WEBSTER_DICTIONARY_API_KEY"
 
 
 class ThesaurusClient(BaseClient):
