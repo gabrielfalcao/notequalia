@@ -26,9 +26,9 @@ export class APIRouter {
 }
 
 const getAPIBaseURL = (): string => {
-    // if ((window.location.href + "").match(/localhost/)) {
-    //     return "http://localhost:5000/";
-    // }
+    if ((window.location.href + "").match(/localhost/)) {
+        return "http://localhost:5000/";
+    }
     return "https://cognod.es/";
 };
 export type ErrorHandler = (err: Error) => void;
