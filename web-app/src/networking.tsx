@@ -26,15 +26,15 @@ export class APIRouter {
 }
 
 const getAPIBaseURL = (): string => {
-    if ((window.location.href + "").match(/localhost/)) {
-        return "http://localhost:5000/";
-    }
+    // if ((window.location.href + "").match(/localhost/)) {
+    //     return "http://localhost:5000/";
+    // }
     return "https://cognod.es/";
 };
 export type ErrorHandler = (err: Error) => void;
 export type SuccessHandler = (data: any) => void;
 
-export class BaseAPIClient {
+export class CoreAPIClient {
     protected api: APIRouter;
     protected defaultOptions: AxiosRequestConfig;
     protected handleError: ErrorHandler;
@@ -42,7 +42,9 @@ export class BaseAPIClient {
     constructor(handleError: ErrorHandler) {
         this.api = new APIRouter(getAPIBaseURL());
         this.defaultOptions = {
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                "Content-Type": "application/json"
+            }
         };
         this.handleError = handleError;
     }
@@ -53,6 +55,41 @@ export class BaseAPIClient {
     protected getOptions = (): any => {
         return { ...this.defaultOptions };
     };
+}
+
+export class AuthAPIClient extends CoreAPIClient {
+    public authenticate = (
+        email: string,
+        password: string,
+        handler: SuccessHandler
+    ): void => {
+        const url = this.api.urlFor("/api/v1/auth/");
+        axios
+            .post(url, { email, password }, this.getOptions())
+            .then((response: AxiosResponse<UserProps>) => {
+                console.log("response", response);
+                return response.data;
+            })
+            .catch(this.handleError)
+            .then(handler);
+    };
+}
+
+export class BaseAPIClient extends CoreAPIClient {
+    protected api: APIRouter;
+    protected defaultOptions: AxiosRequestConfig;
+    protected handleError: ErrorHandler;
+
+    constructor(handleError: ErrorHandler, token: string) {
+        super(handleError);
+        this.api = new APIRouter(getAPIBaseURL());
+        this.defaultOptions = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        };
+    }
 }
 
 export class DictionaryAPIClient extends BaseAPIClient {
@@ -128,24 +165,6 @@ export class AdminAPIClient extends BaseAPIClient {
         axios
             .post(url, { email, password }, this.getOptions())
             .then((response: AxiosResponse<UserProps>) => {
-                return response.data;
-            })
-            .catch(this.handleError)
-            .then(handler);
-    };
-}
-
-export class AuthAPIClient extends BaseAPIClient {
-    public authenticate = (
-        email: string,
-        password: string,
-        handler: SuccessHandler
-    ): void => {
-        const url = this.api.urlFor("/api/v1/auth/");
-        axios
-            .post(url, { email, password }, this.getOptions())
-            .then((response: AxiosResponse<UserProps>) => {
-                console.log("response", response);
                 return response.data;
             })
             .catch(this.handleError)

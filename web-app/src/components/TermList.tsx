@@ -36,8 +36,10 @@ class TermList extends Component<TermListProps, TermListState> {
     constructor(props: TermListProps) {
         super(props);
         const { addError } = props;
-        this.api = new DictionaryAPIClient(addError);
-        this.api.setToken(props.auth.access_token.content);
+        this.api = new DictionaryAPIClient(
+            addError,
+            props.auth.access_token.content
+        );
         console.log(props);
     }
 

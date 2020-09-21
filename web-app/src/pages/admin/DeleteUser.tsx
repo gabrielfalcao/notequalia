@@ -46,8 +46,10 @@ class DeleteUser extends Component<DeleteUserProps, UsersReducerState> {
     constructor(props: DeleteUserProps) {
         super(props);
         const { addError } = props;
-        this.api = new AdminAPIClient(addError);
-        this.api.setToken(props.auth.access_token.content);
+        this.api = new AdminAPIClient(
+            addError,
+            props.auth.access_token.content
+        );
     }
 
     deleteUser = (user: UserProps) => {
