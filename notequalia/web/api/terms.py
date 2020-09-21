@@ -13,6 +13,7 @@ from flask_restplus import reqparse
 from flask_restplus import inputs
 
 from notequalia.models import Term
+from notequalia.errors import NotequaliaException
 from notequalia.lexicon_engine import PyDictionaryClient, MerriamWebsterAPIClient
 from notequalia.utils import json_response
 from .base import api, application
@@ -40,6 +41,7 @@ term_ns = api.namespace(
 
 def define_new_term(term: str) -> Tuple[Term, bool]:
     term = term.lower().strip()
+
     pydictionary = PyDictionaryClient().define_term(term)
     thesaurus = MerriamWebsterAPIClient().get_thesaurus_definitions(term)
     collegiate = MerriamWebsterAPIClient().get_collegiate_definitions(term)
@@ -96,7 +98,11 @@ class DefinitionsEndpoint(Resource):
                 {"error": f"term cannot have more than 50 characters"}, 400
             )
 
-        model, created = define_new_term(term)
+        try:
+            model, created = define_new_term(term)
+        except NotequaliaException as e:
+            return json_response({"errors": str(e)}, 419)
+
         return json_response(model.to_dict(), created and 201 or 200)
 
     def get(self):

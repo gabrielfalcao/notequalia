@@ -7,9 +7,7 @@ logger = logging.getLogger(__name__)
 
 def initialize_gevent():
     if not os.getenv("GEVENT_DISABLED"):
-        import gevent.monkey
-
-        gevent.monkey.patch_all()
+        # enable_monkey_patching()
         logger.warning(f"gevent initialized")
     else:
         logger.warning(
@@ -21,3 +19,8 @@ def initialize_gevent():
 def with_gevent(func, *args, **kw):
     initialize_gevent()
     return func(*args, **kw)
+
+
+def enable_monkey_patching():
+    import gevent.monkey
+    gevent.monkey.patch_all()

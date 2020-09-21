@@ -34,7 +34,7 @@ class BaseClient(object):
         except Exception as e:
             logger.exception(f"failed to retrieve term {term!r} via {url!r}")
             raise MerriamWebsterAPIClientError(
-                f"failed to retrieve term {term!r} via {url!r}: {e}"
+                f"failed to retrieve term {term!r} via {url!r}"
             )
 
         if response.status_code != 200:
