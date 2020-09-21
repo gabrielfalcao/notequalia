@@ -534,7 +534,8 @@ class Paragraph(Model):
         try:
             super().__init__(__data__=__data__, *args, **kw)
         except Exception as e:
-            import ipdb;ipdb.set_trace()
+            # import ipdb;ipdb.set_trace()
+            raise
 
     def serialize(self, *args, **kw):
         return self.text
