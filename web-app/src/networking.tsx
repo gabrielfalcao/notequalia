@@ -47,6 +47,9 @@ export class BaseAPIClient {
         this.handleError = handleError;
     }
 
+    public setToken = (accessToken: string) => {
+        this.defaultOptions.headers["Authorization"] = `Bearer ${accessToken}`;
+    };
     protected getOptions = (): any => {
         return { ...this.defaultOptions };
     };

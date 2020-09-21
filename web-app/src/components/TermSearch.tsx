@@ -45,6 +45,7 @@ class TermSearch extends Component<TermSearchProps, TermSearchState> {
         };
 
         this.api = new DictionaryAPIClient(addError);
+        this.api.setToken(props.auth.access_token.content);
     }
 
     public search = () => {

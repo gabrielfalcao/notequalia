@@ -46,6 +46,7 @@ class DeleteTerm extends Component<DeleteTermProps, TermsReducerState> {
         super(props);
         const { addError } = props;
         this.api = new DictionaryAPIClient(addError);
+        this.api.setToken(props.auth.access_token.content);
     }
 
     deleteTerm = (term: string) => {
