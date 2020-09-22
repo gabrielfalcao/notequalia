@@ -113,8 +113,7 @@ def print_version():
     print(f"notequalia-io {version} / {sys.platform}")
 
 
-@main.command(name="purge-sessions")
-def purge_session():
+def purge_sessions():
     if config.SESSION_TYPE == "filesystem":
         path = Path(config.SESSION_FILE_DIR)
         for path in path.glob("*"):
@@ -424,6 +423,13 @@ def purge_tokens(ctx):
         logger.info(f"deleted {token}")
 
     print("OK")
+    purge_sessions()
+
+
+
+@main.command(name="purge-sessions")
+def purge_session_command():
+    purge_sessions()
 
 
 @main.command("k8s")
