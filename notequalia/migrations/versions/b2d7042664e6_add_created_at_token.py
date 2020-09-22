@@ -18,7 +18,7 @@ depends_on = None
 
 def upgrade():
     op.add_column(
-        "auth_access_token", db.Column("created_at", db.DateTime, nullable=True)
+        "auth_access_token", db.Column("created_at", db.Unicode(255), nullable=True)
     )
 
 

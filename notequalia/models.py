@@ -326,7 +326,7 @@ class User(Model):
             algorithm="HS256",
         )
         return AccessToken.create(
-            content=access_token.decode("utf-8"), scope=scope, user_id=self.id, created_at=datetime.utcnow(),
+            content=access_token.decode("utf-8"), scope=scope, user_id=self.id, created_at=datetime.utcnow().isoformat(),
         )
 
     def validate_token(self, access_token: str) -> bool:
@@ -344,7 +344,7 @@ class AccessToken(Model):
         db.Column("id", db.Integer, primary_key=True),
         db.Column("content", db.UnicodeText, nullable=False, unique=True),
         db.Column("scope", db.UnicodeText, nullable=True),
-        db.Column("created_at", db.DateTime),
+        db.Column("created_at", db.Unicode(255), default=lambda: datetime.utcnow().isoformat()),
         db.Column("duration", db.Integer),
         db.Column(
             "user_id",
