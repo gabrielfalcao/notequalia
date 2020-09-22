@@ -105,7 +105,12 @@ class ManageUserEndpoint(Resource):
         if not user:
             return {"error": "user not found"}, 404
 
+        for token in AccessToken.find_by(user_id=user_id):
+            token.delete()
+            logger.info(f"deleted {token} from {user}")
+
         user.delete()
+        logger.info(f'deleted {user}')
         return "", 204
 
 
