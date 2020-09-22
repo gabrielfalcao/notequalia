@@ -1,0 +1,212 @@
+{
+	"info": {
+		"_postman_id": "d11e2fc5-573a-4045-86ec-59f88e6de6aa",
+		"name": "cognod.es",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c3cf8b91-44a6-478c-8fc9-77ff0f474420",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"pm.environment.set(\"access_token\", jsonData.access_token.content);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":  \"gabriel@nacaolivre.org\", \"password\": \"012345678\"}"
+				},
+				"url": {
+					"raw": "https://cognod.es/api/v1/auth",
+					"protocol": "https",
+					"host": [
+						"cognod",
+						"es"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Term",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{access_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"term\": \"recondite\"}"
+				},
+				"url": {
+					"raw": "https://cognod.es/api/v1/dict/definitions",
+					"protocol": "https",
+					"host": [
+						"cognod",
+						"es"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dict",
+						"definitions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Existent Term",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{access_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"term\": \"recondite\"}"
+				},
+				"url": {
+					"raw": "https://cognod.es/api/v1/dict/term/recondite",
+					"protocol": "https",
+					"host": [
+						"cognod",
+						"es"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dict",
+						"term",
+						"recondite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Term",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{access_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"term\": \"recondite\"}"
+				},
+				"url": {
+					"raw": "https://cognod.es/api/v1/dict/term/recondite",
+					"protocol": "https",
+					"host": [
+						"cognod",
+						"es"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dict",
+						"term",
+						"recondite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Terms",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{access_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"term\": \"recondite\"}"
+				},
+				"url": {
+					"raw": "https://cognod.es/api/v1/dict/definitions",
+					"protocol": "https",
+					"host": [
+						"cognod",
+						"es"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dict",
+						"definitions"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
