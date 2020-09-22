@@ -7,7 +7,7 @@ from flask_restplus import reqparse
 from flask_restplus import inputs
 from flask_restplus import fields
 
-from notequalia.models import User
+from notequalia.models import User, AccessToken
 from .base import api
 
 from .inputs import password as password_input
