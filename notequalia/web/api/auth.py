@@ -62,7 +62,7 @@ class TokenEndpoint(Resource):
     def prepare_auth_params(self):
         email = api.payload.get("email")
         password = api.payload.get("password")
-        scope = api.payload.get("scope") or 'admin'
+        scope = api.payload.get("scope") or "admin"
         return {"email": email, "password": password, "scope": scope}
 
     @auth_ns.expect(parser_auth, validate=True)

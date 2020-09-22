@@ -236,6 +236,53 @@ class Term(Model):
                 ),
             )
 
+class AccessToken(Model):
+    table = db.Table(
+        "auth_access_token",
+        metadata,
+        db.Column("id", db.Integer, primary_key=True),
+        db.Column("content", db.UnicodeText, nullable=False, unique=True),
+        db.Column("scope", db.UnicodeText, nullable=True),
+        db.Column(
+            "created_at", db.Unicode(255), default=lambda: datetime.utcnow().isoformat()
+        ),
+        db.Column("duration", db.Integer),
+        db.Column(
+            "user_id",
+            db.Integer,
+            db.ForeignKey("auth_user.id", ondelete="RESTRICT"),
+            nullable=False,
+        ),
+    )
+
+    @cached_property
+    def scopes(self):
+        return scope_string_to_set(self.scope)
+
+    @property
+    def user(self):
+        return User.find_one_by(id=self.user_id) if self.user_id else None
+
+    def to_dict(self):
+        data = self.user.to_dict()
+        data.pop("id")
+        data["access_token"] = self.serialize()
+        return data
+
+    def matches_scope(self, scope: str) -> bool:
+        expired = not self.user.validate_token(self)
+        if expired:
+            return False
+
+        scope_choices = scope_string_to_set(scope)
+        intersection = self.scopes.intersection(scope_choices)
+        if not intersection:
+            logger.warning(
+                f"token {self} ({self.scopes}) of user {self.user} does not have any of the required scope {scope}"
+            )
+
+        return bool(intersection)
+
 
 class User(Model):
     table = db.Table(
@@ -310,7 +357,7 @@ class User(Model):
         )
 
     def create_token(
-            self, scope: str = "manage:notes manage:terms", duration: int = 28800, **kw
+        self, scope: str = "manage:notes manage:terms", duration: int = 28800, **kw
     ):
         """
         :param duration: in seconds - defaults to 28800 (8 hours)
@@ -326,54 +373,16 @@ class User(Model):
             algorithm="HS256",
         )
         return AccessToken.create(
-            content=access_token.decode("utf-8"), scope=scope, user_id=self.id, created_at=datetime.utcnow().isoformat(),
+            content=access_token.decode("utf-8"),
+            scope=scope,
+            user_id=self.id,
+            created_at=datetime.utcnow().isoformat(),
+            duration=duration,
         )
 
-    def validate_token(self, access_token: str) -> bool:
-        data = jwt.decode(access_token, self.token_secret, algorithms=["HS256"])
-        created_at = date["created_at"]
-        duration = date["duration"]
+    def validate_token(self, access_token: AccessToken) -> bool:
+        data = jwt.decode(access_token.content, self.token_secret, algorithms=["HS256"])
+        created_at = access_token.created_at
+        duration = access_token.duration
         valid_until = parse_datetime(created_at) + timedelta(seconds=duration)
         return now() < valid_until
-
-
-class AccessToken(Model):
-    table = db.Table(
-        "auth_access_token",
-        metadata,
-        db.Column("id", db.Integer, primary_key=True),
-        db.Column("content", db.UnicodeText, nullable=False, unique=True),
-        db.Column("scope", db.UnicodeText, nullable=True),
-        db.Column("created_at", db.Unicode(255), default=lambda: datetime.utcnow().isoformat()),
-        db.Column("duration", db.Integer),
-        db.Column(
-            "user_id",
-            db.Integer,
-            db.ForeignKey("auth_user.id", ondelete="RESTRICT"),
-            nullable=False,
-        ),
-    )
-
-    @cached_property
-    def scopes(self):
-        return scope_string_to_set(self.scope)
-
-    @property
-    def user(self):
-        return User.find_one_by(id=self.user_id) if self.user_id else None
-
-    def to_dict(self):
-        data = self.user.to_dict()
-        data.pop("id")
-        data["access_token"] = self.serialize()
-        return data
-
-    def matches_scope(self, scope: str) -> bool:
-        scope_choices = scope_string_to_set(scope)
-        intersection = self.scopes.intersection(scope_choices)
-        if not intersection:
-            logger.warning(
-                f"token {self} ({self.scopes}) of user {self.user} does not have any of the required scope {scope}"
-            )
-
-        return bool(intersection)

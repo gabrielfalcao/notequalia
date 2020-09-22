@@ -23,4 +23,5 @@ def with_gevent(func, *args, **kw):
 
 def enable_monkey_patching():
     import gevent.monkey
+
     gevent.monkey.patch_all()
