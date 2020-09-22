@@ -12,13 +12,14 @@ from pathlib import Path
 from datetime import datetime
 from zmq.devices import Device
 from chemist import set_default_uri
+from humanfriendly.text import pluralize
 
 # import from notequalia.api to cascade all route declarations
 from notequalia.web import application
 
 from notequalia import config
 from notequalia.config import dbconfig
-from notequalia.models import metadata, Term, User
+from notequalia.models import metadata, Term, User, AccessToken
 from notequalia.worker.client import EchoClient
 from notequalia.worker.server import EchoServer
 from notequalia.web.api.terms import define_new_term
@@ -409,6 +410,20 @@ def index_terms(ctx, host):
 @click.pass_context
 def define_term(ctx, term):
     print(define_new_term(term))
+
+
+@main.command("purge-tokens")
+@click.pass_context
+def purge_tokens(ctx):
+    tokens = AccessToken.all()
+    count = len(tokens)
+    items = pluralize(count, "token", plural=None)
+    print(f"deleting {items}:")
+    for token in tokens:
+        token.delete()
+        logger.info(f"deleted {token}")
+
+    print("OK")
 
 
 @main.command("k8s")

@@ -236,6 +236,7 @@ class Term(Model):
                 ),
             )
 
+
 class AccessToken(Model):
     table = db.Table(
         "auth_access_token",
@@ -362,10 +363,10 @@ class User(Model):
         """
         :param duration: in seconds - defaults to 28800 (8 hours)
         """
-        created_at = now()
+        created_at = now().isoformat()
         access_token = jwt.encode(
             {
-                "created_at": created_at.isoformat(),
+                "created_at": created_at,
                 "duration": duration,
                 "scope": f"{scope} admin admin:user",
             },
@@ -376,7 +377,7 @@ class User(Model):
             content=access_token.decode("utf-8"),
             scope=scope,
             user_id=self.id,
-            created_at=datetime.utcnow().isoformat(),
+            created_at=created_at,
             duration=duration,
         )
 
