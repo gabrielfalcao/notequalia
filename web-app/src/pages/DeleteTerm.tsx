@@ -54,7 +54,7 @@ class DeleteTerm extends Component<DeleteTermProps, TermsReducerState> {
     deleteTerm = (term: string) => {
         const { deleteTerm }: DeleteTermProps = this.props;
         this.api.deleteDefinition(term, (term: TermProps) => {
-            deleteTerm(term.term);
+            deleteTerm(term);
         });
     };
     render() {

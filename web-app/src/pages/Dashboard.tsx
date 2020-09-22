@@ -11,12 +11,14 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import { needs_login, AuthPropTypes } from "../domain/auth";
+// import { ErrorPropTypes } from "../domain/errors";
 import NoteList from "../components/NoteList";
 import TermList from "../components/TermList";
 import TermSearch from "../components/TermSearch";
 
 const DashboardPropTypes = {
     logout: PropTypes.func,
+    errors: PropTypes.any,
     purgeData: PropTypes.func,
     utilities: PropTypes.bool,
     auth: AuthPropTypes
@@ -37,13 +39,19 @@ class Dashboard extends Component<DashboardProps> {
     };
 
     render() {
-        const { auth, purgeData, utilities } = this.props;
+        const { auth, errors, purgeData, utilities } = this.props;
         if (needs_login(auth)) {
             return <Redirect to="/" />;
         }
 
         return (
             <Container>
+                {errors.current ? (
+                    <Row>
+                        <pre>{errors.current}</pre>
+                    </Row>
+                ) : null}
+
                 <Row>
                     {utilities ? (
                         <React.Fragment>

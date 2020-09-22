@@ -1,5 +1,6 @@
 import { NoteProps } from "../domain/notes";
 import { TermProps } from "../domain/terms";
+import { ErrorProps } from "../domain/errors";
 import { UserProps } from "../domain/users";
 
 export type NotesReducerState = {
@@ -48,3 +49,15 @@ export type UsersAction =
 export type UserListState = {
     users: UserProps[];
 };
+
+export type ErrorsReducerState = {
+    all: Array<ErrorProps | string>;
+    current: ErrorProps | string | null;
+};
+
+export type ErrorsAction =
+    | {
+        errors: ErrorProps | string | Array<string> | Array<ErrorProps>;
+        error: ErrorProps | string | null;
+    }
+    | any;
