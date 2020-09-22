@@ -62,7 +62,7 @@ class TokenEndpoint(Resource):
     def prepare_auth_params(self):
         email = api.payload.get("email")
         password = api.payload.get("password")
-        scope = api.payload.get("scope")
+        scope = api.payload.get("scope") or 'admin'
         return {"email": email, "password": password, "scope": scope}
 
     @auth_ns.expect(parser_auth, validate=True)
@@ -75,6 +75,6 @@ class TokenEndpoint(Resource):
         if not auth_user.match_password(params["password"]):
             return {"error": "invalid password"}, 401
 
-        token = auth_user.create_token(duration=300)
+        token = auth_user.create_token(duration=300, **params)
 
         return token.to_dict(), 200
