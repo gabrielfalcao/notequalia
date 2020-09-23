@@ -8,117 +8,176 @@ import Container from "react-bootstrap/Container";
 
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
+import Modal from "react-bootstrap/Modal";
+// import Toast from "react-bootstrap/Toast";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import { needs_login, AuthPropTypes } from "../domain/auth";
-// import { ErrorPropTypes } from "../domain/errors";
+import { ErrorProps } from "../domain/errors";
 import NoteList from "../components/NoteList";
 import TermList from "../components/TermList";
 import TermSearch from "../components/TermSearch";
+import { DictionaryAPIClient } from "../networking";
 
 const DashboardPropTypes = {
-    logout: PropTypes.func,
-    errors: PropTypes.any,
-    purgeData: PropTypes.func,
-    utilities: PropTypes.bool,
-    auth: AuthPropTypes
+	logout: PropTypes.func,
+	errors: PropTypes.any,
+	purgeData: PropTypes.func,
+	addError: PropTypes.func,
+	addTerms: PropTypes.func,
+	utilities: PropTypes.bool,
+	auth: AuthPropTypes
 };
 
 type DashboardProps = InferProps<typeof DashboardPropTypes>;
 
 class Dashboard extends Component<DashboardProps> {
-    static propTypes = DashboardPropTypes;
+	private api: DictionaryAPIClient;
+	static propTypes = DashboardPropTypes;
 
-    constructor(props: DashboardProps) {
-        super(props);
-        this.state = {};
-    }
+	constructor(props: DashboardProps) {
+		super(props);
+		const { addError } = props;
+		this.api = new DictionaryAPIClient(
+			addError,
+			props.auth.access_token.content
+		);
+		this.state = {};
+	}
 
-    public performDashboard = () => {
-        this.props.logout();
-    };
+	public performDashboard = () => {
+		this.props.logout();
+	};
+	public fetchDefinitions = () => {
+		const { addTerms }: DashboardProps = this.props;
 
-    render() {
-        const { auth, errors, purgeData, utilities } = this.props;
-        if (needs_login(auth)) {
-            return <Redirect to="/" />;
-        }
+		this.api.listDefinitions(addTerms);
+	};
 
-        return (
-            <Container>
-                {errors.current ? (
-                    <Row>
-                        <pre>{errors.current}</pre>
-                    </Row>
-                ) : null}
+	render() {
+		const { auth, errors, purgeData, utilities } = this.props;
+		const { fetchDefinitions } = this;
+		if (needs_login(auth)) {
+			return <Redirect to="/" />;
+		}
 
-                <Row>
-                    {utilities ? (
-                        <React.Fragment>
-                            <Col md={6}>
-                                <TermSearch />
-                            </Col>
+		return (
+			<Container>
+				{errors.current
+					? errors.all.map((error: ErrorProps) => (
+							<Alert variant="danger">
+								<h3>{error.name}</h3>
+								<p>{error.message}</p>
+								{error.config ? (
+									<p>
+										{error.config.method.toUpperCase()}{" "}
+										{error.config.url}
+									</p>
+								) : null}
 
-                            <Col md={6}>
-                                <Card bg="light" text="dark" className="mb-2">
-                                    <Card.Header>Utilities</Card.Header>
-                                    <Card.Body>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => {
-                                                purgeData();
-                                            }}
-                                        >
-                                            Purge all data{" "}
-                                        </Button>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        </React.Fragment>
-                    ) : null}
+								<pre style={{ color: "white" }}>
+									{error.stack}
+								</pre>
+							</Alert>
+					  ))
+					: null}
 
-                    <Col md={12}>
-                        <Card bg="light" text="dark" className="mb-2">
-                            <Card.Header>Notes</Card.Header>
-                            <Card.Body>
-                                <NoteList />
-                                <LinkContainer to="/notes/new">
-                                    <Button variant="success">
-                                        Add new Note{" "}
-                                    </Button>
-                                </LinkContainer>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    {utilities ? (
-                        <Col md={12}>
-                            <Card bg="light" text="dark" className="mb-2">
-                                <Card.Header>Lexicon</Card.Header>
-                                <Card.Body>
-                                    <TermList hideFunctionalLabels />
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ) : null}
-                </Row>
-            </Container>
-        );
-    }
+				<Row>
+					{utilities ? (
+						<React.Fragment>
+							<Col md={6}>
+								<TermSearch />
+							</Col>
+
+							<Col md={6}>
+								<Modal.Dialog>
+									<Modal.Header>
+										<Modal.Title>Actions</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<p>
+											<Button
+												variant="danger"
+												onClick={() => {
+													purgeData();
+												}}
+											>
+												Purge all data{" "}
+											</Button>
+										</p>
+										<p>
+											<Button
+												onClick={() => {
+													fetchDefinitions();
+												}}
+												variant="success"
+											>
+												{"Fetch Definitions"}
+											</Button>
+										</p>
+									</Modal.Body>
+								</Modal.Dialog>
+							</Col>
+						</React.Fragment>
+					) : null}
+
+					{false ? (
+						<Col md={12}>
+							<Card bg="light" text="dark" className="mb-2">
+								<Card.Header>Notes</Card.Header>
+								<Card.Body>
+									<NoteList />
+									<LinkContainer to="/notes/new">
+										<Button variant="success">
+											Add new Note{" "}
+										</Button>
+									</LinkContainer>
+								</Card.Body>
+							</Card>
+						</Col>
+					) : null}
+					{utilities ? (
+						<Col md={12}>
+							<Card bg="light" text="dark" className="mb-2">
+								<Card.Header>Lexicon</Card.Header>
+								<Card.Body>
+									<TermList hideFunctionalLabels />
+								</Card.Body>
+							</Card>
+						</Col>
+					) : null}
+				</Row>
+			</Container>
+		);
+	}
 }
 export default connect(
-    state => {
-        return { ...state };
-    },
-    {
-        logout: function() {
-            return {
-                type: "LOGOUT"
-            };
-        },
-        purgeData: function() {
-            return {
-                type: "PURGE_DATA"
-            };
-        }
-    }
+	state => {
+		return { ...state };
+	},
+	{
+		logout: function() {
+			return {
+				type: "LOGOUT"
+			};
+		},
+		purgeData: function() {
+			return {
+				type: "PURGE_DATA"
+			};
+		},
+		addTerms: function(terms: any) {
+			return {
+				type: "ADD_TERMS",
+				terms
+			};
+		},
+		addError: function(error: Error) {
+			return {
+				type: "ADD_ERROR",
+				error
+			};
+		}
+	}
 )(Dashboard);

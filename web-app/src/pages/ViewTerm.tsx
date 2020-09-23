@@ -171,13 +171,6 @@ class ViewTerm extends Component<ViewTermProps, any> {
 								</LinkContainer>
 							</Modal.Footer>
 						</Modal.Dialog>
-					</Col>
-				</Row>
-				<Row>
-					<Col md={6}>
-						<h1>Search another term</h1>
-					</Col>
-					<Col md={6}>
 						<TermSearch />
 					</Col>
 				</Row>
