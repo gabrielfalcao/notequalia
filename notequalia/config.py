@@ -9,6 +9,7 @@ current_working_path = Path(os.getcwd()).expanduser().absolute()
 DEFAULT_UPLOAD_PATH = current_working_path.joinpath("notequalia-io-uploads")
 APP_URL_EXTERNAL = os.getenv("APP_URL_EXTERNAL") or "https://pron-f1l3-serv3r.ngrok.io/"
 
+DEFAULT_AUTH_TOKEN_DURATION = int(os.getenv("OAUTH2_TOKEN_DURATION_SECONDS") or 604800)  # 1 week
 REDIS_HOST = os.getenv("REDIS_HOST")
 if REDIS_HOST:
     SESSION_TYPE = "redis"

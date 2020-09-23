@@ -75,6 +75,6 @@ class TokenEndpoint(Resource):
         if not auth_user.match_password(params["password"]):
             return {"error": "invalid password"}, 401
 
-        token = auth_user.create_token(duration=300, **params)
+        token = auth_user.create_token(duration=config.DEFAULT_AUTH_TOKEN_DURATION, **params)
 
         return token.to_dict(), 200
