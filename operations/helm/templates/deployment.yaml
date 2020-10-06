@@ -104,8 +104,8 @@ spec:
           httpGet:
             path: /health
             port: api
-          initialDelaySeconds: 30
-          periodSeconds: 150
+          initialDelaySeconds: 60
+          periodSeconds: 600
         readinessProbe:
           httpGet:
             path: /health
