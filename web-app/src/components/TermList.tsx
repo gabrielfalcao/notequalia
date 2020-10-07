@@ -52,7 +52,6 @@ class TermList extends Component<TermListProps, TermListState> {
 	render() {
 		const { terms, hideFunctionalLabels }: TermListProps = this.props;
 		const { by_term } = terms;
-		const { fetchDefinitions } = this;
 		const all: TermProps[] = Object.values(by_term);
 		const showFunctionalLabels = !hideFunctionalLabels;
 		return (
