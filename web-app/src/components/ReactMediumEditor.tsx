@@ -291,7 +291,8 @@ export default class ReactMediumEditor extends Component<
         return (
             <article
             ref={editor}
-            style={{zIndex:424242}}             
+            tabIndex={1}
+            style={{minHeight: "100%", zIndex: 0}}             
                 dangerouslySetInnerHTML={{ __html: this.state.text }}
             />
         );
