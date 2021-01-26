@@ -10,7 +10,7 @@ data:
   FLASK_PORT: {{ .Values.service.port | quote }}
   # FLASK_DEBUG: "true"  # disable for production usage
   APP_URL_EXTERNAL: {{ .Values.notequalia_url | quote }}
-  OAUTH2_TOKEN_DURATION_SECONDS: {{ .Values.notequalia_api_token_duration_seconds | quote }}
+  OAUTH2_TOKEN_DURATION_HOURS: {{ .Values.notequalia_api_token_duration_hours | quote }}
 # PostgreSQL
 {{- if .Values.postgresql.enabled }}
   POSTGRES_HOST: {{ template "postgresql.hostname" . }}
