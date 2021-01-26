@@ -258,3 +258,6 @@ cert-manager-backup.yaml:
 
 black:
 	black -l 79 notequalia tests
+
+local-splash:
+	docker run --rm -p 8050:8050 scrapinghub/splash
