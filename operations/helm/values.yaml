@@ -23,6 +23,8 @@ notequalia:
   mailserver:
     enabled: true
     port: 25
+rodrivamp:
+  enabled: true
 
 image:
   repository: gabrielfalcao/k8s-notequalia-io
