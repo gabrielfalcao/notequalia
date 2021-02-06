@@ -16,5 +16,6 @@ RUN npm install --silent -g react-scripts@3.4.1
 # add app
 COPY . ./
 
+ENV NODE_ENV production
 # start app
 CMD ["npm", "start"]
