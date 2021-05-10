@@ -26,6 +26,9 @@ notequalia:
 rodrivamp:
   enabled: true
 
+blog_falcao_it:
+  enabled: true
+
 image:
   repository: gabrielfalcao/k8s-notequalia-io
   tag: latest
