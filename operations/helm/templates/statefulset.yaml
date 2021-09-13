@@ -9,7 +9,7 @@ secrets:
 
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "notequalia-io.fullname" . }}-web
 spec:
@@ -21,33 +21,27 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
       app.kubernetes.io/instance: {{ .Release.Name }}
+  volumeClaimTemplates:
+  - metadata:
+      name: notequalia-uploads-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
   template:
     metadata:
       labels:
         app.kubernetes.io/name: {{ include "notequalia-io.name" . }}-web
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      affinity:
-        # kubernetes.io/hostname=pool-cognodes-361bk
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - pool-cognodes-361bk
-
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - pool-cognodes-361bk
-
       initContainers:
+      - name: volume-permission-fix
+        image: busybox
+        command: ["/bin/chmod","-R","777", "/data"]
+        volumeMounts:
+        - name: notequalia-uploads-volume
+          mountPath: /data
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: check-installation
@@ -89,11 +83,6 @@ spec:
         envFrom:
           - configMapRef:
               name: {{ include "notequalia-io.fullname" . }}-env
-
-      volumes:
-        - name: notequalia-uploads-volume
-          persistentVolumeClaim:
-            claimName: pvc-notequalia-io
 
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
