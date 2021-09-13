@@ -39,6 +39,8 @@ FIGLET			:= $(shell which figlet)
 WEB-APP_REACT_NGROK	:= notequalia-fe
 BACKEND_FLASK_NGROK	:= notequalia-be
 
+HELM2			:= /usr/local/opt/helm@2/bin/helm
+
 all: dependencies tests
 
 venv $(VENV):  # creates $(VENV) folder if does not exist
@@ -155,15 +157,15 @@ purge-sessions:
 
 
 operations/helm/charts:
-	helm dependency update --skip-refresh operations/helm/
+	$(HELM2) dependency update --skip-refresh operations/helm/
 
 template: operations/helm/charts
-	helm template $(HELM_SET_VARS) operations/helm
+	$(HELM2) template $(HELM_SET_VARS) operations/helm
 
-deploy: tests db k8s-namespace operations/helm/charts
+deploy: k8s-namespace operations/helm/charts
 	iterm2 color orange
 	git push
-	helm dependency update --skip-refresh operations/helm/
+	$(HELM2) dependency update --skip-refresh operations/helm/
 	iterm2 color red
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
 	iterm2 color green
@@ -172,10 +174,10 @@ deploy-cluster: setup-cluster
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
 
 helm-install:
-	helm install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm --timeout 900
+	$(HELM2) install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm --timeout 900
 
 helm-upgrade:
-	helm upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
+	$(HELM2) upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
 
 k8s-namespace:
 	iterm2 color blue
