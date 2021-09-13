@@ -48,15 +48,16 @@ class Evergreen extends Component<EvergreenProps> {
                 <Row className="mt-3" style={{ minHeight: "100vh" }}>
                     <EvergreenNote
                         title={"Notes should be linkable"}
-                        text={`<p>This is links to <a href="#notebook/1/Second-level note">Second-level note</a></p>`}
+                        text={`<p>This is links to <a href="#notebook/1/Second-level note">Second-level note</a></p><p>${lorem.generateParagraphs(4)}</p>`}
                     />
                     <EvergreenNote
                         title={"Second-level note"}
-                        text={`<p>This is a secondary note.</p><p>From here you can create a <a href="#notebook/1/Third-level note">Third-level note</a></p>`}
+                        text={`<p>This is a secondary note.</p><p>From here you can create a <a href="#notebook/1/Third-level note">Third-level note</a></p><p>${lorem.generateParagraphs(1)}</p><p>${lorem.generateParagraphs(1)}</p><p>${lorem.generateParagraphs(1)}</p>`}
                     />
                     <EvergreenNote
-                        title={"Some Lorem Ipsum"}
+                        title={"Try editing the notes"}
                         text={`
+<p>This content is not being persisted for now.</p>
 <p>${lorem.generateParagraphs(1)}</p>
 <p>${lorem.generateParagraphs(2)}</p>
 <p>${lorem.generateParagraphs(3)}</p>

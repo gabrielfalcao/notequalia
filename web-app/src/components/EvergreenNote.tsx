@@ -67,7 +67,7 @@ class EvergreenNote extends Component<EvergreenNoteProps, EvergreenNoteState> {
     render() {
         const { title } = this.state;
         return (
-            <Col md={5} lg={4}>
+                <Col md={5} lg={4}>
                 <Toast
                     style={{ position: "absolute", zIndex: 10000000 }}
                     show={this.state.showToastSaveNote}

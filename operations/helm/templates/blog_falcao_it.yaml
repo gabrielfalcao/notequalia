@@ -1,0 +1,104 @@
+{{- if .Values.blog_falcao_it.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-falcaoit-ghost-blog
+spec:
+
+  minReadySeconds: 5
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: blog-falcaoit-ghost-blog
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: blog-falcaoit-ghost-blog
+        app.kubernetes.io/instance: {{ .Release.Name }}
+
+    spec:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - pool-cognodes-361bh
+
+      containers:
+      - name: blog
+        image: ghost:alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2368
+        env:
+        - name: url
+          value: https://blog.falcao.it
+        volumeMounts:
+        - mountPath: /var/lib/ghost/content
+          name: blog-falcaoit-content
+      volumes:
+        - name: blog-falcaoit-content
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-falcaoit-ghost-blog
+  labels:
+    app.kubernetes.io/name: blog-falcaoit-ghost-blog
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+spec:
+  type: NodePort
+  ports:
+    - port: 2368
+      targetPort: 2368
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: blog-falcaoit-ghost-blog
+    app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "notequalia-io.fullname" . }}-ingress-blog-falcaoit
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/proxy-body-size: 800m
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "600"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "600"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    # kubernetes.io/tls-acme: 'false'
+    # https://docs.giantswarm.io/guides/advanced-ingress-configuration/#custom-max-body-size
+spec:
+  tls:
+  - hosts:
+    - blog.falcao.it
+    secretName: blog-falcaoit-letsencrypt-secret
+  rules:
+  - host: blog.falcao.it
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: blog-falcaoit-ghost-blog
+          servicePort: 2368
+{{- end }}

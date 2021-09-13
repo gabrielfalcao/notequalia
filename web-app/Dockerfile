@@ -1,4 +1,4 @@
-FROM node:12.16.1-alpine
+FROM node:14.15.4-alpine
 
 
 # set working directory
@@ -16,5 +16,6 @@ RUN npm install --silent -g react-scripts@3.4.1
 # add app
 COPY . ./
 
+ENV NODE_ENV production
 # start app
 CMD ["npm", "start"]
