@@ -12,6 +12,8 @@
     "bootswatch": "4.4.1",
     "connected-react-router": "^6.8.0",
     "d3": "^5.16.0",
+    "eslint-plugin-kyt": "^1.5.3",
+    "eslint-plugin-pretty-lights": "^0.0.23",
     "font-awesome": "^4.7.0",
     "front-matter": "^4.0.2",
     "highlight.js": "^10.0.3",
@@ -22,6 +24,7 @@
     "medium-editor": "^5.23.3",
     "oidc-client": "1.10.1",
     "popper.js": "1.16.1",
+    "pretty-lights": "^0.0.20",
     "querystring": "^0.2.0",
     "react": "16.13.1",
     "react-bootstrap": "^1.0.0",
@@ -103,7 +106,7 @@
     "lorem-ipsum": "^2.0.3",
     "prettier": "^1.19.1",
     "ts-jest": "^26.0.0",
-    "typescript": "^3.8.3"
+    "typescript": "^4.4.4"
   },
   "husky": {
     "skipCI": true,

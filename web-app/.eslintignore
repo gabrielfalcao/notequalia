@@ -1,0 +1,15 @@
+.caches
+.staging
+**/__fixtures__
+/build
+/coverage
+/dist
+/docs
+/docs_build
+/lib
+node_modules
+package-lock.json
+schema.json
+yarn.lock
+/src/serviceWorker.js
+/src/setupTests.js
