@@ -15,6 +15,8 @@ notes](https://notes.andymatuschak.org/) and [Zettelkasten note-taking
 [WriteMapper-like](https://writemapper.com/) experience to visually
 navigate note references.
 
+Implements foundations for [memorizing new words](https://brightside.me/inspiration-tips-and-tricks/90-second-method-that-can-help-you-memorize-foreign-words-and-not-forget-them-533110/)
+
 Components in this repo by folder
 ---------------------------------
 
