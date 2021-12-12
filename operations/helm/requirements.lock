@@ -8,5 +8,5 @@ dependencies:
 - name: elasticsearch
   repository: file://dependency_charts/elasticsearch
   version: 7.5.1
-digest: sha256:d6597829e188f2ce3cc14c2d4584ee92ccdfd529c10b1305d3375e8bf4b8268e
-generated: "2021-09-13T21:57:07.331609+02:00"
+digest: sha256:f57d5455c04074e1193e818dc47d6a1dd78144efb87ec141df44f3fbba296860
+generated: "2021-11-26T03:43:49.236558+01:00"

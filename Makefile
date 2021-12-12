@@ -32,14 +32,34 @@ PROD_TAG		?= $(shell git log --pretty="format:%H" -n1 . | tail -1)
 DOCKER_AUTHOR		:= gabrielfalcao
 BASE_IMAGE		:= notequalia-io-base
 PROD_IMAGE		:= k8s-notequalia-io
-NAMESPACE		:= notequalia-k8sns
-HELM_SET_VARS		:= --set image.tag=$(PROD_TAG) --set cluster.namespace=$(NAMESPACE) --set image.repository=$(DOCKER_AUTHOR)/$(PROD_IMAGE) --set oauth2.client_id=$(OAUTH2_CLIENT_ID) --set oauth2.client_secret=$(OAUTH2_CLIENT_SECRET) --set flask.secret_key=$(SECRET_KEY)-$(PROD_TAG) --set notequalia.merriam_webster_api.keys.thesaurus=$(MERRIAM_WEBSTER_THESAURUS_API_KEY) --set notequalia.merriam_webster_api.keys.dictionary=$(MERRIAM_WEBSTER_DICTIONARY_API_KEY)
-HELM_RELEASE		:= $(NAMESPACE)-v0
+DOCKER_ENV		:= $(GIT_ROOT)/tools/docker.env
+KUBE_ENV_CATTLE		:= $(GIT_ROOT)/kube/cattle/kube.env
+KUBE_ENV_PET		:= $(GIT_ROOT)/kube/pets/kube.env
+KUBE_ENV		:= $(KUBE_ENV_CATTLE) $(KUBE_ENV_PET)
+
+KUBE_BUTLER_YML_CATTLE	:= $(GIT_ROOT)/kube/cattle/drone-ci-butler.yml
+KUBE_BUTLER_YML_PET	:= $(GIT_ROOT)/kube/pets/drone-ci-butler.yml
+KUBE_BUTLER_YML		:= $(KUBE_BUTLER_YML_CATTLE) $(KUBE_BUTLER_YML_PET)
+BUILD_PATHS		:= build docs/build frontend/build
+DOCKER_IMAGE_NAME	:= gabrielfalcao/drone-ci-butler/runtime
+BRANCH_NAME		:= $(shell git branch | grep '^[*]' | awk '{print $$2}')
+DOCKER_IMAGE_TAG	:= $(shell git rev-parse origin/$(BRANCH_NAME))
+TMP_KUBE		:= $(GIT_ROOT)/wip/cattle.yml
+K8S_NAMESPACE		:= ci-butler-ns
+KUSTOMIZATION_PATH	:= $(GIT_ROOT)/kube
+KUSTOMIZATION_CATTLE_YML:= $(KUSTOMIZATION_PATH)/cattle/kustomization.yml
+KUSTOMIZATION_PET_YML	:= $(KUSTOMIZATION_PATH)/pets/kustomization.yml
+KUSTOMIZATION_YML	:= $(KUSTOMIZATION_CATTLE_YML) $(KUSTOMIZATION_PET_YML)
+TEST_CONFIG_YML		:= $(GIT_ROOT)/tests/drone-ci-butler.yml
+K8S_MAX_LOG_REQUESTS	:= 100
+
+
 FIGLET			:= $(shell which figlet)
 WEB-APP_REACT_NGROK	:= notequalia-fe
 BACKEND_FLASK_NGROK	:= notequalia-be
+export DOCKER_IMAGE_TAG
 
-HELM2			:= /usr/local/opt/helm@2/bin/helm
+
 
 all: dependencies tests
 
@@ -162,62 +182,6 @@ operations/helm/charts:
 template: operations/helm/charts
 	$(HELM2) template $(HELM_SET_VARS) operations/helm
 
-deploy: k8s-namespace operations/helm/charts
-	iterm2 color orange
-	git push
-	$(HELM2) dependency update --skip-refresh operations/helm/
-	iterm2 color red
-	$(MAKE) helm-install || $(MAKE) helm-upgrade
-	iterm2 color green
-
-deploy-cluster: setup-cluster
-	$(MAKE) helm-install || $(MAKE) helm-upgrade
-
-helm-install:
-	$(HELM2) install --namespace $(NAMESPACE) $(HELM_SET_VARS) -n $(HELM_RELEASE) operations/helm --timeout 900
-
-helm-upgrade:
-	$(HELM2) upgrade --namespace $(NAMESPACE) $(HELM_SET_VARS) $(HELM_RELEASE) operations/helm
-
-k8s-namespace:
-	iterm2 color blue
-	kubectl get namespaces | grep $(NAMESPACE) | awk '{print $$1}' || kubectl create namespace $(NAMESPACE)
-	iterm2 color yellow
-
-rollback:
-	iterm2 color cyan
-	-helm delete --purge $(HELM_RELEASE)
-	-kubectl patch crd/applicationauthusers.cognod.es -p '{"metadata":{"finalizers":[]}}' --type=merge
-	-kubectl delete -f notequalia/k8s/crd.yaml
-	-kubectl create -f notequalia/k8s/crd.yaml
-	-kubectl patch applicationauthusers/gabriel -p '{"metadata":{"finalizers":[]}}' --type=merge
-	-kubectl delete -f notequalia/k8s/crd.yaml
-	-kubectl get pv -n $(NAMESPACE) -o yaml  | kubectl delete --timeout=50s -f -
-	iterm2 color green
-
-k9s:
-	iterm2 color k
-	k9s -n $(NAMESPACE)
-undeploy:
-	helm delete --purge nginx-ingress
-	helm delete --purge external-dns
-	helm delete --purge cert-manager
-
-redeploy:
-	$(MAKE) undeploy deploy
-
-setup-helm-and-tiller:
-	kubectl -n kube-system create serviceaccount tiller
-	kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-	helm init --history-max=20 --service-account tiller --wait --upgrade
-	helm repo add dgraph https://charts.dgraph.io
-	helm repo add elastic https://helm.elastic.co
-	helm repo add jetstack https://charts.jetstack.io
-	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-	helm repo add bitnami https://charts.bitnami.com/bitnami
-	helm install --name nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
-	helm install bitnami/external-dns --name external-dns -f operations/helm/externaldns-values.yaml
-
 setup-cert-manager: # setup-helm-and-tiller
 	kubectl apply -f operations/kube/cert-manager.crds.yaml
 	-kubectl create namespace cert-manager
@@ -263,3 +227,212 @@ black:
 
 local-splash:
 	docker run --rm -p 8050:8050 scrapinghub/splash
+
+
+kube: clean $(TMP_KUBE) $(KUSTOMIZATION_YML)
+
+docs:
+	$(MAKE) -C docs html
+deploy: $(TMP_KUBE)
+	-$(ITERM2) name deploy && $(ITERM2) color grey 6
+	@echo "\033[0;34mImage \033[1;35m$(DOCKER_IMAGE_NAME)\033[0m"
+	@echo "\033[0;34mTag \033[1;36m$(DOCKER_IMAGE_TAG)\033[0m"
+	@kubectl get ns $(K8S_NAMESPACE) || kubectl create ns $(K8S_NAMESPACE)
+	@kubectl -n $(K8S_NAMESPACE) apply -f $(TMP_KUBE)
+
+undeploy: undeploy-application undeploy-infra
+
+undeploy-application:
+	kubectl -n $(K8S_NAMESPACE) delete service -l app.kubernetes.io/name=drone-ci-butler
+	kubectl -n $(K8S_NAMESPACE) delete statefulset -l app.kubernetes.io/name=drone-ci-butler
+	kubectl -n $(K8S_NAMESPACE) delete deployment -l app.kubernetes.io/name=drone-ci-butler
+
+undeploy-infra:
+	kubectl -n $(K8S_NAMESPACE) delete service -l drone-ci-butler/role=infra
+	kubectl -n $(K8S_NAMESPACE) delete statefulset -l drone-ci-butler/role=infra
+	kubectl -n $(K8S_NAMESPACE) delete deployment -l drone-ci-butler/role=infra
+
+
+undeploy-all:
+	kubectl -n $(K8S_NAMESPACE) delete deployment,service,statefulset --all
+
+undeploy-volume-claims:
+	kubectl -n $(K8S_NAMESPACE) delete pvc -l app.kubernetes.io/name=drone-ci-butler
+	kubectl -n $(K8S_NAMESPACE) delete pv -l app.kubernetes.io/name=drone-ci-butler
+
+k8s-delete-all-resources:
+	test -f $(TMP_KUBE) && kubectl -n $(K8S_NAMESPACE) delete -f $(TMP_KUBE)
+
+k8s-delete-pvs:
+	kubectl -n $(K8S_NAMESPACE) get pvc --field-selector metadata.namespace=$(K8S_NAMESPACE) -o yaml | kubectl -n $(K8S_NAMESPACE)  delete -f -
+
+k8s-delete-ns:
+	kubectl delete ns $(K8S_NAMESPACE)
+	$(MAKE) k8s-resources
+logs-web:
+	kubectl -n ci-butler-ns logs --max-log-requests $(K8S_MAX_LOG_REQUESTS) --prefix --ignore-errors=true deployment/drone-ci-butler-web -f --all-containers
+
+logs-workers:
+	kubectl -n ci-butler-ns logs --max-log-requests $(K8S_MAX_LOG_REQUESTS) --prefix --ignore-errors=true deployment/drone-ci-butler-build-info-worker -f --all-containers
+
+logs-queue:
+	kubectl -n ci-butler-ns logs --max-log-requests $(K8S_MAX_LOG_REQUESTS) --prefix --ignore-errors=true deployment/drone-ci-butler-queue -f --all-containers
+
+k8s-resources:
+	kubectl api-resources --verbs=list --namespaced -o name | xargs -n 1 kubectl -n $(K8S_NAMESPACE) get --show-kind --ignore-not-found -n $(K8S_NAMESPACE)
+
+k8s-purge-redis:
+	 kubectl -n $(K8S_NAMESPACE) exec deployment/drone-ci-butler-queue -- bash -c "drone-ci-butler purge --redis-queue"
+
+k8s-purge-all:
+	 kubectl -n $(K8S_NAMESPACE) exec deployment/drone-ci-butler-queue -- bash -c "drone-ci-butler purge --elasticsearch --redis-queue --http-cache"
+
+k8s-shell-queue:
+	 kubectl -n $(K8S_NAMESPACE) exec -ti deployment/drone-ci-butler-queue -- bash
+
+k8s-shell-kibana:
+	 kubectl -n $(K8S_NAMESPACE) exec -ti service/drone-ci-butler-kibana -- bash
+
+k8s-shell-redis:
+	 kubectl -n $(K8S_NAMESPACE) exec -ti service/drone-ci-butler-redis -- bash
+
+k8s-job:
+	 kubectl -n $(K8S_NAMESPACE) exec deployment/drone-ci-butler-queue -- bash -c "drone-ci-butler builds --redis-only > /dev/null 2> /dev/null &"
+
+redeploy:
+	$(MAKE) undeploy
+	$(MAKE) deploy
+
+$(TMP_KUBE): $(KUBE_ENV) $(KUBE_BUTLER_YML) $(KUSTOMIZATION_YML)
+	-$(ITERM2) name $(shell basename $@) && $(ITERM2) color blue 3
+	@kustomize build kube/cattle > $@
+	@echo "\033[1;37mCREATED \033[1;32m$(TMP_KUBE)\033[0m"
+	@echo "\t⬆️️ \033[1;34mthis is the 'kubernetes' file\033[0m"
+
+k9s:
+	-@$(ITERM2) name k8s 🛳 && $(ITERM2) color k
+	k9s -n $(K8S_NAMESPACE)
+
+env-docker: | $(DOCKER_ENV)
+
+# build base docker image
+docker-base:
+	docker build -t $(DOCKER_IMAGE_NAME)-base -f Dockerfile.base .
+
+# build production docker image
+docker-k8s:
+	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f Dockerfile .
+	docker tag $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) $(DOCKER_IMAGE_NAME):latest
+
+# pushes the latest image
+docker-push:
+	docker push $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
+	docker push $(DOCKER_IMAGE_NAME):latest
+
+docker-push-base:
+	docker push $(DOCKER_IMAGE_NAME)-base:latest
+
+##############################################################
+# Real targets (only run target if its file has been "made" by
+#               Makefile yet)
+##############################################################
+
+$(KUSTOMIZATION_YML):
+	-$(ITERM2) name $(shell basename $@) && $(ITERM2) color grey 3
+	cp -f $(KUSTOMIZATION_PATH)/kustomization.yaml $@
+	@(cd $(shell dirname $@) > /dev/null && kustomize edit set namespace $(K8S_NAMESPACE))
+	@(cd $(shell dirname $@) > /dev/null && kustomize edit set image $(DOCKER_IMAGE_NAME)=$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG))
+	@echo "\033[1;37mCOPIED \033[1;36m$@\033[0m"
+
+$(NODE_MODULES):
+	cd frontend && yarn
+
+# creates virtual env if necessary and installs pip and setuptools
+$(VENV): | $(REQUIREMENTS_PATH)  # creates $(VENV) folder if does not exist
+	echo "Creating virtualenv in $(VENV_ROOT)" && python3 -mvenv $(VENV)
+
+# installs pip and setuptools in their latest version, creates virtualenv if necessary
+$(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
+	@test -e $(VENV)/bin/python || $(MAKE) $(VENV)
+	@test -e $(VENV)/bin/pip || $(MAKE) $(VENV)
+
+ # installs latest version of the "black" code formatting tool
+$(VENV)/bin/black: | $(VENV)/bin/pip
+	$(VENV)/bin/pip install -U black
+
+# installs this package in "edit" mode after ensuring its requirements are installed
+$(VENV)/bin/gunicorn $(VENV)/bin/alembic $(VENV)/bin/pytest $(VENV)/bin/nosetests $(MAIN_CLI_PATH): | $(VENV) $(VENV)/bin/pip $(VENV)/bin/python $(REQUIREMENTS_PATH)
+	$(VENV)/bin/pip install -r $(REQUIREMENTS_PATH)
+	$(VENV)/bin/pip install -e .
+
+# ensure that REQUIREMENTS_PATH exists
+$(REQUIREMENTS_PATH):
+	@echo "The requirements file $(REQUIREMENTS_PATH) does not exist"
+	@echo ""
+	@echo "To fix this issue:"
+	@echo "  edit the variable REQUIREMENTS_NAME inside of the file:"
+	@echo "  $(MAKEFILE_PATH)."
+	@echo ""
+	@exit 1
+
+# generates environment variables with secrets
+$(DOCKER_ENV) $(KUBE_ENV): clean
+	-$(ITERM2) name $(shell basename $(shell dirname $@)) env && $(ITERM2) color yellow 3
+	@$(MAIN_CLI_PATH) env > $@
+	@echo "\033[1;37mCREATED \033[1;32m$@\033[0m"
+
+$(KUBE_BUTLER_YML):
+	-$(ITERM2) name $(shell basename $@) && $(ITERM2) color grey 6
+	@cp -f ~/.drone-ci-butler.yml $@
+	@echo "\033[1;37mUPDATED \033[1;32m$@\033[0m"
+###############################################################
+# Declare all target names that exist for convenience and don't
+# represent real paths, which is what Make expects by default:
+###############################################################
+
+.PHONY: \
+	all \
+	black \
+	builds \
+	clean \
+	compose \
+	dependencies \
+	deploy \
+	develop \
+	docs \
+	docker-base \
+	docker-k8s \
+	env-docker \
+	functional \
+	k8s-resources \
+	public \
+	purge \
+	react-app \
+	redeploy \
+	release \
+	release-build \
+	release-push \
+	run \
+	setup \
+	tdd \
+	tests \
+	tunnel \
+	unit \
+	web \
+	undeploy \
+	undeploy-infra \
+	undeploy-application \
+	undeploy-all \
+	deploy \
+	kube \
+	port-forward \
+	k8s-job \
+	k8s-delete-ns \
+	k8s-delete-pvs \
+	k8s-purge-redis \
+	queue-logs \
+	python-format \
+	pod-logs \
+	pod-logs-web
+
+.DEFAULT_GOAL	:= help
