@@ -1,0 +1,31 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: enqueue-builds-in-redis
+spec:
+  template:
+    labels:
+      drone-ci-butler/role: application
+    spec:
+      containers:
+      - image: "drone-ci-butler:latest"
+        imagePullPolicy: IfNotPresent
+        name: retrieve-drone-builds
+        command: ['drone-ci-butler', 'builds', '--redis-only']
+        envFrom:
+          - configMapRef:
+              name: env
+        volumeMounts:
+        - name: yaml-config
+          mountPath: /butler/drone-ci-butler.yml
+          subPath: drone-ci-butler.yml
+      restartPolicy: Never
+      volumes:
+        - name: yaml-config
+          configMap:
+            name: config
+            items:
+              - key: drone-ci-butler.yml
+                path: drone-ci-butler.yml
+  backoffLimit: 4

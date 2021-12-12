@@ -1,0 +1,16 @@
+postgresql:
+  maxConnections: 150
+  postgresConnectionLimit: 150
+  dbUserConnectionLimit: 150
+  maxPool: 150
+  password: "5cpulAirlt"
+  repmgrPassword: "618k7IPtUA"
+  replicaCount: 1
+  statementTimeout: 30
+  tcpKeepalivesInterval: 30
+  tcpKeepalivesIdle: 30
+  tcpKeepalivesCount: 30
+
+pgpool:
+  childMaxConnections: 150
+  adminPassword: "OdbZwXlqs3"

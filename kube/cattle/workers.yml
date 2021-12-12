@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: build-info-worker
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+  minReadySeconds: 5
+  # progressDeadlineSeconds: 180
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: drone-ci-butler
+      drone-ci-butler/role: application
+      app.kubernetes.io/svc: workers
+  template:
+    metadata:
+      labels:
+        drone-ci-butler/role: application
+        app.kubernetes.io/svc: workers
+    spec:
+      volumes:
+        - name: yaml-config
+          configMap:
+            name: config
+            items:
+              - key: drone-ci-butler.yml
+                path: drone-ci-butler.yml
+
+      initContainers:
+      - image: "drone-ci-butler:latest"
+        imagePullPolicy: IfNotPresent
+        name: check-network-services
+        command: ['drone-ci-butler', 'test-connections']
+        envFrom:
+          - configMapRef:
+              name: env
+        volumeMounts:
+        - name: yaml-config
+          mountPath: /butler/drone-ci-butler.yml
+          subPath: drone-ci-butler.yml
+
+      containers:
+      - image: "drone-ci-butler:latest"
+        imagePullPolicy: IfNotPresent
+        name: workers
+        command: ['drone-ci-butler', 'worker:drone-build-info']
+        resources:
+          limits:
+            memory: 2Gi
+          requests:
+            memory: 2Gi
+
+        envFrom:
+          - configMapRef:
+              name: env
+        volumeMounts:
+        - name: yaml-config
+          mountPath: /butler/drone-ci-butler.yml
+          subPath: drone-ci-butler.yml
