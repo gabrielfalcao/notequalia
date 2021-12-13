@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cognodes
+
+namespace: cognodes
+namePrefix: cognodes
+
+# Example configuration for the webserver
+# at https://github.com/monopole/hello
+commonLabels:
+  app-name: cognodes
+  app.kubernetes.io/instance: fadee85f037537c2d13c9dc7e66ba9f97d364bcb
+  app.kubernetes.io/name: drone-ci-butler
+  git-revision: fadee85f037537c2d13c9dc7e66ba9f97d364bcb
+
+# kustomization.yaml
+
+configMapGenerator:
+- envs:
+  - kube.env
+  name: env
+
+resources:
+- blog.yml
+
+images:
+- name: drone-ci-butler
+  newName: drone-ci-butler
+  newTag: 06444b5cc3e5b40579bb8744b553a21706b75c63

@@ -1,0 +1,96 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: falcaoit-ghost-blog
+spec:
+  serviceName: falcaoit-ghost-blog
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      infra.cognod.es/service: falcaoit-ghost-blog
+
+  updateStrategy:
+    type: RollingUpdate
+
+  volumeClaimTemplates:
+  - metadata:
+      name: blog-falcaoit-content
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+
+  template:
+    metadata:
+      labels:
+        infra.cognod.es/service: falcaoit-ghost-blog
+
+
+    spec:
+      containers:
+      - name: blog
+        image: ghost:alpine
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2368
+        env:
+        - name: url
+          value: http://blog.falcao.it
+        volumeMounts:
+        - mountPath: /var/lib/ghost/content
+          name: blog-falcaoit-content
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: falcaoit-ghost-blog
+  labels:
+    infra.cognod.es/service: falcaoit-ghost-blog
+
+spec:
+  type: NodePort
+  ports:
+    - port: 2368
+      targetPort: 2368
+      protocol: TCP
+      name: ghost
+  selector:
+    infra.cognod.es/service: falcaoit-ghost-blog
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-blog-falcaoit
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/proxy-body-size: 800m
+    # nginx.ingress.kubernetes.io/affinity: "cookie"
+    # nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    # nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+    # nginx.ingress.kubernetes.io/session-cookie-expires: "600"
+    # nginx.ingress.kubernetes.io/session-cookie-max-age: "600"
+    # nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    # nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+
+spec:
+  # tls:
+  # - hosts:
+  #   - blog.falcao.it
+  #   secretName: blog-falcaoit-letsencrypt-secret
+  rules:
+  - host: blog.falcao.it
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: falcaoit-ghost-blog
+            port:
+              number: 2368
