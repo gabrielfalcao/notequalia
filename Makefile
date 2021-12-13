@@ -184,6 +184,10 @@ k8s-namespace:
 	kubectl get namespaces | grep $(NAMESPACE) | awk '{print $$1}' || kubectl create namespace $(NAMESPACE)
 	iterm2 color yellow
 
+delete:
+	iterm2 color cyan
+	-helm delete --purge $(HELM_RELEASE)
+
 rollback:
 	iterm2 color cyan
 	-helm delete --purge $(HELM_RELEASE)
