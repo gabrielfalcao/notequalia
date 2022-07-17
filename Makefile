@@ -39,7 +39,7 @@ FIGLET			:= $(shell which figlet)
 WEB-APP_REACT_NGROK	:= notequalia-fe
 BACKEND_FLASK_NGROK	:= notequalia-be
 
-HELM2			:= /usr/local/opt/helm@2/bin/helm
+HELM2			:= /opt/homebrew/opt/helm@2/bin/helm
 
 all: dependencies tests
 
@@ -49,7 +49,7 @@ venv $(VENV):  # creates $(VENV) folder if does not exist
 
 develop $(VENV)/bin/notequalia-io $(VENV)/bin/nosetests $(VENV)/bin/python $(VENV)/bin/pip: # installs latest pip
 	test -e $(VENV)/bin/pip || $(MAKE) $(VENV)
-	$(VENV)/bin/pip install -r development.txt
+	$(VENV)/bin/pip install -U -r development.txt
 	$(VENV)/bin/python setup.py develop
 
 # Runs the unit and functional tests
@@ -164,7 +164,7 @@ template: operations/helm/charts
 
 deploy: k8s-namespace operations/helm/charts
 	iterm2 color orange
-	git push
+	$(shell which git) push
 	$(HELM2) dependency update --skip-refresh operations/helm/
 	iterm2 color red
 	$(MAKE) helm-install || $(MAKE) helm-upgrade
