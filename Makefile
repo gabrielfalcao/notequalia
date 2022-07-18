@@ -211,8 +211,8 @@ redeploy:
 	$(MAKE) undeploy deploy
 
 setup-helm-and-tiller:
-	kubectl -n kube-system create serviceaccount tiller
-	kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+	-kubectl -n kube-system create serviceaccount tiller
+	-kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 	helm init --history-max=20 --service-account tiller --wait --upgrade
 	helm repo add dgraph https://charts.dgraph.io
 	helm repo add elastic https://helm.elastic.co
@@ -234,7 +234,7 @@ setup-cluster: # setup-cert-manager
 	kubectl apply -f operations/kube/digitalocean-flexplugin-rbac.yml
 	kubectl apply -f operations/kube/storage-class-digitalocean.yml
 	-kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
-	-kubectl create -f notequalia/k8s/crd.yaml
+	-kubectl create -f notequalia/k8s/crd.yaml || echo "the last error can be safely ignored ;)"
 
 tunnel:
 	ngrok http --subdomain=$(BACKEND_FLASK_NGROK) 5000
