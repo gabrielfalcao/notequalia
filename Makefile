@@ -69,6 +69,14 @@ migrate:
 
 # runs unit tests
 
+keycloak:
+	docker run --rm --name research-openid-subprotocol-medical-records -p 3000:4242 \
+		-e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=love \
+		quay.io/keycloak/keycloak:8.0.1 --hostname-port=3000
+
+shutdown-keycloak-container:
+	docker ps -a | grep jboss | awk '{print $1}' | xargs docker rm -f
+
 unit: | $(VENV)/bin/nosetests  # runs only unit tests
 	$(VENV)/bin/nosetests --cover-erase tests/unit
 
